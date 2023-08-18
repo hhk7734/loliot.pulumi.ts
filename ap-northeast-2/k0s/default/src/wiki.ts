@@ -37,6 +37,9 @@ const deployment = new kubernetes.apps.v1.Deployment("wiki", {
 							},
 						],
 						resources: {
+							requests: {
+								memory: "10Mi",
+							},
 							limits: {
 								memory: "64Mi",
 							},
