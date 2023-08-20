@@ -1,4 +1,5 @@
 import * as certmanager from "@crds/certmanager/certmanager";
+import { certManager } from "@src/cert-manager/cert-manager";
 import * as variable from "@src/variable";
 
 const cloudflareLetsencryptName = "cloudflare-letsencrypt";
@@ -36,5 +37,8 @@ const cloudflareLetsencrypt = new certmanager.v1.ClusterIssuer(
 				],
 			},
 		},
+	},
+	{
+		dependsOn: [certManager],
 	},
 );

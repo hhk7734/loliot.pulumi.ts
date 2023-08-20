@@ -1,6 +1,14 @@
 import * as kubernetes from "@pulumi/kubernetes";
 import * as networking from "@crds/istio/networking";
 
+const tolerations = [
+	{
+		key: "node-role.kubernetes.io/master",
+		operator: "Exists",
+		effect: "NoSchedule",
+	},
+];
+
 const deployment = new kubernetes.apps.v1.Deployment("wiki", {
 	metadata: {
 		name: "wiki",
@@ -46,6 +54,7 @@ const deployment = new kubernetes.apps.v1.Deployment("wiki", {
 						},
 					},
 				],
+				tolerations: tolerations,
 			},
 		},
 	},

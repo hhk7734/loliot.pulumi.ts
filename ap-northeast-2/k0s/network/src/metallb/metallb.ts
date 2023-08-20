@@ -3,6 +3,14 @@ import * as variable from "@src/variable";
 import * as metallbCRD from "@crds/metallb/metallb";
 import { namespace } from "./namespace";
 
+const tolerations = [
+	{
+		key: "node-role.kubernetes.io/master",
+		operator: "Exists",
+		effect: "NoSchedule",
+	},
+];
+
 const metallbName = "metallb";
 const metallb = new kubernetes.helm.v3.Release(metallbName, {
 	name: metallbName,
@@ -18,17 +26,19 @@ const metallb = new kubernetes.helm.v3.Release(metallbName, {
 			labels: {
 				"loliot.net/stack": variable.stackName,
 			},
+			tolerations: tolerations,
 		},
 		speaker: {
 			labels: {
 				"loliot.net/stack": variable.stackName,
 			},
+			tolerations: tolerations,
 		},
 	},
 });
 
 const defaultIpAddressPoolName = "default";
-const defaultIpAddressPool = new metallbCRD.v1beta1.IPAddressPool(
+export const defaultIpAddressPool = new metallbCRD.v1beta1.IPAddressPool(
 	defaultIpAddressPoolName,
 	{
 		metadata: {

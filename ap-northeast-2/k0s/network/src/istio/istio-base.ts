@@ -2,7 +2,7 @@ import * as kubernetes from "@pulumi/kubernetes";
 import { namespace } from "./namespace";
 
 const istioBaseName = "istio-base";
-const istioBase = new kubernetes.helm.v3.Release(istioBaseName, {
+export const istioBase = new kubernetes.helm.v3.Release(istioBaseName, {
 	name: istioBaseName,
 	repositoryOpts: {
 		repo: "https://istio-release.storage.googleapis.com/charts",

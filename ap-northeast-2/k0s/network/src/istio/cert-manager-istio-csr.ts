@@ -3,6 +3,14 @@ import * as kubernetes from "@pulumi/kubernetes";
 import * as variable from "@src/variable";
 import { namespace } from "./namespace";
 
+const tolerations = [
+	{
+		key: "node-role.kubernetes.io/master",
+		operator: "Exists",
+		effect: "NoSchedule",
+	},
+];
+
 const issuerName = "istio-ca";
 const issuer = new certmanager.v1.Issuer(issuerName, {
 	metadata: {
@@ -17,7 +25,7 @@ const issuer = new certmanager.v1.Issuer(issuerName, {
 });
 
 const certManagerIstioCSRName = "cert-manager-istio-csr";
-const certManagerIstioCSR = new kubernetes.helm.v3.Release(
+export const certManagerIstioCSR = new kubernetes.helm.v3.Release(
 	certManagerIstioCSRName,
 	{
 		name: certManagerIstioCSRName,
@@ -64,6 +72,7 @@ const certManagerIstioCSR = new kubernetes.helm.v3.Release(
 					readOnly: true,
 				},
 			],
+			tolerations: tolerations,
 		},
 	},
 	{

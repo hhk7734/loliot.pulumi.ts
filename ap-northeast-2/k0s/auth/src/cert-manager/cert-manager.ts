@@ -2,8 +2,16 @@ import * as kubernetes from "@pulumi/kubernetes";
 import { namespace } from "@src/namespace";
 import * as variable from "@src/variable";
 
+const tolerations = [
+	{
+		key: "node-role.kubernetes.io/master",
+		operator: "Exists",
+		effect: "NoSchedule",
+	},
+];
+
 const certManagerName = "cert-manager";
-const certManager = new kubernetes.helm.v3.Release(certManagerName, {
+export const certManager = new kubernetes.helm.v3.Release(certManagerName, {
 	name: certManagerName,
 	repositoryOpts: {
 		repo: "https://charts.jetstack.io",
@@ -25,6 +33,16 @@ const certManager = new kubernetes.helm.v3.Release(certManagerName, {
 				cpu: "10m",
 				memory: "32Mi",
 			},
+		},
+		tolerations: tolerations,
+		webhook: {
+			tolerations: tolerations,
+		},
+		cainjector: {
+			tolerations: tolerations,
+		},
+		startupapicheck: {
+			tolerations: tolerations,
 		},
 	},
 });
