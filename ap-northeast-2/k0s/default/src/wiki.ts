@@ -86,9 +86,21 @@ const virtualService = new networking.v1beta1.VirtualService("wiki", {
 		name: "wiki",
 	},
 	spec: {
-		hosts: ["wiki.loliot.net"],
+		hosts: ["wiki.loliot.net", "loliot.net"],
 		gateways: ["istio-system/default-gateway"],
 		http: [
+			{
+				match: [
+					{
+						authority: {
+							exact: "loliot.net",
+						},
+					},
+				],
+				redirect: {
+					authority: "wiki.loliot.net",
+				},
+			},
 			{
 				match: [
 					{
