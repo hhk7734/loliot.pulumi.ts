@@ -1,0 +1,3 @@
+encryptionsalt: v1:EES/qVIT/hc=:v1:ZS278+omlNAdNDU+:FH9wkVM6MuYG4OtR25OHkoMW0CWfWw==
+config:
+  kubernetes:context: loliot
