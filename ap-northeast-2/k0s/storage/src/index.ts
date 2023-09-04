@@ -9,3 +9,5 @@ register({
 	baseUrl: tsConfig.absoluteBaseUrl,
 	paths: tsConfig.paths,
 });
+
+export * as postgresql from "./postgresql";

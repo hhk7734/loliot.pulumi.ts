@@ -1,3 +1,5 @@
 encryptionsalt: v1:EES/qVIT/hc=:v1:ZS278+omlNAdNDU+:FH9wkVM6MuYG4OtR25OHkoMW0CWfWw==
 config:
   kubernetes:context: loliot
+  loliot:postgresqlPassword:
+    secure: v1:f4wBCRgeSlUvmP+r:7rMMW911CbT0XSWSDj/UDlN/kNM47FUV
