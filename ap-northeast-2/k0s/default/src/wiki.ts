@@ -35,7 +35,7 @@ const deployment = new kubernetes.apps.v1.Deployment("wiki", {
 				containers: [
 					{
 						name: "wiki",
-						image: "hhk7734/wiki-loliot-net:1.0",
+						image: "ghcr.io/hhk7734/wiki:3ce22939",
 						imagePullPolicy: "Always",
 						ports: [
 							{
@@ -55,6 +55,11 @@ const deployment = new kubernetes.apps.v1.Deployment("wiki", {
 					},
 				],
 				tolerations: tolerations,
+				imagePullSecrets: [
+					{
+						name: "hhk7734-ghcr",
+					},
+				],
 			},
 		},
 	},

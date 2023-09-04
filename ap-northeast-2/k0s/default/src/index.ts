@@ -11,3 +11,4 @@ register({
 });
 
 export * as wiki from "./wiki";
+export * as secret from "./secret";
