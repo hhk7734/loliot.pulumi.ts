@@ -43,7 +43,7 @@ app:
     # -- Container port to expose istio-csr HTTP readiness probe on default network interface.
     port: 6060
     # -- Path to expose istio-csr HTTP readiness probe on default network interface.
-    path: "/readyz"
+    path: '/readyz'
 
   certmanager:
     # -- Namespace to create CertificateRequests for both istio-csr's serving
@@ -74,7 +74,7 @@ app:
 
   tls:
     # -- The Istio cluster's trust domain.
-    trustDomain: "cluster.local"
+    trustDomain: 'cluster.local'
     # -- An optional file location to a PEM encoded root CA that the root CA
     # ConfigMap in all namespaces will be populated with. If empty, the CA
     # returned from cert-manager for the serving certificate will be used.
@@ -104,7 +104,7 @@ app:
 
   server:
     # -- The istio cluster ID to verify incoming CSRs.
-    clusterID: "Kubernetes"
+    clusterID: 'Kubernetes'
     # -- Maximum validity duration that can be requested for a certificate.
     # istio-csr will request a duration of the smaller of this value, and that of
     # the incoming gRPC CSR.
@@ -119,7 +119,7 @@ app:
       # -- Number of bits to use for the server's serving certificate (RSAKeySize).
       certificateKeySize: 2048
       # -- The type of signature algorithm to use when generating private keys. Currently only RSA and ECDSA are supported. By default RSA is used.
-      signatureAlgorithm: "RSA"
+      signatureAlgorithm: 'RSA'
 
   istio:
     # -- The istio revisions that are currently installed in the cluster.
@@ -131,7 +131,7 @@ app:
     # not using `default` as a revision, add the `default` revision here
     # anyway. The resulting certificate will include a DNS name that won't be
     # used, but will pass this constraint.
-    revisions: ["default"]
+    revisions: ['default']
     # -- The namespace where the istio control-plane is running.
     namespace: istio-system
 

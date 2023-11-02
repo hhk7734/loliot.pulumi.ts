@@ -1,130 +1,130 @@
-import * as kubernetes from "@pulumi/kubernetes";
-import * as networking from "@crds/istio/networking";
+import * as kubernetes from '@pulumi/kubernetes';
+import * as networking from '@crds/istio/networking';
 
 const tolerations = [
 	{
-		key: "node-role.kubernetes.io/master",
-		operator: "Exists",
-		effect: "NoSchedule",
-	},
+		key: 'node-role.kubernetes.io/master',
+		operator: 'Exists',
+		effect: 'NoSchedule'
+	}
 ];
 
-const deployment = new kubernetes.apps.v1.Deployment("wiki", {
+const deployment = new kubernetes.apps.v1.Deployment('wiki', {
 	metadata: {
-		name: "wiki",
+		name: 'wiki',
 		labels: {
-			"loliot.net/stack": "wiki",
-		},
+			'loliot.net/stack': 'wiki'
+		}
 	},
 	spec: {
 		revisionHistoryLimit: 3,
 		selector: {
 			matchLabels: {
-				"app.kubernetes.io/name": "wiki",
-				app: "wiki",
-			},
+				'app.kubernetes.io/name': 'wiki',
+				app: 'wiki'
+			}
 		},
 		template: {
 			metadata: {
 				labels: {
-					"app.kubernetes.io/name": "wiki",
-					app: "wiki",
-				},
+					'app.kubernetes.io/name': 'wiki',
+					app: 'wiki'
+				}
 			},
 			spec: {
 				containers: [
 					{
-						name: "wiki",
-						image: "ghcr.io/hhk7734/wiki:f7e56936",
-						imagePullPolicy: "Always",
+						name: 'wiki',
+						image: 'ghcr.io/hhk7734/wiki:f7e56936',
+						imagePullPolicy: 'Always',
 						ports: [
 							{
-								name: "http",
+								name: 'http',
 								containerPort: 80,
-								protocol: "TCP",
-							},
+								protocol: 'TCP'
+							}
 						],
 						resources: {
 							requests: {
-								memory: "10Mi",
+								memory: '10Mi'
 							},
 							limits: {
-								memory: "64Mi",
-							},
-						},
-					},
+								memory: '64Mi'
+							}
+						}
+					}
 				],
 				tolerations: tolerations,
 				imagePullSecrets: [
 					{
-						name: "hhk7734-ghcr",
-					},
-				],
-			},
-		},
-	},
+						name: 'hhk7734-ghcr'
+					}
+				]
+			}
+		}
+	}
 });
 
-const service = new kubernetes.core.v1.Service("wiki", {
+const service = new kubernetes.core.v1.Service('wiki', {
 	metadata: {
-		name: "wiki",
+		name: 'wiki',
 		labels: {
-			"loliot.net/stack": "wiki",
-		},
+			'loliot.net/stack': 'wiki'
+		}
 	},
 	spec: {
 		ports: [
 			{
-				name: "http",
+				name: 'http',
 				port: 8080,
-				protocol: "TCP",
-				targetPort: 80,
-			},
+				protocol: 'TCP',
+				targetPort: 80
+			}
 		],
 		selector: deployment.spec.selector.matchLabels,
-		type: "ClusterIP",
-	},
+		type: 'ClusterIP'
+	}
 });
 
-const virtualService = new networking.v1beta1.VirtualService("wiki", {
+const virtualService = new networking.v1beta1.VirtualService('wiki', {
 	metadata: {
-		name: "wiki",
+		name: 'wiki'
 	},
 	spec: {
-		hosts: ["wiki.loliot.net", "loliot.net"],
-		gateways: ["istio-system/default-gateway"],
+		hosts: ['wiki.loliot.net', 'loliot.net'],
+		gateways: ['istio-system/default-gateway'],
 		http: [
 			{
 				match: [
 					{
 						authority: {
-							exact: "loliot.net",
-						},
-					},
+							exact: 'loliot.net'
+						}
+					}
 				],
 				redirect: {
-					authority: "wiki.loliot.net",
-				},
+					authority: 'wiki.loliot.net'
+				}
 			},
 			{
 				match: [
 					{
 						uri: {
-							prefix: "/",
-						},
-					},
+							prefix: '/'
+						}
+					}
 				],
 				route: [
 					{
 						destination: {
-							host: "wiki",
+							host: 'wiki',
 							port: {
-								number: 8080,
-							},
-						},
-					},
-				],
-			},
-		],
-	},
+								number: 8080
+							}
+						}
+					}
+				]
+			}
+		]
+	}
 });

@@ -18,7 +18,7 @@ global:
   # team_name: dev
 
   # Optional priority class to be used for the cert-manager pods
-  priorityClassName: ""
+  priorityClassName: ''
   rbac:
     create: true
     # Aggregate ClusterRoles to Kubernetes default user-facing roles. Ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#user-facing-roles
@@ -33,7 +33,7 @@ global:
 
   leaderElection:
     # Override the namespace used for the leader election lease
-    namespace: "kube-system"
+    namespace: 'kube-system'
 
     # The duration that non-leader candidates will wait after observing a
     # leadership renewal until attempting to acquire leadership of a led but
@@ -75,7 +75,7 @@ podDisruptionBudget:
 # component as this behaviour relies on a bug that will be fixed in cert-manager 1.13
 # https://github.com/cert-manager/cert-manager/pull/6093
 # Use webhook.extraArgs to pass --feature-gates flag directly instead.
-featureGates: ""
+featureGates: ''
 
 # The maximum number of challenges that can be scheduled as 'processing' at once
 maxConcurrentChallenges: 60
@@ -97,12 +97,12 @@ image:
 # Override the namespace used to store DNS provider credentials etc. for ClusterIssuer
 # resources. By default, the same namespace as cert-manager is deployed within is
 # used. This namespace will not be automatically created by the Helm chart.
-clusterResourceNamespace: ""
+clusterResourceNamespace: ''
 
 # This namespace allows you to define where the services will be installed into
 # if not set then they will use the namespace of the release
 # This is helpful when installing cert manager as a chart dependency (sub chart)
-namespace: ""
+namespace: ''
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -127,7 +127,7 @@ enableCertificateOwnerRef: false
 # See: https://cert-manager.io/docs/configuration/acme/dns01/#setting-nameservers-for-dns01-self-check
 
 # Comma separated string with host and port of the recursive nameservers cert-manager should query
-dns01RecursiveNameservers: ""
+dns01RecursiveNameservers: ''
 
 # Forces cert-manager to only use the recursive nameservers for verification.
 # Enabling this option could cause the DNS01 self check to take longer due to caching performed by the recursive nameservers
@@ -625,7 +625,7 @@ startupapicheck:
   # Optional additional annotations to add to the startupapicheck Job
   jobAnnotations:
     helm.sh/hook: post-install
-    helm.sh/hook-weight: "1"
+    helm.sh/hook-weight: '1'
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
 
   # Optional additional annotations to add to the startupapicheck Pods
@@ -670,7 +670,7 @@ startupapicheck:
     # annotations for the startup API Check job RBAC and PSP resources
     annotations:
       helm.sh/hook: post-install
-      helm.sh/hook-weight: "-5"
+      helm.sh/hook-weight: '-5'
       helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
 
   # Automounting API credentials for a particular pod
@@ -687,7 +687,7 @@ startupapicheck:
     # Optional additional annotations to add to the Job's ServiceAccount
     annotations:
       helm.sh/hook: post-install
-      helm.sh/hook-weight: "-5"
+      helm.sh/hook-weight: '-5'
       helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
 
     # Automount API credentials for a Service Account.

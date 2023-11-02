@@ -1,1 +1,1 @@
-export * as loliotNet from "./loliot-net";
+export * as loliotNet from './loliot-net';

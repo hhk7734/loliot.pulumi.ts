@@ -1,14 +1,14 @@
-import { loadConfig, register } from "tsconfig-paths";
+import { loadConfig, register } from 'tsconfig-paths';
 
-const tsConfig = loadConfig(".");
-if (tsConfig.resultType === "failed") {
-	console.log("Could not load tsconfig to map paths, aborting.");
+const tsConfig = loadConfig('.');
+if (tsConfig.resultType === 'failed') {
+	console.log('Could not load tsconfig to map paths, aborting.');
 	process.exit(1);
 }
 register({
 	baseUrl: tsConfig.absoluteBaseUrl,
-	paths: tsConfig.paths,
+	paths: tsConfig.paths
 });
 
-export * as metallb from "./metallb";
-export * as istio from "./istio";
+export * as metallb from './metallb';
+export * as istio from './istio';

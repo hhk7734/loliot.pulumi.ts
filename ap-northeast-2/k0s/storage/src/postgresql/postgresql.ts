@@ -1,109 +1,106 @@
-import * as kubernetes from "@pulumi/kubernetes";
-import * as variable from "@src/variable";
-import { namespace } from "@src/namespace";
+import * as kubernetes from '@pulumi/kubernetes';
+import * as variable from '@src/variable';
+import { namespace } from '@src/namespace';
 
 const matchLabels = {
-	"app.kubernetes.io/name": "postgresql",
-	app: "postgresql",
+	'app.kubernetes.io/name': 'postgresql',
+	app: 'postgresql'
 };
 const labels = {
-	"loliot.net/stack": variable.stackName,
-	...matchLabels,
+	'loliot.net/stack': variable.stackName,
+	...matchLabels
 };
 
-const secretName = "postgresql";
+const secretName = 'postgresql';
 const secret = new kubernetes.core.v1.Secret(secretName, {
 	metadata: {
 		name: secretName,
 		namespace: namespace.metadata.name,
-		labels: labels,
+		labels: labels
 	},
 	stringData: {
-		password: variable.postgresqlPassword,
-	},
+		password: variable.postgresqlPassword
+	}
 });
 
-const serviceAccountName = "postgresql";
-const serviceAccount = new kubernetes.core.v1.ServiceAccount(
-	serviceAccountName,
-	{
-		metadata: {
-			name: serviceAccountName,
-			namespace: namespace.metadata.name,
-			labels: labels,
-		},
-	},
-);
+const serviceAccountName = 'postgresql';
+const serviceAccount = new kubernetes.core.v1.ServiceAccount(serviceAccountName, {
+	metadata: {
+		name: serviceAccountName,
+		namespace: namespace.metadata.name,
+		labels: labels
+	}
+});
 
-const statefulSetName = "postgresql";
+const statefulSetName = 'postgresql';
 const statefulSet = new kubernetes.apps.v1.StatefulSet(statefulSetName, {
 	metadata: {
 		name: statefulSetName,
 		namespace: namespace.metadata.name,
-		labels: labels,
+		labels: labels
 	},
 	spec: {
-		serviceName: "postgresql",
+		serviceName: 'postgresql',
 		replicas: 1,
 		selector: {
-			matchLabels: matchLabels,
+			matchLabels: matchLabels
 		},
 		template: {
 			metadata: {
-				labels: labels,
+				labels: labels
 			},
 			spec: {
 				serviceAccountName: serviceAccount.metadata.name,
 				containers: [
 					{
 						name: statefulSetName,
-						image: "postgres:15.4-alpine3.18",
-						imagePullPolicy: "IfNotPresent",
+						image: 'postgres:15.4-alpine3.18',
+						imagePullPolicy: 'IfNotPresent',
 						ports: [
 							{
-								name: "postgresql",
+								name: 'postgresql',
 								containerPort: 5432,
-								protocol: "TCP",
-							},
+								protocol: 'TCP'
+							}
 						],
 						env: [
 							{
-								name: "POSTGRES_USER",
-								value: "postgres",
+								name: 'POSTGRES_USER',
+								value: 'postgres'
 							},
 							{
-								name: "POSTGRES_PASSWORD",
+								name: 'POSTGRES_PASSWORD',
 								valueFrom: {
 									secretKeyRef: {
 										name: secret.metadata.name,
-										key: "password",
-									},
-								},
+										key: 'password'
+									}
+								}
 							},
 							{
-								name: "PGDATA",
-								value: "/var/lib/postgresql/data",
-							},
+								name: 'PGDATA',
+								value: '/var/lib/postgresql/data'
+							}
 						],
 						resources: {
 							requests: {
-								memory: "10Mi",
+								memory: '10Mi'
 							},
 							limits: {
-								memory: "64Mi",
-							},
+								memory: '64Mi'
+							}
 						},
 						volumeMounts: [
 							{
-								name: "data",
-								mountPath: "/var/lib/postgresql/data",
+								name: 'data',
+								mountPath: '/var/lib/postgresql/data'
 							},
 							{
-								name: "dshm",
-								mountPath: "/dev/shm",
-							},
-						],
-					},
+								name: 'dshm',
+								mountPath: '/dev/shm'
+							}
+						]
+					}
 				],
 				affinity: {
 					podAntiAffinity: {
@@ -111,13 +108,13 @@ const statefulSet = new kubernetes.apps.v1.StatefulSet(statefulSetName, {
 							{
 								weight: 100,
 								podAffinityTerm: {
-									topologyKey: "kubernetes.io/hostname",
+									topologyKey: 'kubernetes.io/hostname',
 									labelSelector: {
-										matchLabels: matchLabels,
-									},
-								},
-							},
-						],
+										matchLabels: matchLabels
+									}
+								}
+							}
+						]
 					},
 					nodeAffinity: {
 						requiredDuringSchedulingIgnoredDuringExecution: {
@@ -125,68 +122,68 @@ const statefulSet = new kubernetes.apps.v1.StatefulSet(statefulSetName, {
 								{
 									matchExpressions: [
 										{
-											key: "node-role.kubernetes.io/control-plane",
-											operator: "In",
-											values: ["true"],
-										},
-									],
-								},
-							],
-						},
-					},
+											key: 'node-role.kubernetes.io/control-plane',
+											operator: 'In',
+											values: ['true']
+										}
+									]
+								}
+							]
+						}
+					}
 				},
 				tolerations: [
 					{
-						key: "node-role.kubernetes.io/master",
-						operator: "Exists",
-						effect: "NoSchedule",
-					},
+						key: 'node-role.kubernetes.io/master',
+						operator: 'Exists',
+						effect: 'NoSchedule'
+					}
 				],
 				volumes: [
 					{
-						name: "dshm",
+						name: 'dshm',
 						emptyDir: {
-							medium: "Memory",
-						},
-					},
-				],
-			},
+							medium: 'Memory'
+						}
+					}
+				]
+			}
 		},
 		volumeClaimTemplates: [
 			{
 				metadata: {
-					name: "data",
-					labels: labels,
+					name: 'data',
+					labels: labels
 				},
 				spec: {
-					accessModes: ["ReadWriteOnce"],
+					accessModes: ['ReadWriteOnce'],
 					resources: {
 						requests: {
-							storage: "5Gi",
-						},
-					},
-				},
-			},
-		],
-	},
+							storage: '5Gi'
+						}
+					}
+				}
+			}
+		]
+	}
 });
 
-const serviceName = "postgresql";
+const serviceName = 'postgresql';
 const service = new kubernetes.core.v1.Service(serviceName, {
 	metadata: {
 		name: serviceName,
 		namespace: namespace.metadata.name,
-		labels: labels,
+		labels: labels
 	},
 	spec: {
 		selector: matchLabels,
 		ports: [
 			{
-				name: "postgresql",
+				name: 'postgresql',
 				port: 5432,
-				targetPort: "postgresql",
-				protocol: "TCP",
-			},
-		],
-	},
+				targetPort: 'postgresql',
+				protocol: 'TCP'
+			}
+		]
+	}
 });

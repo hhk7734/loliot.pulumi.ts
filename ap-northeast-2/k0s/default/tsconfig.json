@@ -1,14 +1,10 @@
 {
-  "extends": "../../../tsconfig.base.json",
-  "compilerOptions": {
-    "baseUrl": "./",
-    "paths": {
-      "@src/*": [
-        "./src/*"
-      ],
-      "@crds/*": [
-        "../../../crds/*"
-      ]
-    }
-  },
+	"extends": "../../../tsconfig.base.json",
+	"compilerOptions": {
+		"baseUrl": "./",
+		"paths": {
+			"@src/*": ["./src/*"],
+			"@crds/*": ["../../../crds/*"]
+		}
+	}
 }

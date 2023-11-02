@@ -9,9 +9,9 @@ pilot:
   rollingMaxSurge: 100%
   rollingMaxUnavailable: 25%
 
-  hub: ""
-  tag: ""
-  variant: ""
+  hub: ''
+  tag: ''
+  variant: ''
 
   # Can be a full hub/image:tag
   image: pilot
@@ -43,7 +43,7 @@ pilot:
   # You can use jwksResolverExtraRootCA to provide a root certificate
   # in PEM format. This will then be trusted by pilot when resolving
   # JWKS URIs.
-  jwksResolverExtraRootCA: ""
+  jwksResolverExtraRootCA: ''
 
   # This is used to set the source of configuration for
   # the associated address in configSource, if nothing is specified
@@ -130,11 +130,11 @@ istiodRemote:
   # For example: https://$remotePilotAddress:15017/inject
   # The host should not refer to a service running in the cluster; use a service reference by specifying
   # the clientConfig.service field instead.
-  injectionURL: ""
+  injectionURL: ''
 
   # Sidecar injector mutating webhook configuration path value for the clientConfig.service field.
   # Override to pass env variables, for example: /inject/cluster/remote/net/network2
-  injectionPath: "/inject"
+  injectionPath: '/inject'
 telemetry:
   enabled: true
   v2:
@@ -172,15 +172,15 @@ telemetry:
       enabled: false
       # To reduce the number of successful logs, default log window duration is
       # set to 12 hours.
-      logWindowDuration: "43200s"
+      logWindowDuration: '43200s'
 # Revision is set as 'version' label and part of the resource names when installing multiple control planes.
-revision: ""
+revision: ''
 
 # Revision tags are aliases to Istio control plane revisions
 revisionTags: []
 
 # For Helm compatibility.
-ownerName: ""
+ownerName: ''
 
 # meshConfig defines runtime configuration of components, including Istiod and istio-agent behavior
 # See https://istio.io/docs/reference/config/istio.mesh.v1alpha1/ for all available options
@@ -222,11 +222,11 @@ global:
   tag: 1.18.2
   # Variant of the image to use.
   # Currently supported are: [debug, distroless]
-  variant: ""
+  variant: ''
 
   # Specify image pull policy if default behavior isn't desired.
   # Default behavior: latest images will be Always else IfNotPresent.
-  imagePullPolicy: ""
+  imagePullPolicy: ''
 
   # ImagePullSecrets for all ServiceAccount, list of secrets in the same namespace
   # to use for pulling any images in pods that reference this ServiceAccount.
@@ -247,7 +247,7 @@ global:
   # The control plane has different scopes depending on component, but can configure default log level across all components
   # If empty, default scope and level will be used as configured in code
   logging:
-    level: "default:info"
+    level: 'default:info'
 
   omitSidecarInjectorConfigMap: false
 
@@ -279,7 +279,7 @@ global:
   # will not be killed because of low priority class.
   # Refer to https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
   # for more detail.
-  priorityClassName: ""
+  priorityClassName: ''
 
   proxy:
     image: proxyv2
@@ -289,11 +289,11 @@ global:
 
     # CAUTION: It is important to ensure that all Istio helm charts specify the same clusterDomain value
     # cluster domain. Default value is "cluster.local".
-    clusterDomain: "cluster.local"
+    clusterDomain: 'cluster.local'
 
     # Per Component log level for proxy, applies to gateways and sidecars. If a component level is
     # not set, then the global "logLevel" will be used.
-    componentLogLevel: "misc:error"
+    componentLogLevel: 'misc:error'
 
     # If set, newly injected sidecars will have core dumps enabled.
     enableCoreDump: false
@@ -301,18 +301,18 @@ global:
     # istio ingress capture allowlist
     # examples:
     #     Redirect only selected ports:            --includeInboundPorts="80,8080"
-    excludeInboundPorts: ""
-    includeInboundPorts: "*"
+    excludeInboundPorts: ''
+    includeInboundPorts: '*'
 
     # istio egress capture allowlist
     # https://istio.io/docs/tasks/traffic-management/egress.html#calling-external-services-directly
     # example: includeIPRanges: "172.30.0.0/16,172.20.0.0/16"
     # would only capture egress traffic on those two IP Ranges, all other outbound traffic would
     # be allowed by the sidecar
-    includeIPRanges: "*"
-    excludeIPRanges: ""
-    includeOutboundPorts: ""
-    excludeOutboundPorts: ""
+    includeIPRanges: '*'
+    excludeIPRanges: ''
+    includeOutboundPorts: ''
+    excludeOutboundPorts: ''
 
     # Log level for proxy, applies to gateways and sidecars.
     # Expected values are: trace|debug|info|warning|error|critical|off
@@ -344,14 +344,14 @@ global:
 
     # Specify which tracer to use. One of: zipkin, lightstep, datadog, stackdriver.
     # If using stackdriver tracer outside GCP, set env GOOGLE_APPLICATION_CREDENTIALS to the GCP credential file.
-    tracer: "zipkin"
+    tracer: 'zipkin'
 
   proxy_init:
     # Base name for the proxy_init container, used to configure iptables.
     image: proxyv2
 
   # configure remote pilot and istiod service and endpoint
-  remotePilotAddress: ""
+  remotePilotAddress: ''
 
   ##############################################################################################
   # The following values are found in other charts. To effectively modify these values, make   #
@@ -361,7 +361,7 @@ global:
   # The customized CA address to retrieve certificates for the pods in the cluster.
   # CSR clients such as the Istio Agent and ingress gateways can use this to specify the CA endpoint.
   # If not set explicitly, default to the Istio discovery address.
-  caAddress: ""
+  caAddress: ''
 
   # Configure a remote cluster data plane controlled by an external istiod.
   # When set to true, istiod is not deployed locally and only a subset of the other
@@ -373,7 +373,7 @@ global:
 
   # Configure the policy for validating JWT.
   # Currently, two options are supported: "third-party-jwt" and "first-party-jwt".
-  jwtPolicy: "third-party-jwt"
+  jwtPolicy: 'third-party-jwt'
 
   # Mesh ID means Mesh Identifier. It should be unique within the scope where
   # meshes will interact with each other, but it is not required to be
@@ -396,7 +396,7 @@ global:
   # If the mesh admin does not specify a value, Istio will use the value of the
   # mesh's Trust Domain. The best practice is to select a proper Trust Domain
   # value.
-  meshID: ""
+  meshID: ''
 
   # Configure the mesh networks to be used by the Split Horizon EDS.
   #
@@ -438,11 +438,11 @@ global:
     enabled: false
     # Should be set to the name of the cluster this installation will run in. This is required for sidecar injection
     # to properly label proxies
-    clusterName: ""
+    clusterName: ''
 
   # Network defines the network this cluster belong to. This name
   # corresponds to the networks in the map of mesh networks.
-  network: ""
+  network: ''
 
   # Configure the certificate provider for control plane communication.
   # Currently, two providers are supported: "kubernetes" and "istiod".
@@ -467,7 +467,7 @@ global:
   # will be used as the certificates for workloads.
   # The default value is "" and when caName="", the CA will be configured by other
   # mechanisms (e.g., environmental variable CA_PROVIDER).
-  caName: ""
+  caName: ''
 
   # whether to use autoscaling/v2 template for HPA settings
   # for internal usage only, not to be configured by users.

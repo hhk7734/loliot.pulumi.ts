@@ -1,1 +1,1 @@
-export * as postgresql from "./postgresql";
+export * as postgresql from './postgresql';
