@@ -35,7 +35,7 @@ const deployment = new kubernetes.apps.v1.Deployment('wiki', {
 				containers: [
 					{
 						name: 'wiki',
-						image: 'ghcr.io/hhk7734/wiki:769f4cb0',
+						image: 'ghcr.io/hhk7734/wiki:57e41948',
 						imagePullPolicy: 'Always',
 						ports: [
 							{
