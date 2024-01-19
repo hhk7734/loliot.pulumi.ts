@@ -1,0 +1,12 @@
+- hosts: all
+  become: true
+  tasks:
+    - name: Set net.ipv4.ip_forward to 1
+      ansible.posix.sysctl:
+        name: net.ipv4.ip_forward
+        value: 1
+
+    - name: Set net.ipv6.conf.all.forwarding to 1
+      ansible.posix.sysctl:
+        name: net.ipv6.conf.all.forwarding
+        value: 1
