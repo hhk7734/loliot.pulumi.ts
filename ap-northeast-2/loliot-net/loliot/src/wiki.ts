@@ -3,6 +3,7 @@ import * as networking from '@crds/istio/networking';
 import { hhk7734GHCR } from '@src/ghcr';
 import { namespace } from '@src/namespace';
 import * as pulumi from '@pulumi/pulumi';
+import { gateway } from '@src/ingress';
 
 const deployment = new kubernetes.apps.v1.Deployment('wiki', {
 	metadata: {
@@ -113,7 +114,11 @@ new networking.v1beta1.VirtualService('wiki', {
 	},
 	spec: {
 		hosts: ['wiki.loliot.net', 'loliot.net'],
-		gateways: [],
+		gateways: [
+			gateway.metadata.apply((metadata) =>
+				metadata ? `${metadata.namespace}/${metadata.name}` : ''
+			)
+		],
 		http: [
 			{
 				match: [
@@ -140,7 +145,7 @@ new networking.v1beta1.VirtualService('wiki', {
 						destination: {
 							host: pulumi
 								.all([service.metadata.name, service.metadata.namespace])
-								.apply(([name, namespace]) => `${name}.${namespace}.svc`),
+								.apply(([name, namespace]) => `${name}.${namespace}.svc.cluster.local`),
 							port: {
 								number: service.spec.ports[0].port
 							}

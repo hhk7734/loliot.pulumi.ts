@@ -10,5 +10,6 @@ register({
 	paths: tsConfig.paths
 });
 
+export * as ingress from './ingress';
 export * as wiki from './wiki';
 export * as secret from './ghcr';
