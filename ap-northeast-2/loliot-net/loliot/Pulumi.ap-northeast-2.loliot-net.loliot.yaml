@@ -1,0 +1,5 @@
+encryptionsalt: v1:66vlvpIeYUM=:v1:RI+dwJXu3Uf3S5rV:z58XdR+WwhKyyRC6Dtd28O9cbzzLBg==
+config:
+  kubernetes:context: loliot-net
+  loliot:githubGHCRKey:
+    secure: v1:fVXIH2lmzAjwVa+t:5h4HMdvQyz6QdCae7ZZGpjUL6GJhvLRNma8yJ8aqoapiRE1u07DXdvyRqNM4DMOnQtk3Ow8eWd7kQcRKEiSsNnFwNwAueILNJl+s7Q2POOjg6b+K0+KiIJXBp+6yQj51r+tY9pkWHvAw1mC5y2q1K0s6m2Ym7OCPZ0rbiBhQaOcHHUol7wF2
