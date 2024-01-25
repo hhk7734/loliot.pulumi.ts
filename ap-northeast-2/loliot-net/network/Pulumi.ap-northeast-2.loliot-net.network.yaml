@@ -1,0 +1,5 @@
+encryptionsalt: v1:2kt70VttjIM=:v1:+uuXxJMMDtV5Uff1:iI/xUFQX18pByYykEdopc3xLcVXmWg==
+config:
+  kubernetes:context: loliot-net
+  loliot:k8sServiceHost:
+    secure: v1:1NU3wAzOrfToZiz+:BWJy7WlTGvgy4voC55wVkZIklgz1iR/M0sKudg==
