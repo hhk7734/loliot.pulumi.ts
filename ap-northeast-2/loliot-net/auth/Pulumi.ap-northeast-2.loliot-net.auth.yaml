@@ -1,0 +1,5 @@
+encryptionsalt: v1:kV+C1asS/iY=:v1:B5tkHfKHcsYjeTvq:5p73kQ1wIFKI6REiFeWppu7Au4GM+A==
+config:
+  kubernetes:context: loliot-net
+  loliot:cloudflareAPIToken:
+    secure: v1:tJi70lcxmRFxWfj9:1cztOd6Nxxq8UAdqX7TCgx2nZoL4XagcDe+jnJ2WTYRxPhdDVVDDL1uoMJbm+lqcM8Zzul2YYMY=
