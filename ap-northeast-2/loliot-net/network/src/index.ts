@@ -11,3 +11,4 @@ register({
 });
 
 export * as cilium from './cilium';
+export * as istio from './istio';
