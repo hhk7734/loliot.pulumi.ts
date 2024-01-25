@@ -2,6 +2,7 @@ import * as networking from '@crds/istio/networking';
 import * as kubernetes from '@pulumi/kubernetes';
 import * as variable from '@src/variable';
 import { namespace } from './namespace';
+import * as certmanager from '@crds/certmanager/certmanager';
 
 const ingressName = 'istio-ingress';
 const ingress = new kubernetes.helm.v3.Release(ingressName, {
@@ -85,6 +86,30 @@ const ingress = new kubernetes.helm.v3.Release(ingressName, {
 	}
 });
 
+const issuerName = variable.auth.certManager
+	.apply((certManager) => certManager.clusterIssuer.cloudflareLetsencrypt.metadata)
+	.apply((metadata) => `${metadata?.name}`);
+const loliotNetIngressCertName = 'loliot-net-ingress-cert';
+const loliotNetIngressCert = new certmanager.v1.Certificate(loliotNetIngressCertName, {
+	metadata: {
+		name: loliotNetIngressCertName,
+		namespace: namespace.metadata.name,
+		labels: {
+			'loliot.net/stack': variable.stackName
+		}
+	},
+	spec: {
+		secretName: loliotNetIngressCertName,
+		duration: '2160h',
+		renewBefore: '360h',
+		dnsNames: ['*.loliot.net', 'loliot.net'],
+		issuerRef: {
+			kind: 'ClusterIssuer',
+			name: issuerName
+		}
+	}
+});
+
 const gatewayName = 'gateway';
 export const gateway = new networking.v1alpha3.Gateway(
 	gatewayName,
@@ -103,7 +128,16 @@ export const gateway = new networking.v1alpha3.Gateway(
 			servers: [
 				{
 					port: { number: 80, name: 'http', protocol: 'HTTP' },
-					hosts: ['*']
+					hosts: ['*'],
+					tls: { httpsRedirect: true }
+				},
+				{
+					port: { number: 443, name: 'https', protocol: 'HTTPS' },
+					hosts: ['*.loliot.net', 'loliot.net'],
+					tls: {
+						mode: 'SIMPLE',
+						credentialName: loliotNetIngressCert.metadata.apply((metadata) => `${metadata?.name}`)
+					}
 				}
 			]
 		}

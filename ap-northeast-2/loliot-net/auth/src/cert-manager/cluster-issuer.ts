@@ -20,7 +20,7 @@ const cloudflareAPITokenSecret = new kubernetes.core.v1.Secret(cloudflareAPIToke
 });
 
 const cloudflareLetsencryptName = 'cloudflare-letsencrypt';
-new certmanager.v1.ClusterIssuer(
+export const cloudflareLetsencrypt = new certmanager.v1.ClusterIssuer(
 	cloudflareLetsencryptName,
 	{
 		metadata: {
