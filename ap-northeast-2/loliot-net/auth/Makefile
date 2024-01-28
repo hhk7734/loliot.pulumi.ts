@@ -1,7 +1,5 @@
-.PHONY: up
-up: passphrase
-	pulumi up -s ap-northeast-2.loliot-net.auth
+export PULUMI_CONFIG_PASSPHRASE_FILE=../../../.secret/ap-northeast-2.loliot-net.pulumi
 
-.PHONY: passphrase
-passphrase:
-	export PULUMI_CONFIG_PASSPHRASE_FILE=../../../.secret/ap-northeast-2.loliot-net.pulumi
+.PHONY: up
+up:
+	pulumi up -s ap-northeast-2.loliot-net.auth
