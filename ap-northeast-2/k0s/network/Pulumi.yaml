@@ -1,5 +1,0 @@
-name: loliot
-runtime:
-  name: nodejs
-backend:
-  url: file://../../../
