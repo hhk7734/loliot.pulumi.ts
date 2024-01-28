@@ -12,3 +12,4 @@ register({
 
 export * as certManager from './cert-manager';
 export * as namespace from './namespace';
+export * as casdoor from './casdoor';
