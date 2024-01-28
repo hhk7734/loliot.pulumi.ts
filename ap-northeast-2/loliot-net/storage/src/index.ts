@@ -11,3 +11,4 @@ register({
 });
 
 export * as namespace from './namespace';
+export * as localPathProvisioner from './local-path-provisioner';
