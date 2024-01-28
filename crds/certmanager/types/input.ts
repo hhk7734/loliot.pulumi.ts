@@ -93,7 +93,7 @@ export namespace acme {
             /**
              * Use the 'ACME DNS' (https://github.com/joohoi/acme-dns) API to manage DNS01 challenge records.
              */
-            acmeDNS?: pulumi.Input<inputs.acme.v1.ChallengeSpecSolverDns01AcmeDNSArgs>;
+            acmeDNS?: pulumi.Input<inputs.acme.v1.ChallengeSpecSolverDns01AcmeDnsArgs>;
             /**
              * Use the Akamai DNS zone management API to manage DNS01 challenge records.
              */
@@ -101,11 +101,11 @@ export namespace acme {
             /**
              * Use the Microsoft Azure DNS API to manage DNS01 challenge records.
              */
-            azureDNS?: pulumi.Input<inputs.acme.v1.ChallengeSpecSolverDns01AzureDNSArgs>;
+            azureDNS?: pulumi.Input<inputs.acme.v1.ChallengeSpecSolverDns01AzureDnsArgs>;
             /**
              * Use the Google Cloud DNS API to manage DNS01 challenge records.
              */
-            cloudDNS?: pulumi.Input<inputs.acme.v1.ChallengeSpecSolverDns01CloudDNSArgs>;
+            cloudDNS?: pulumi.Input<inputs.acme.v1.ChallengeSpecSolverDns01CloudDnsArgs>;
             /**
              * Use the Cloudflare API to manage DNS01 challenge records.
              */
@@ -135,18 +135,18 @@ export namespace acme {
         /**
          * Use the 'ACME DNS' (https://github.com/joohoi/acme-dns) API to manage DNS01 challenge records.
          */
-        export interface ChallengeSpecSolverDns01AcmeDNSArgs {
+        export interface ChallengeSpecSolverDns01AcmeDnsArgs {
             /**
              * A reference to a specific 'key' within a Secret resource. In some instances, `key` is a required field.
              */
-            accountSecretRef: pulumi.Input<inputs.acme.v1.ChallengeSpecSolverDns01AcmeDNSAccountSecretRefArgs>;
+            accountSecretRef: pulumi.Input<inputs.acme.v1.ChallengeSpecSolverDns01AcmeDnsAccountSecretRefArgs>;
             host: pulumi.Input<string>;
         }
 
         /**
          * A reference to a specific 'key' within a Secret resource. In some instances, `key` is a required field.
          */
-        export interface ChallengeSpecSolverDns01AcmeDNSAccountSecretRefArgs {
+        export interface ChallengeSpecSolverDns01AcmeDnsAccountSecretRefArgs {
             /**
              * The key of the entry in the Secret resource's `data` field to be used. Some instances of this field may be defaulted, in others it may be required.
              */
@@ -221,7 +221,7 @@ export namespace acme {
         /**
          * Use the Microsoft Azure DNS API to manage DNS01 challenge records.
          */
-        export interface ChallengeSpecSolverDns01AzureDNSArgs {
+        export interface ChallengeSpecSolverDns01AzureDnsArgs {
             /**
              * if both this and ClientSecret are left unset MSI will be used
              */
@@ -229,7 +229,7 @@ export namespace acme {
             /**
              * if both this and ClientID are left unset MSI will be used
              */
-            clientSecretSecretRef?: pulumi.Input<inputs.acme.v1.ChallengeSpecSolverDns01AzureDNSClientSecretSecretRefArgs>;
+            clientSecretSecretRef?: pulumi.Input<inputs.acme.v1.ChallengeSpecSolverDns01AzureDnsClientSecretSecretRefArgs>;
             /**
              * name of the Azure environment (default AzurePublicCloud)
              */
@@ -241,7 +241,7 @@ export namespace acme {
             /**
              * managed identity configuration, can not be used at the same time as clientID, clientSecretSecretRef or tenantID
              */
-            managedIdentity?: pulumi.Input<inputs.acme.v1.ChallengeSpecSolverDns01AzureDNSManagedIdentityArgs>;
+            managedIdentity?: pulumi.Input<inputs.acme.v1.ChallengeSpecSolverDns01AzureDnsManagedIdentityArgs>;
             /**
              * resource group the DNS zone is located in
              */
@@ -259,7 +259,7 @@ export namespace acme {
         /**
          * if both this and ClientID are left unset MSI will be used
          */
-        export interface ChallengeSpecSolverDns01AzureDNSClientSecretSecretRefArgs {
+        export interface ChallengeSpecSolverDns01AzureDnsClientSecretSecretRefArgs {
             /**
              * The key of the entry in the Secret resource's `data` field to be used. Some instances of this field may be defaulted, in others it may be required.
              */
@@ -273,7 +273,7 @@ export namespace acme {
         /**
          * managed identity configuration, can not be used at the same time as clientID, clientSecretSecretRef or tenantID
          */
-        export interface ChallengeSpecSolverDns01AzureDNSManagedIdentityArgs {
+        export interface ChallengeSpecSolverDns01AzureDnsManagedIdentityArgs {
             /**
              * client ID of the managed identity, can not be used at the same time as resourceID
              */
@@ -287,7 +287,7 @@ export namespace acme {
         /**
          * Use the Google Cloud DNS API to manage DNS01 challenge records.
          */
-        export interface ChallengeSpecSolverDns01CloudDNSArgs {
+        export interface ChallengeSpecSolverDns01CloudDnsArgs {
             /**
              * HostedZoneName is an optional field that tells cert-manager in which Cloud DNS zone the challenge record has to be created. If left empty cert-manager will automatically choose a zone.
              */
@@ -296,13 +296,13 @@ export namespace acme {
             /**
              * A reference to a specific 'key' within a Secret resource. In some instances, `key` is a required field.
              */
-            serviceAccountSecretRef?: pulumi.Input<inputs.acme.v1.ChallengeSpecSolverDns01CloudDNSServiceAccountSecretRefArgs>;
+            serviceAccountSecretRef?: pulumi.Input<inputs.acme.v1.ChallengeSpecSolverDns01CloudDnsServiceAccountSecretRefArgs>;
         }
 
         /**
          * A reference to a specific 'key' within a Secret resource. In some instances, `key` is a required field.
          */
-        export interface ChallengeSpecSolverDns01CloudDNSServiceAccountSecretRefArgs {
+        export interface ChallengeSpecSolverDns01CloudDnsServiceAccountSecretRefArgs {
             /**
              * The key of the entry in the Secret resource's `data` field to be used. Some instances of this field may be defaulted, in others it may be required.
              */
@@ -430,7 +430,7 @@ export namespace acme {
             /**
              * The SecretAccessKey is used for authentication. If set, pull the AWS access key ID from a key within a Kubernetes Secret. Cannot be set when AccessKeyID is set. If neither the Access Key nor Key ID are set, we fall-back to using env vars, shared credentials file or AWS Instance metadata, see: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials
              */
-            accessKeyIDSecretRef?: pulumi.Input<inputs.acme.v1.ChallengeSpecSolverDns01Route53AccessKeyIDSecretRefArgs>;
+            accessKeyIDSecretRef?: pulumi.Input<inputs.acme.v1.ChallengeSpecSolverDns01Route53AccessKeyIdsecretRefArgs>;
             /**
              * If set, the provider will manage only this zone in Route53 and will not do an lookup using the route53:ListHostedZonesByName api call.
              */
@@ -452,7 +452,7 @@ export namespace acme {
         /**
          * The SecretAccessKey is used for authentication. If set, pull the AWS access key ID from a key within a Kubernetes Secret. Cannot be set when AccessKeyID is set. If neither the Access Key nor Key ID are set, we fall-back to using env vars, shared credentials file or AWS Instance metadata, see: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials
          */
-        export interface ChallengeSpecSolverDns01Route53AccessKeyIDSecretRefArgs {
+        export interface ChallengeSpecSolverDns01Route53AccessKeyIdsecretRefArgs {
             /**
              * The key of the entry in the Secret resource's `data` field to be used. Some instances of this field may be defaulted, in others it may be required.
              */
@@ -502,7 +502,7 @@ export namespace acme {
             /**
              * The Gateway API is a sig-network community API that models service networking in Kubernetes (https://gateway-api.sigs.k8s.io/). The Gateway solver will create HTTPRoutes with the specified labels in the same namespace as the challenge. This solver is experimental, and fields / behaviour may change in the future.
              */
-            gatewayHTTPRoute?: pulumi.Input<inputs.acme.v1.ChallengeSpecSolverHttp01GatewayHTTPRouteArgs>;
+            gatewayHTTPRoute?: pulumi.Input<inputs.acme.v1.ChallengeSpecSolverHttp01GatewayHttprouteArgs>;
             /**
              * The ingress based HTTP01 challenge solver will solve challenges by creating or modifying Ingress resources in order to route requests for '/.well-known/acme-challenge/XYZ' to 'challenge solver' pods that are provisioned by cert-manager for each Challenge to be completed.
              */
@@ -512,7 +512,7 @@ export namespace acme {
         /**
          * The Gateway API is a sig-network community API that models service networking in Kubernetes (https://gateway-api.sigs.k8s.io/). The Gateway solver will create HTTPRoutes with the specified labels in the same namespace as the challenge. This solver is experimental, and fields / behaviour may change in the future.
          */
-        export interface ChallengeSpecSolverHttp01GatewayHTTPRouteArgs {
+        export interface ChallengeSpecSolverHttp01GatewayHttprouteArgs {
             /**
              * Custom labels that will be applied to HTTPRoutes created by cert-manager while solving HTTP-01 challenges.
              */
@@ -520,7 +520,7 @@ export namespace acme {
             /**
              * When solving an HTTP-01 challenge, cert-manager creates an HTTPRoute. cert-manager needs to know which parentRefs should be used when creating the HTTPRoute. Usually, the parentRef references a Gateway. See: https://gateway-api.sigs.k8s.io/api-types/httproute/#attaching-to-gateways
              */
-            parentRefs?: pulumi.Input<pulumi.Input<inputs.acme.v1.ChallengeSpecSolverHttp01GatewayHTTPRouteParentRefsArgs>[]>;
+            parentRefs?: pulumi.Input<pulumi.Input<inputs.acme.v1.ChallengeSpecSolverHttp01GatewayHttprouteParentRefsArgs>[]>;
             /**
              * Optional service type for Kubernetes solver service. Supported values are NodePort or ClusterIP. If unset, defaults to NodePort.
              */
@@ -528,10 +528,12 @@ export namespace acme {
         }
 
         /**
-         * ParentReference identifies an API object (usually a Gateway) that can be considered a parent of this resource (usually a route). The only kind of parent resource with "Core" support is Gateway. This API may be extended in the future to support additional kinds of parent resources, such as HTTPRoute. 
+         * ParentReference identifies an API object (usually a Gateway) that can be considered a parent of this resource (usually a route). There are two kinds of parent resources with "Core" support: 
+         *  * Gateway (Gateway conformance profile) * Service (Mesh conformance profile, experimental, ClusterIP Services only) 
+         *  This API may be extended in the future to support additional kinds of parent resources. 
          *  The API object must be valid in the cluster; the Group and Kind must be registered in the cluster for this reference to be valid.
          */
-        export interface ChallengeSpecSolverHttp01GatewayHTTPRouteParentRefsArgs {
+        export interface ChallengeSpecSolverHttp01GatewayHttprouteParentRefsArgs {
             /**
              * Group is the group of the referent. When unspecified, "gateway.networking.k8s.io" is inferred. To set the core API group (such as for a "Service" kind referent), Group must be explicitly set to "" (empty string). 
              *  Support: Core
@@ -539,8 +541,9 @@ export namespace acme {
             group?: pulumi.Input<string>;
             /**
              * Kind is kind of the referent. 
-             *  Support: Core (Gateway) 
-             *  Support: Implementation-specific (Other Resources)
+             *  There are two kinds of parent resources with "Core" support: 
+             *  * Gateway (Gateway conformance profile) * Service (Mesh conformance profile, experimental, ClusterIP Services only) 
+             *  Support for other resources is Implementation-Specific.
              */
             kind?: pulumi.Input<string>;
             /**
@@ -551,12 +554,15 @@ export namespace acme {
             /**
              * Namespace is the namespace of the referent. When unspecified, this refers to the local namespace of the Route. 
              *  Note that there are specific rules for ParentRefs which cross namespace boundaries. Cross-namespace references are only valid if they are explicitly allowed by something in the namespace they are referring to. For example: Gateway has the AllowedRoutes field, and ReferenceGrant provides a generic way to enable any other kind of cross-namespace reference. 
+             *  ParentRefs from a Route to a Service in the same namespace are "producer" routes, which apply default routing rules to inbound connections from any namespace to the Service. 
+             *  ParentRefs from a Route to a Service in a different namespace are "consumer" routes, and these routing rules are only applied to outbound connections originating from the same namespace as the Route, for which the intended destination of the connections are a Service targeted as a ParentRef of the Route. 
              *  Support: Core
              */
             namespace?: pulumi.Input<string>;
             /**
              * Port is the network port this Route targets. It can be interpreted differently based on the type of parent resource. 
              *  When the parent resource is a Gateway, this targets all listeners listening on the specified port that also support this kind of Route(and select this Route). It's not recommended to set `Port` unless the networking behaviors specified in a Route must apply to a specific port as opposed to a listener(s) whose port(s) may be changed. When both Port and SectionName are specified, the name and port of the selected listener must match both specified values. 
+             *  When the parent resource is a Service, this targets a specific port in the Service spec. When both Port (experimental) and SectionName are specified, the name and port of the selected port must match both specified values. 
              *  Implementations MAY choose to support other parent resources. Implementations supporting other types of parent resources MUST clearly document how/if Port is interpreted. 
              *  For the purpose of status, an attachment is considered successful as long as the parent resource accepts it partially. For example, Gateway listeners can restrict which Routes can attach to them by Route kind, namespace, or hostname. If 1 of 2 Gateway listeners accept attachment from the referencing Route, the Route MUST be considered successfully attached. If no Gateway listeners accept attachment from this Route, the Route MUST be considered detached from the Gateway. 
              *  Support: Extended 
@@ -565,7 +571,7 @@ export namespace acme {
             port?: pulumi.Input<number>;
             /**
              * SectionName is the name of a section within the target resource. In the following resources, SectionName is interpreted as the following: 
-             *  * Gateway: Listener Name. When both Port (experimental) and SectionName are specified, the name and port of the selected listener must match both specified values. 
+             *  * Gateway: Listener Name. When both Port (experimental) and SectionName are specified, the name and port of the selected listener must match both specified values. * Service: Port Name. When both Port (experimental) and SectionName are specified, the name and port of the selected listener must match both specified values. Note that attaching Routes to Services as Parents is part of experimental Mesh support and is not supported for any other purpose. 
              *  Implementations MAY choose to support attaching Routes to other resources. If that is the case, they MUST clearly document how SectionName is interpreted. 
              *  When unspecified (empty string), this will reference the entire resource. For the purpose of status, an attachment is considered successful if at least one section in the parent resource accepts it. For example, Gateway listeners can restrict which Routes can attach to them by Route kind, namespace, or hostname. If 1 of 2 Gateway listeners accept attachment from the referencing Route, the Route MUST be considered successfully attached. If no Gateway listeners accept attachment from this Route, the Route MUST be considered detached from the Gateway. 
              *  Support: Core
@@ -573,9 +579,9 @@ export namespace acme {
             sectionName?: pulumi.Input<string>;
         }
         /**
-         * challengeSpecSolverHttp01GatewayHTTPRouteParentRefsArgsProvideDefaults sets the appropriate defaults for ChallengeSpecSolverHttp01GatewayHTTPRouteParentRefsArgs
+         * challengeSpecSolverHttp01GatewayHttprouteParentRefsArgsProvideDefaults sets the appropriate defaults for ChallengeSpecSolverHttp01GatewayHttprouteParentRefsArgs
          */
-        export function challengeSpecSolverHttp01GatewayHTTPRouteParentRefsArgsProvideDefaults(val: ChallengeSpecSolverHttp01GatewayHTTPRouteParentRefsArgs): ChallengeSpecSolverHttp01GatewayHTTPRouteParentRefsArgs {
+        export function challengeSpecSolverHttp01GatewayHttprouteParentRefsArgsProvideDefaults(val: ChallengeSpecSolverHttp01GatewayHttprouteParentRefsArgs): ChallengeSpecSolverHttp01GatewayHttprouteParentRefsArgs {
             return {
                 ...val,
                 group: (val.group) ?? "gateway.networking.k8s.io",
@@ -1449,11 +1455,11 @@ export namespace acme {
 export namespace certmanager {
     export namespace v1 {
         /**
-         * Desired state of the CertificateRequest resource.
+         * Specification of the desired state of the CertificateRequest resource. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
          */
         export interface CertificateRequestSpecArgs {
             /**
-             * The requested 'duration' (i.e. lifetime) of the Certificate. This option may be ignored/overridden by some issuer types.
+             * Requested 'duration' (i.e. lifetime) of the Certificate. Note that the issuer may choose to ignore the requested duration, just like any other requested attribute.
              */
             duration?: pulumi.Input<string>;
             /**
@@ -1465,15 +1471,19 @@ export namespace certmanager {
              */
             groups?: pulumi.Input<pulumi.Input<string>[]>;
             /**
-             * IsCA will request to mark the certificate as valid for certificate signing when submitting to the issuer. This will automatically add the `cert sign` usage to the list of `usages`.
+             * Requested basic constraints isCA value. Note that the issuer may choose to ignore the requested isCA value, just like any other requested attribute. 
+             *  NOTE: If the CSR in the `Request` field has a BasicConstraints extension, it must have the same isCA value as specified here. 
+             *  If true, this will automatically add the `cert sign` usage to the list of requested `usages`.
              */
             isCA?: pulumi.Input<boolean>;
             /**
-             * IssuerRef is a reference to the issuer for this CertificateRequest.  If the `kind` field is not set, or set to `Issuer`, an Issuer resource with the given name in the same namespace as the CertificateRequest will be used.  If the `kind` field is set to `ClusterIssuer`, a ClusterIssuer with the provided name will be used. The `name` field in this stanza is required at all times. The group field refers to the API group of the issuer which defaults to `cert-manager.io` if empty.
+             * Reference to the issuer responsible for issuing the certificate. If the issuer is namespace-scoped, it must be in the same namespace as the Certificate. If the issuer is cluster-scoped, it can be used from any namespace. 
+             *  The `name` field of the reference must always be specified.
              */
             issuerRef: pulumi.Input<inputs.certmanager.v1.CertificateRequestSpecIssuerRefArgs>;
             /**
-             * The PEM-encoded x509 certificate signing request to be submitted to the CA for signing.
+             * The PEM-encoded X.509 certificate signing request to be submitted to the issuer for signing. 
+             *  If the CSR has a BasicConstraints extension, its isCA attribute must match the `isCA` value of this CertificateRequest. If the CSR has a KeyUsage extension, its key usages must match the key usages in the `usages` field of this CertificateRequest. If the CSR has a ExtKeyUsage extension, its extended key usages must match the extended key usages in the `usages` field of this CertificateRequest.
              */
             request: pulumi.Input<string>;
             /**
@@ -1481,7 +1491,9 @@ export namespace certmanager {
              */
             uid?: pulumi.Input<string>;
             /**
-             * Usages is the set of x509 usages that are requested for the certificate. If usages are set they SHOULD be encoded inside the CSR spec Defaults to `digital signature` and `key encipherment` if not specified.
+             * Requested key usages and extended key usages. 
+             *  NOTE: If the CSR in the `Request` field has uses the KeyUsage or ExtKeyUsage extension, these extensions must have the same values as specified here without any additional values. 
+             *  If unset, defaults to `digital signature` and `key encipherment`.
              */
             usages?: pulumi.Input<pulumi.Input<string>[]>;
             /**
@@ -1491,7 +1503,8 @@ export namespace certmanager {
         }
 
         /**
-         * IssuerRef is a reference to the issuer for this CertificateRequest.  If the `kind` field is not set, or set to `Issuer`, an Issuer resource with the given name in the same namespace as the CertificateRequest will be used.  If the `kind` field is set to `ClusterIssuer`, a ClusterIssuer with the provided name will be used. The `name` field in this stanza is required at all times. The group field refers to the API group of the issuer which defaults to `cert-manager.io` if empty.
+         * Reference to the issuer responsible for issuing the certificate. If the issuer is namespace-scoped, it must be in the same namespace as the Certificate. If the issuer is cluster-scoped, it can be used from any namespace. 
+         *  The `name` field of the reference must always be specified.
          */
         export interface CertificateRequestSpecIssuerRefArgs {
             /**
@@ -1509,19 +1522,19 @@ export namespace certmanager {
         }
 
         /**
-         * Status of the CertificateRequest. This is set and managed automatically.
+         * Status of the CertificateRequest. This is set and managed automatically. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
          */
         export interface CertificateRequestStatusArgs {
             /**
-             * The PEM encoded x509 certificate of the signer, also known as the CA (Certificate Authority). This is set on a best-effort basis by different issuers. If not set, the CA is assumed to be unknown/not available.
+             * The PEM encoded X.509 certificate of the signer, also known as the CA (Certificate Authority). This is set on a best-effort basis by different issuers. If not set, the CA is assumed to be unknown/not available.
              */
             ca?: pulumi.Input<string>;
             /**
-             * The PEM encoded x509 certificate resulting from the certificate signing request. If not set, the CertificateRequest has either not been completed or has failed. More information on failure can be found by checking the `conditions` field.
+             * The PEM encoded X.509 certificate resulting from the certificate signing request. If not set, the CertificateRequest has either not been completed or has failed. More information on failure can be found by checking the `conditions` field.
              */
             certificate?: pulumi.Input<string>;
             /**
-             * List of status conditions to indicate the status of a CertificateRequest. Known condition types are `Ready` and `InvalidRequest`.
+             * List of status conditions to indicate the status of a CertificateRequest. Known condition types are `Ready`, `InvalidRequest`, `Approved` and `Denied`.
              */
             conditions?: pulumi.Input<pulumi.Input<inputs.certmanager.v1.CertificateRequestStatusConditionsArgs>[]>;
             /**
@@ -1557,83 +1570,95 @@ export namespace certmanager {
         }
 
         /**
-         * Desired state of the Certificate resource.
+         * Specification of the desired state of the Certificate resource. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
          */
         export interface CertificateSpecArgs {
             /**
-             * AdditionalOutputFormats defines extra output formats of the private key and signed certificate chain to be written to this Certificate's target Secret. This is an Alpha Feature and is only enabled with the `--feature-gates=AdditionalCertificateOutputFormats=true` option on both the controller and webhook components.
+             * Defines extra output formats of the private key and signed certificate chain to be written to this Certificate's target Secret. 
+             *  This is an Alpha Feature and is only enabled with the `--feature-gates=AdditionalCertificateOutputFormats=true` option set on both the controller and webhook components.
              */
             additionalOutputFormats?: pulumi.Input<pulumi.Input<inputs.certmanager.v1.CertificateSpecAdditionalOutputFormatsArgs>[]>;
             /**
-             * CommonName is a common name to be used on the Certificate. The CommonName should have a length of 64 characters or fewer to avoid generating invalid CSRs. This value is ignored by TLS clients when any subject alt name is set. This is x509 behaviour: https://tools.ietf.org/html/rfc6125#section-6.4.4
+             * Requested common name X509 certificate subject attribute. More info: https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6 NOTE: TLS clients will ignore this value when any subject alternative name is set (see https://tools.ietf.org/html/rfc6125#section-6.4.4). 
+             *  Should have a length of 64 characters or fewer to avoid generating invalid CSRs. Cannot be set if the `literalSubject` field is set.
              */
             commonName?: pulumi.Input<string>;
             /**
-             * DNSNames is a list of DNS subjectAltNames to be set on the Certificate.
+             * Requested DNS subject alternative names.
              */
             dnsNames?: pulumi.Input<pulumi.Input<string>[]>;
             /**
-             * The requested 'duration' (i.e. lifetime) of the Certificate. This option may be ignored/overridden by some issuer types. If unset this defaults to 90 days. Certificate will be renewed either 2/3 through its duration or `renewBefore` period before its expiry, whichever is later. Minimum accepted duration is 1 hour. Value must be in units accepted by Go time.ParseDuration https://golang.org/pkg/time/#ParseDuration
+             * Requested 'duration' (i.e. lifetime) of the Certificate. Note that the issuer may choose to ignore the requested duration, just like any other requested attribute. 
+             *  If unset, this defaults to 90 days. Minimum accepted duration is 1 hour. Value must be in units accepted by Go time.ParseDuration https://golang.org/pkg/time/#ParseDuration.
              */
             duration?: pulumi.Input<string>;
             /**
-             * EmailAddresses is a list of email subjectAltNames to be set on the Certificate.
+             * Requested email subject alternative names.
              */
             emailAddresses?: pulumi.Input<pulumi.Input<string>[]>;
             /**
-             * EncodeUsagesInRequest controls whether key usages should be present in the CertificateRequest
+             * Whether the KeyUsage and ExtKeyUsage extensions should be set in the encoded CSR. 
+             *  This option defaults to true, and should only be disabled if the target issuer does not support CSRs with these X509 KeyUsage/ ExtKeyUsage extensions.
              */
             encodeUsagesInRequest?: pulumi.Input<boolean>;
             /**
-             * IPAddresses is a list of IP address subjectAltNames to be set on the Certificate.
+             * Requested IP address subject alternative names.
              */
             ipAddresses?: pulumi.Input<pulumi.Input<string>[]>;
             /**
-             * IsCA will mark this Certificate as valid for certificate signing. This will automatically add the `cert sign` usage to the list of `usages`.
+             * Requested basic constraints isCA value. The isCA value is used to set the `isCA` field on the created CertificateRequest resources. Note that the issuer may choose to ignore the requested isCA value, just like any other requested attribute. 
+             *  If true, this will automatically add the `cert sign` usage to the list of requested `usages`.
              */
             isCA?: pulumi.Input<boolean>;
             /**
-             * IssuerRef is a reference to the issuer for this certificate. If the `kind` field is not set, or set to `Issuer`, an Issuer resource with the given name in the same namespace as the Certificate will be used. If the `kind` field is set to `ClusterIssuer`, a ClusterIssuer with the provided name will be used. The `name` field in this stanza is required at all times.
+             * Reference to the issuer responsible for issuing the certificate. If the issuer is namespace-scoped, it must be in the same namespace as the Certificate. If the issuer is cluster-scoped, it can be used from any namespace. 
+             *  The `name` field of the reference must always be specified.
              */
             issuerRef: pulumi.Input<inputs.certmanager.v1.CertificateSpecIssuerRefArgs>;
             /**
-             * Keystores configures additional keystore output formats stored in the `secretName` Secret resource.
+             * Additional keystore output formats to be stored in the Certificate's Secret.
              */
             keystores?: pulumi.Input<inputs.certmanager.v1.CertificateSpecKeystoresArgs>;
             /**
-             * LiteralSubject is an LDAP formatted string that represents the [X.509 Subject field](https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6). Use this *instead* of the Subject field if you need to ensure the correct ordering of the RDN sequence, such as when issuing certs for LDAP authentication. See https://github.com/cert-manager/cert-manager/issues/3203, https://github.com/cert-manager/cert-manager/issues/4424. This field is alpha level and is only supported by cert-manager installations where LiteralCertificateSubject feature gate is enabled on both cert-manager controller and webhook.
+             * Requested X.509 certificate subject, represented using the LDAP "String Representation of a Distinguished Name" [1]. Important: the LDAP string format also specifies the order of the attributes in the subject, this is important when issuing certs for LDAP authentication. Example: `CN=foo,DC=corp,DC=example,DC=com` More info [1]: https://datatracker.ietf.org/doc/html/rfc4514 More info: https://github.com/cert-manager/cert-manager/issues/3203 More info: https://github.com/cert-manager/cert-manager/issues/4424 
+             *  Cannot be set if the `subject` or `commonName` field is set. This is an Alpha Feature and is only enabled with the `--feature-gates=LiteralCertificateSubject=true` option set on both the controller and webhook components.
              */
             literalSubject?: pulumi.Input<string>;
             /**
-             * Options to control private keys used for the Certificate.
+             * Private key options. These include the key algorithm and size, the used encoding and the rotation policy.
              */
             privateKey?: pulumi.Input<inputs.certmanager.v1.CertificateSpecPrivateKeyArgs>;
             /**
-             * How long before the currently issued certificate's expiry cert-manager should renew the certificate. The default is 2/3 of the issued certificate's duration. Minimum accepted value is 5 minutes. Value must be in units accepted by Go time.ParseDuration https://golang.org/pkg/time/#ParseDuration
+             * How long before the currently issued certificate's expiry cert-manager should renew the certificate. For example, if a certificate is valid for 60 minutes, and `renewBefore=10m`, cert-manager will begin to attempt to renew the certificate 50 minutes after it was issued (i.e. when there are 10 minutes remaining until the certificate is no longer valid). 
+             *  NOTE: The actual lifetime of the issued certificate is used to determine the renewal time. If an issuer returns a certificate with a different lifetime than the one requested, cert-manager will use the lifetime of the issued certificate. 
+             *  If unset, this defaults to 1/3 of the issued certificate's lifetime. Minimum accepted value is 5 minutes. Value must be in units accepted by Go time.ParseDuration https://golang.org/pkg/time/#ParseDuration.
              */
             renewBefore?: pulumi.Input<string>;
             /**
-             * revisionHistoryLimit is the maximum number of CertificateRequest revisions that are maintained in the Certificate's history. Each revision represents a single `CertificateRequest` created by this Certificate, either when it was created, renewed, or Spec was changed. Revisions will be removed by oldest first if the number of revisions exceeds this number. If set, revisionHistoryLimit must be a value of `1` or greater. If unset (`nil`), revisions will not be garbage collected. Default value is `nil`.
+             * The maximum number of CertificateRequest revisions that are maintained in the Certificate's history. Each revision represents a single `CertificateRequest` created by this Certificate, either when it was created, renewed, or Spec was changed. Revisions will be removed by oldest first if the number of revisions exceeds this number. 
+             *  If set, revisionHistoryLimit must be a value of `1` or greater. If unset (`nil`), revisions will not be garbage collected. Default value is `nil`.
              */
             revisionHistoryLimit?: pulumi.Input<number>;
             /**
-             * SecretName is the name of the secret resource that will be automatically created and managed by this Certificate resource. It will be populated with a private key and certificate, signed by the denoted issuer.
+             * Name of the Secret resource that will be automatically created and managed by this Certificate resource. It will be populated with a private key and certificate, signed by the denoted issuer. The Secret resource lives in the same namespace as the Certificate resource.
              */
             secretName: pulumi.Input<string>;
             /**
-             * SecretTemplate defines annotations and labels to be copied to the Certificate's Secret. Labels and annotations on the Secret will be changed as they appear on the SecretTemplate when added or removed. SecretTemplate annotations are added in conjunction with, and cannot overwrite, the base set of annotations cert-manager sets on the Certificate's Secret.
+             * Defines annotations and labels to be copied to the Certificate's Secret. Labels and annotations on the Secret will be changed as they appear on the SecretTemplate when added or removed. SecretTemplate annotations are added in conjunction with, and cannot overwrite, the base set of annotations cert-manager sets on the Certificate's Secret.
              */
             secretTemplate?: pulumi.Input<inputs.certmanager.v1.CertificateSpecSecretTemplateArgs>;
             /**
-             * Full X509 name specification (https://golang.org/pkg/crypto/x509/pkix/#Name).
+             * Requested set of X509 certificate subject attributes. More info: https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6 
+             *  The common name attribute is specified separately in the `commonName` field. Cannot be set if the `literalSubject` field is set.
              */
             subject?: pulumi.Input<inputs.certmanager.v1.CertificateSpecSubjectArgs>;
             /**
-             * URIs is a list of URI subjectAltNames to be set on the Certificate.
+             * Requested URI subject alternative names.
              */
             uris?: pulumi.Input<pulumi.Input<string>[]>;
             /**
-             * Usages is the set of x509 usages that are requested for the certificate. Defaults to `digital signature` and `key encipherment` if not specified.
+             * Requested key usages and extended key usages. These usages are used to set the `usages` field on the created CertificateRequest resources. If `encodeUsagesInRequest` is unset or set to `true`, the usages will additionally be encoded in the `request` field which contains the CSR blob. 
+             *  If unset, defaults to `digital signature` and `key encipherment`.
              */
             usages?: pulumi.Input<pulumi.Input<string>[]>;
         }
@@ -1649,7 +1674,8 @@ export namespace certmanager {
         }
 
         /**
-         * IssuerRef is a reference to the issuer for this certificate. If the `kind` field is not set, or set to `Issuer`, an Issuer resource with the given name in the same namespace as the Certificate will be used. If the `kind` field is set to `ClusterIssuer`, a ClusterIssuer with the provided name will be used. The `name` field in this stanza is required at all times.
+         * Reference to the issuer responsible for issuing the certificate. If the issuer is namespace-scoped, it must be in the same namespace as the Certificate. If the issuer is cluster-scoped, it can be used from any namespace. 
+         *  The `name` field of the reference must always be specified.
          */
         export interface CertificateSpecIssuerRefArgs {
             /**
@@ -1667,7 +1693,7 @@ export namespace certmanager {
         }
 
         /**
-         * Keystores configures additional keystore output formats stored in the `secretName` Secret resource.
+         * Additional keystore output formats to be stored in the Certificate's Secret.
          */
         export interface CertificateSpecKeystoresArgs {
             /**
@@ -1737,29 +1763,33 @@ export namespace certmanager {
         }
 
         /**
-         * Options to control private keys used for the Certificate.
+         * Private key options. These include the key algorithm and size, the used encoding and the rotation policy.
          */
         export interface CertificateSpecPrivateKeyArgs {
             /**
-             * Algorithm is the private key algorithm of the corresponding private key for this certificate. If provided, allowed values are either `RSA`,`Ed25519` or `ECDSA` If `algorithm` is specified and `size` is not provided, key size of 256 will be used for `ECDSA` key algorithm and key size of 2048 will be used for `RSA` key algorithm. key size is ignored when using the `Ed25519` key algorithm.
+             * Algorithm is the private key algorithm of the corresponding private key for this certificate. 
+             *  If provided, allowed values are either `RSA`, `ECDSA` or `Ed25519`. If `algorithm` is specified and `size` is not provided, key size of 2048 will be used for `RSA` key algorithm and key size of 256 will be used for `ECDSA` key algorithm. key size is ignored when using the `Ed25519` key algorithm.
              */
             algorithm?: pulumi.Input<string>;
             /**
-             * The private key cryptography standards (PKCS) encoding for this certificate's private key to be encoded in. If provided, allowed values are `PKCS1` and `PKCS8` standing for PKCS#1 and PKCS#8, respectively. Defaults to `PKCS1` if not specified.
+             * The private key cryptography standards (PKCS) encoding for this certificate's private key to be encoded in. 
+             *  If provided, allowed values are `PKCS1` and `PKCS8` standing for PKCS#1 and PKCS#8, respectively. Defaults to `PKCS1` if not specified.
              */
             encoding?: pulumi.Input<string>;
             /**
-             * RotationPolicy controls how private keys should be regenerated when a re-issuance is being processed. If set to Never, a private key will only be generated if one does not already exist in the target `spec.secretName`. If one does exists but it does not have the correct algorithm or size, a warning will be raised to await user intervention. If set to Always, a private key matching the specified requirements will be generated whenever a re-issuance occurs. Default is 'Never' for backward compatibility.
+             * RotationPolicy controls how private keys should be regenerated when a re-issuance is being processed. 
+             *  If set to `Never`, a private key will only be generated if one does not already exist in the target `spec.secretName`. If one does exists but it does not have the correct algorithm or size, a warning will be raised to await user intervention. If set to `Always`, a private key matching the specified requirements will be generated whenever a re-issuance occurs. Default is `Never` for backward compatibility.
              */
             rotationPolicy?: pulumi.Input<string>;
             /**
-             * Size is the key bit size of the corresponding private key for this certificate. If `algorithm` is set to `RSA`, valid values are `2048`, `4096` or `8192`, and will default to `2048` if not specified. If `algorithm` is set to `ECDSA`, valid values are `256`, `384` or `521`, and will default to `256` if not specified. If `algorithm` is set to `Ed25519`, Size is ignored. No other values are allowed.
+             * Size is the key bit size of the corresponding private key for this certificate. 
+             *  If `algorithm` is set to `RSA`, valid values are `2048`, `4096` or `8192`, and will default to `2048` if not specified. If `algorithm` is set to `ECDSA`, valid values are `256`, `384` or `521`, and will default to `256` if not specified. If `algorithm` is set to `Ed25519`, Size is ignored. No other values are allowed.
              */
             size?: pulumi.Input<number>;
         }
 
         /**
-         * SecretTemplate defines annotations and labels to be copied to the Certificate's Secret. Labels and annotations on the Secret will be changed as they appear on the SecretTemplate when added or removed. SecretTemplate annotations are added in conjunction with, and cannot overwrite, the base set of annotations cert-manager sets on the Certificate's Secret.
+         * Defines annotations and labels to be copied to the Certificate's Secret. Labels and annotations on the Secret will be changed as they appear on the SecretTemplate when added or removed. SecretTemplate annotations are added in conjunction with, and cannot overwrite, the base set of annotations cert-manager sets on the Certificate's Secret.
          */
         export interface CertificateSpecSecretTemplateArgs {
             /**
@@ -1773,7 +1803,8 @@ export namespace certmanager {
         }
 
         /**
-         * Full X509 name specification (https://golang.org/pkg/crypto/x509/pkix/#Name).
+         * Requested set of X509 certificate subject attributes. More info: https://datatracker.ietf.org/doc/html/rfc5280#section-4.1.2.6 
+         *  The common name attribute is specified separately in the `commonName` field. Cannot be set if the `literalSubject` field is set.
          */
         export interface CertificateSpecSubjectArgs {
             /**
@@ -1811,7 +1842,7 @@ export namespace certmanager {
         }
 
         /**
-         * Status of the Certificate. This is set and managed automatically.
+         * Status of the Certificate. This is set and managed automatically. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
          */
         export interface CertificateStatusArgs {
             /**
@@ -1835,7 +1866,7 @@ export namespace certmanager {
              */
             notAfter?: pulumi.Input<string>;
             /**
-             * The time after which the certificate stored in the secret named by this resource in spec.secretName is valid.
+             * The time after which the certificate stored in the secret named by this resource in `spec.secretName` is valid.
              */
             notBefore?: pulumi.Input<string>;
             /**
@@ -2024,7 +2055,7 @@ export namespace certmanager {
             /**
              * Use the 'ACME DNS' (https://github.com/joohoi/acme-dns) API to manage DNS01 challenge records.
              */
-            acmeDNS?: pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversDns01AcmeDNSArgs>;
+            acmeDNS?: pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversDns01AcmeDnsArgs>;
             /**
              * Use the Akamai DNS zone management API to manage DNS01 challenge records.
              */
@@ -2032,11 +2063,11 @@ export namespace certmanager {
             /**
              * Use the Microsoft Azure DNS API to manage DNS01 challenge records.
              */
-            azureDNS?: pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversDns01AzureDNSArgs>;
+            azureDNS?: pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversDns01AzureDnsArgs>;
             /**
              * Use the Google Cloud DNS API to manage DNS01 challenge records.
              */
-            cloudDNS?: pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversDns01CloudDNSArgs>;
+            cloudDNS?: pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversDns01CloudDnsArgs>;
             /**
              * Use the Cloudflare API to manage DNS01 challenge records.
              */
@@ -2066,18 +2097,18 @@ export namespace certmanager {
         /**
          * Use the 'ACME DNS' (https://github.com/joohoi/acme-dns) API to manage DNS01 challenge records.
          */
-        export interface ClusterIssuerSpecAcmeSolversDns01AcmeDNSArgs {
+        export interface ClusterIssuerSpecAcmeSolversDns01AcmeDnsArgs {
             /**
              * A reference to a specific 'key' within a Secret resource. In some instances, `key` is a required field.
              */
-            accountSecretRef: pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversDns01AcmeDNSAccountSecretRefArgs>;
+            accountSecretRef: pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversDns01AcmeDnsAccountSecretRefArgs>;
             host: pulumi.Input<string>;
         }
 
         /**
          * A reference to a specific 'key' within a Secret resource. In some instances, `key` is a required field.
          */
-        export interface ClusterIssuerSpecAcmeSolversDns01AcmeDNSAccountSecretRefArgs {
+        export interface ClusterIssuerSpecAcmeSolversDns01AcmeDnsAccountSecretRefArgs {
             /**
              * The key of the entry in the Secret resource's `data` field to be used. Some instances of this field may be defaulted, in others it may be required.
              */
@@ -2152,7 +2183,7 @@ export namespace certmanager {
         /**
          * Use the Microsoft Azure DNS API to manage DNS01 challenge records.
          */
-        export interface ClusterIssuerSpecAcmeSolversDns01AzureDNSArgs {
+        export interface ClusterIssuerSpecAcmeSolversDns01AzureDnsArgs {
             /**
              * if both this and ClientSecret are left unset MSI will be used
              */
@@ -2160,7 +2191,7 @@ export namespace certmanager {
             /**
              * if both this and ClientID are left unset MSI will be used
              */
-            clientSecretSecretRef?: pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversDns01AzureDNSClientSecretSecretRefArgs>;
+            clientSecretSecretRef?: pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversDns01AzureDnsClientSecretSecretRefArgs>;
             /**
              * name of the Azure environment (default AzurePublicCloud)
              */
@@ -2172,7 +2203,7 @@ export namespace certmanager {
             /**
              * managed identity configuration, can not be used at the same time as clientID, clientSecretSecretRef or tenantID
              */
-            managedIdentity?: pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversDns01AzureDNSManagedIdentityArgs>;
+            managedIdentity?: pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversDns01AzureDnsManagedIdentityArgs>;
             /**
              * resource group the DNS zone is located in
              */
@@ -2190,7 +2221,7 @@ export namespace certmanager {
         /**
          * if both this and ClientID are left unset MSI will be used
          */
-        export interface ClusterIssuerSpecAcmeSolversDns01AzureDNSClientSecretSecretRefArgs {
+        export interface ClusterIssuerSpecAcmeSolversDns01AzureDnsClientSecretSecretRefArgs {
             /**
              * The key of the entry in the Secret resource's `data` field to be used. Some instances of this field may be defaulted, in others it may be required.
              */
@@ -2204,7 +2235,7 @@ export namespace certmanager {
         /**
          * managed identity configuration, can not be used at the same time as clientID, clientSecretSecretRef or tenantID
          */
-        export interface ClusterIssuerSpecAcmeSolversDns01AzureDNSManagedIdentityArgs {
+        export interface ClusterIssuerSpecAcmeSolversDns01AzureDnsManagedIdentityArgs {
             /**
              * client ID of the managed identity, can not be used at the same time as resourceID
              */
@@ -2218,7 +2249,7 @@ export namespace certmanager {
         /**
          * Use the Google Cloud DNS API to manage DNS01 challenge records.
          */
-        export interface ClusterIssuerSpecAcmeSolversDns01CloudDNSArgs {
+        export interface ClusterIssuerSpecAcmeSolversDns01CloudDnsArgs {
             /**
              * HostedZoneName is an optional field that tells cert-manager in which Cloud DNS zone the challenge record has to be created. If left empty cert-manager will automatically choose a zone.
              */
@@ -2227,13 +2258,13 @@ export namespace certmanager {
             /**
              * A reference to a specific 'key' within a Secret resource. In some instances, `key` is a required field.
              */
-            serviceAccountSecretRef?: pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversDns01CloudDNSServiceAccountSecretRefArgs>;
+            serviceAccountSecretRef?: pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversDns01CloudDnsServiceAccountSecretRefArgs>;
         }
 
         /**
          * A reference to a specific 'key' within a Secret resource. In some instances, `key` is a required field.
          */
-        export interface ClusterIssuerSpecAcmeSolversDns01CloudDNSServiceAccountSecretRefArgs {
+        export interface ClusterIssuerSpecAcmeSolversDns01CloudDnsServiceAccountSecretRefArgs {
             /**
              * The key of the entry in the Secret resource's `data` field to be used. Some instances of this field may be defaulted, in others it may be required.
              */
@@ -2361,7 +2392,7 @@ export namespace certmanager {
             /**
              * The SecretAccessKey is used for authentication. If set, pull the AWS access key ID from a key within a Kubernetes Secret. Cannot be set when AccessKeyID is set. If neither the Access Key nor Key ID are set, we fall-back to using env vars, shared credentials file or AWS Instance metadata, see: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials
              */
-            accessKeyIDSecretRef?: pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversDns01Route53AccessKeyIDSecretRefArgs>;
+            accessKeyIDSecretRef?: pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversDns01Route53AccessKeyIdsecretRefArgs>;
             /**
              * If set, the provider will manage only this zone in Route53 and will not do an lookup using the route53:ListHostedZonesByName api call.
              */
@@ -2383,7 +2414,7 @@ export namespace certmanager {
         /**
          * The SecretAccessKey is used for authentication. If set, pull the AWS access key ID from a key within a Kubernetes Secret. Cannot be set when AccessKeyID is set. If neither the Access Key nor Key ID are set, we fall-back to using env vars, shared credentials file or AWS Instance metadata, see: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials
          */
-        export interface ClusterIssuerSpecAcmeSolversDns01Route53AccessKeyIDSecretRefArgs {
+        export interface ClusterIssuerSpecAcmeSolversDns01Route53AccessKeyIdsecretRefArgs {
             /**
              * The key of the entry in the Secret resource's `data` field to be used. Some instances of this field may be defaulted, in others it may be required.
              */
@@ -2433,7 +2464,7 @@ export namespace certmanager {
             /**
              * The Gateway API is a sig-network community API that models service networking in Kubernetes (https://gateway-api.sigs.k8s.io/). The Gateway solver will create HTTPRoutes with the specified labels in the same namespace as the challenge. This solver is experimental, and fields / behaviour may change in the future.
              */
-            gatewayHTTPRoute?: pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversHttp01GatewayHTTPRouteArgs>;
+            gatewayHTTPRoute?: pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversHttp01GatewayHttprouteArgs>;
             /**
              * The ingress based HTTP01 challenge solver will solve challenges by creating or modifying Ingress resources in order to route requests for '/.well-known/acme-challenge/XYZ' to 'challenge solver' pods that are provisioned by cert-manager for each Challenge to be completed.
              */
@@ -2443,7 +2474,7 @@ export namespace certmanager {
         /**
          * The Gateway API is a sig-network community API that models service networking in Kubernetes (https://gateway-api.sigs.k8s.io/). The Gateway solver will create HTTPRoutes with the specified labels in the same namespace as the challenge. This solver is experimental, and fields / behaviour may change in the future.
          */
-        export interface ClusterIssuerSpecAcmeSolversHttp01GatewayHTTPRouteArgs {
+        export interface ClusterIssuerSpecAcmeSolversHttp01GatewayHttprouteArgs {
             /**
              * Custom labels that will be applied to HTTPRoutes created by cert-manager while solving HTTP-01 challenges.
              */
@@ -2451,7 +2482,7 @@ export namespace certmanager {
             /**
              * When solving an HTTP-01 challenge, cert-manager creates an HTTPRoute. cert-manager needs to know which parentRefs should be used when creating the HTTPRoute. Usually, the parentRef references a Gateway. See: https://gateway-api.sigs.k8s.io/api-types/httproute/#attaching-to-gateways
              */
-            parentRefs?: pulumi.Input<pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversHttp01GatewayHTTPRouteParentRefsArgs>[]>;
+            parentRefs?: pulumi.Input<pulumi.Input<inputs.certmanager.v1.ClusterIssuerSpecAcmeSolversHttp01GatewayHttprouteParentRefsArgs>[]>;
             /**
              * Optional service type for Kubernetes solver service. Supported values are NodePort or ClusterIP. If unset, defaults to NodePort.
              */
@@ -2459,10 +2490,12 @@ export namespace certmanager {
         }
 
         /**
-         * ParentReference identifies an API object (usually a Gateway) that can be considered a parent of this resource (usually a route). The only kind of parent resource with "Core" support is Gateway. This API may be extended in the future to support additional kinds of parent resources, such as HTTPRoute. 
+         * ParentReference identifies an API object (usually a Gateway) that can be considered a parent of this resource (usually a route). There are two kinds of parent resources with "Core" support: 
+         *  * Gateway (Gateway conformance profile) * Service (Mesh conformance profile, experimental, ClusterIP Services only) 
+         *  This API may be extended in the future to support additional kinds of parent resources. 
          *  The API object must be valid in the cluster; the Group and Kind must be registered in the cluster for this reference to be valid.
          */
-        export interface ClusterIssuerSpecAcmeSolversHttp01GatewayHTTPRouteParentRefsArgs {
+        export interface ClusterIssuerSpecAcmeSolversHttp01GatewayHttprouteParentRefsArgs {
             /**
              * Group is the group of the referent. When unspecified, "gateway.networking.k8s.io" is inferred. To set the core API group (such as for a "Service" kind referent), Group must be explicitly set to "" (empty string). 
              *  Support: Core
@@ -2470,8 +2503,9 @@ export namespace certmanager {
             group?: pulumi.Input<string>;
             /**
              * Kind is kind of the referent. 
-             *  Support: Core (Gateway) 
-             *  Support: Implementation-specific (Other Resources)
+             *  There are two kinds of parent resources with "Core" support: 
+             *  * Gateway (Gateway conformance profile) * Service (Mesh conformance profile, experimental, ClusterIP Services only) 
+             *  Support for other resources is Implementation-Specific.
              */
             kind?: pulumi.Input<string>;
             /**
@@ -2482,12 +2516,15 @@ export namespace certmanager {
             /**
              * Namespace is the namespace of the referent. When unspecified, this refers to the local namespace of the Route. 
              *  Note that there are specific rules for ParentRefs which cross namespace boundaries. Cross-namespace references are only valid if they are explicitly allowed by something in the namespace they are referring to. For example: Gateway has the AllowedRoutes field, and ReferenceGrant provides a generic way to enable any other kind of cross-namespace reference. 
+             *  ParentRefs from a Route to a Service in the same namespace are "producer" routes, which apply default routing rules to inbound connections from any namespace to the Service. 
+             *  ParentRefs from a Route to a Service in a different namespace are "consumer" routes, and these routing rules are only applied to outbound connections originating from the same namespace as the Route, for which the intended destination of the connections are a Service targeted as a ParentRef of the Route. 
              *  Support: Core
              */
             namespace?: pulumi.Input<string>;
             /**
              * Port is the network port this Route targets. It can be interpreted differently based on the type of parent resource. 
              *  When the parent resource is a Gateway, this targets all listeners listening on the specified port that also support this kind of Route(and select this Route). It's not recommended to set `Port` unless the networking behaviors specified in a Route must apply to a specific port as opposed to a listener(s) whose port(s) may be changed. When both Port and SectionName are specified, the name and port of the selected listener must match both specified values. 
+             *  When the parent resource is a Service, this targets a specific port in the Service spec. When both Port (experimental) and SectionName are specified, the name and port of the selected port must match both specified values. 
              *  Implementations MAY choose to support other parent resources. Implementations supporting other types of parent resources MUST clearly document how/if Port is interpreted. 
              *  For the purpose of status, an attachment is considered successful as long as the parent resource accepts it partially. For example, Gateway listeners can restrict which Routes can attach to them by Route kind, namespace, or hostname. If 1 of 2 Gateway listeners accept attachment from the referencing Route, the Route MUST be considered successfully attached. If no Gateway listeners accept attachment from this Route, the Route MUST be considered detached from the Gateway. 
              *  Support: Extended 
@@ -2496,7 +2533,7 @@ export namespace certmanager {
             port?: pulumi.Input<number>;
             /**
              * SectionName is the name of a section within the target resource. In the following resources, SectionName is interpreted as the following: 
-             *  * Gateway: Listener Name. When both Port (experimental) and SectionName are specified, the name and port of the selected listener must match both specified values. 
+             *  * Gateway: Listener Name. When both Port (experimental) and SectionName are specified, the name and port of the selected listener must match both specified values. * Service: Port Name. When both Port (experimental) and SectionName are specified, the name and port of the selected listener must match both specified values. Note that attaching Routes to Services as Parents is part of experimental Mesh support and is not supported for any other purpose. 
              *  Implementations MAY choose to support attaching Routes to other resources. If that is the case, they MUST clearly document how SectionName is interpreted. 
              *  When unspecified (empty string), this will reference the entire resource. For the purpose of status, an attachment is considered successful if at least one section in the parent resource accepts it. For example, Gateway listeners can restrict which Routes can attach to them by Route kind, namespace, or hostname. If 1 of 2 Gateway listeners accept attachment from the referencing Route, the Route MUST be considered successfully attached. If no Gateway listeners accept attachment from this Route, the Route MUST be considered detached from the Gateway. 
              *  Support: Core
@@ -2504,9 +2541,9 @@ export namespace certmanager {
             sectionName?: pulumi.Input<string>;
         }
         /**
-         * clusterIssuerSpecAcmeSolversHttp01GatewayHTTPRouteParentRefsArgsProvideDefaults sets the appropriate defaults for ClusterIssuerSpecAcmeSolversHttp01GatewayHTTPRouteParentRefsArgs
+         * clusterIssuerSpecAcmeSolversHttp01GatewayHttprouteParentRefsArgsProvideDefaults sets the appropriate defaults for ClusterIssuerSpecAcmeSolversHttp01GatewayHttprouteParentRefsArgs
          */
-        export function clusterIssuerSpecAcmeSolversHttp01GatewayHTTPRouteParentRefsArgsProvideDefaults(val: ClusterIssuerSpecAcmeSolversHttp01GatewayHTTPRouteParentRefsArgs): ClusterIssuerSpecAcmeSolversHttp01GatewayHTTPRouteParentRefsArgs {
+        export function clusterIssuerSpecAcmeSolversHttp01GatewayHttprouteParentRefsArgsProvideDefaults(val: ClusterIssuerSpecAcmeSolversHttp01GatewayHttprouteParentRefsArgs): ClusterIssuerSpecAcmeSolversHttp01GatewayHttprouteParentRefsArgs {
             return {
                 ...val,
                 group: (val.group) ?? "gateway.networking.k8s.io",
@@ -3697,7 +3734,7 @@ export namespace certmanager {
             /**
              * Use the 'ACME DNS' (https://github.com/joohoi/acme-dns) API to manage DNS01 challenge records.
              */
-            acmeDNS?: pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversDns01AcmeDNSArgs>;
+            acmeDNS?: pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversDns01AcmeDnsArgs>;
             /**
              * Use the Akamai DNS zone management API to manage DNS01 challenge records.
              */
@@ -3705,11 +3742,11 @@ export namespace certmanager {
             /**
              * Use the Microsoft Azure DNS API to manage DNS01 challenge records.
              */
-            azureDNS?: pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversDns01AzureDNSArgs>;
+            azureDNS?: pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversDns01AzureDnsArgs>;
             /**
              * Use the Google Cloud DNS API to manage DNS01 challenge records.
              */
-            cloudDNS?: pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversDns01CloudDNSArgs>;
+            cloudDNS?: pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversDns01CloudDnsArgs>;
             /**
              * Use the Cloudflare API to manage DNS01 challenge records.
              */
@@ -3739,18 +3776,18 @@ export namespace certmanager {
         /**
          * Use the 'ACME DNS' (https://github.com/joohoi/acme-dns) API to manage DNS01 challenge records.
          */
-        export interface IssuerSpecAcmeSolversDns01AcmeDNSArgs {
+        export interface IssuerSpecAcmeSolversDns01AcmeDnsArgs {
             /**
              * A reference to a specific 'key' within a Secret resource. In some instances, `key` is a required field.
              */
-            accountSecretRef: pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversDns01AcmeDNSAccountSecretRefArgs>;
+            accountSecretRef: pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversDns01AcmeDnsAccountSecretRefArgs>;
             host: pulumi.Input<string>;
         }
 
         /**
          * A reference to a specific 'key' within a Secret resource. In some instances, `key` is a required field.
          */
-        export interface IssuerSpecAcmeSolversDns01AcmeDNSAccountSecretRefArgs {
+        export interface IssuerSpecAcmeSolversDns01AcmeDnsAccountSecretRefArgs {
             /**
              * The key of the entry in the Secret resource's `data` field to be used. Some instances of this field may be defaulted, in others it may be required.
              */
@@ -3825,7 +3862,7 @@ export namespace certmanager {
         /**
          * Use the Microsoft Azure DNS API to manage DNS01 challenge records.
          */
-        export interface IssuerSpecAcmeSolversDns01AzureDNSArgs {
+        export interface IssuerSpecAcmeSolversDns01AzureDnsArgs {
             /**
              * if both this and ClientSecret are left unset MSI will be used
              */
@@ -3833,7 +3870,7 @@ export namespace certmanager {
             /**
              * if both this and ClientID are left unset MSI will be used
              */
-            clientSecretSecretRef?: pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversDns01AzureDNSClientSecretSecretRefArgs>;
+            clientSecretSecretRef?: pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversDns01AzureDnsClientSecretSecretRefArgs>;
             /**
              * name of the Azure environment (default AzurePublicCloud)
              */
@@ -3845,7 +3882,7 @@ export namespace certmanager {
             /**
              * managed identity configuration, can not be used at the same time as clientID, clientSecretSecretRef or tenantID
              */
-            managedIdentity?: pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversDns01AzureDNSManagedIdentityArgs>;
+            managedIdentity?: pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversDns01AzureDnsManagedIdentityArgs>;
             /**
              * resource group the DNS zone is located in
              */
@@ -3863,7 +3900,7 @@ export namespace certmanager {
         /**
          * if both this and ClientID are left unset MSI will be used
          */
-        export interface IssuerSpecAcmeSolversDns01AzureDNSClientSecretSecretRefArgs {
+        export interface IssuerSpecAcmeSolversDns01AzureDnsClientSecretSecretRefArgs {
             /**
              * The key of the entry in the Secret resource's `data` field to be used. Some instances of this field may be defaulted, in others it may be required.
              */
@@ -3877,7 +3914,7 @@ export namespace certmanager {
         /**
          * managed identity configuration, can not be used at the same time as clientID, clientSecretSecretRef or tenantID
          */
-        export interface IssuerSpecAcmeSolversDns01AzureDNSManagedIdentityArgs {
+        export interface IssuerSpecAcmeSolversDns01AzureDnsManagedIdentityArgs {
             /**
              * client ID of the managed identity, can not be used at the same time as resourceID
              */
@@ -3891,7 +3928,7 @@ export namespace certmanager {
         /**
          * Use the Google Cloud DNS API to manage DNS01 challenge records.
          */
-        export interface IssuerSpecAcmeSolversDns01CloudDNSArgs {
+        export interface IssuerSpecAcmeSolversDns01CloudDnsArgs {
             /**
              * HostedZoneName is an optional field that tells cert-manager in which Cloud DNS zone the challenge record has to be created. If left empty cert-manager will automatically choose a zone.
              */
@@ -3900,13 +3937,13 @@ export namespace certmanager {
             /**
              * A reference to a specific 'key' within a Secret resource. In some instances, `key` is a required field.
              */
-            serviceAccountSecretRef?: pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversDns01CloudDNSServiceAccountSecretRefArgs>;
+            serviceAccountSecretRef?: pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversDns01CloudDnsServiceAccountSecretRefArgs>;
         }
 
         /**
          * A reference to a specific 'key' within a Secret resource. In some instances, `key` is a required field.
          */
-        export interface IssuerSpecAcmeSolversDns01CloudDNSServiceAccountSecretRefArgs {
+        export interface IssuerSpecAcmeSolversDns01CloudDnsServiceAccountSecretRefArgs {
             /**
              * The key of the entry in the Secret resource's `data` field to be used. Some instances of this field may be defaulted, in others it may be required.
              */
@@ -4034,7 +4071,7 @@ export namespace certmanager {
             /**
              * The SecretAccessKey is used for authentication. If set, pull the AWS access key ID from a key within a Kubernetes Secret. Cannot be set when AccessKeyID is set. If neither the Access Key nor Key ID are set, we fall-back to using env vars, shared credentials file or AWS Instance metadata, see: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials
              */
-            accessKeyIDSecretRef?: pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversDns01Route53AccessKeyIDSecretRefArgs>;
+            accessKeyIDSecretRef?: pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversDns01Route53AccessKeyIdsecretRefArgs>;
             /**
              * If set, the provider will manage only this zone in Route53 and will not do an lookup using the route53:ListHostedZonesByName api call.
              */
@@ -4056,7 +4093,7 @@ export namespace certmanager {
         /**
          * The SecretAccessKey is used for authentication. If set, pull the AWS access key ID from a key within a Kubernetes Secret. Cannot be set when AccessKeyID is set. If neither the Access Key nor Key ID are set, we fall-back to using env vars, shared credentials file or AWS Instance metadata, see: https://docs.aws.amazon.com/sdk-for-go/v1/developer-guide/configuring-sdk.html#specifying-credentials
          */
-        export interface IssuerSpecAcmeSolversDns01Route53AccessKeyIDSecretRefArgs {
+        export interface IssuerSpecAcmeSolversDns01Route53AccessKeyIdsecretRefArgs {
             /**
              * The key of the entry in the Secret resource's `data` field to be used. Some instances of this field may be defaulted, in others it may be required.
              */
@@ -4106,7 +4143,7 @@ export namespace certmanager {
             /**
              * The Gateway API is a sig-network community API that models service networking in Kubernetes (https://gateway-api.sigs.k8s.io/). The Gateway solver will create HTTPRoutes with the specified labels in the same namespace as the challenge. This solver is experimental, and fields / behaviour may change in the future.
              */
-            gatewayHTTPRoute?: pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversHttp01GatewayHTTPRouteArgs>;
+            gatewayHTTPRoute?: pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversHttp01GatewayHttprouteArgs>;
             /**
              * The ingress based HTTP01 challenge solver will solve challenges by creating or modifying Ingress resources in order to route requests for '/.well-known/acme-challenge/XYZ' to 'challenge solver' pods that are provisioned by cert-manager for each Challenge to be completed.
              */
@@ -4116,7 +4153,7 @@ export namespace certmanager {
         /**
          * The Gateway API is a sig-network community API that models service networking in Kubernetes (https://gateway-api.sigs.k8s.io/). The Gateway solver will create HTTPRoutes with the specified labels in the same namespace as the challenge. This solver is experimental, and fields / behaviour may change in the future.
          */
-        export interface IssuerSpecAcmeSolversHttp01GatewayHTTPRouteArgs {
+        export interface IssuerSpecAcmeSolversHttp01GatewayHttprouteArgs {
             /**
              * Custom labels that will be applied to HTTPRoutes created by cert-manager while solving HTTP-01 challenges.
              */
@@ -4124,7 +4161,7 @@ export namespace certmanager {
             /**
              * When solving an HTTP-01 challenge, cert-manager creates an HTTPRoute. cert-manager needs to know which parentRefs should be used when creating the HTTPRoute. Usually, the parentRef references a Gateway. See: https://gateway-api.sigs.k8s.io/api-types/httproute/#attaching-to-gateways
              */
-            parentRefs?: pulumi.Input<pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversHttp01GatewayHTTPRouteParentRefsArgs>[]>;
+            parentRefs?: pulumi.Input<pulumi.Input<inputs.certmanager.v1.IssuerSpecAcmeSolversHttp01GatewayHttprouteParentRefsArgs>[]>;
             /**
              * Optional service type for Kubernetes solver service. Supported values are NodePort or ClusterIP. If unset, defaults to NodePort.
              */
@@ -4132,10 +4169,12 @@ export namespace certmanager {
         }
 
         /**
-         * ParentReference identifies an API object (usually a Gateway) that can be considered a parent of this resource (usually a route). The only kind of parent resource with "Core" support is Gateway. This API may be extended in the future to support additional kinds of parent resources, such as HTTPRoute. 
+         * ParentReference identifies an API object (usually a Gateway) that can be considered a parent of this resource (usually a route). There are two kinds of parent resources with "Core" support: 
+         *  * Gateway (Gateway conformance profile) * Service (Mesh conformance profile, experimental, ClusterIP Services only) 
+         *  This API may be extended in the future to support additional kinds of parent resources. 
          *  The API object must be valid in the cluster; the Group and Kind must be registered in the cluster for this reference to be valid.
          */
-        export interface IssuerSpecAcmeSolversHttp01GatewayHTTPRouteParentRefsArgs {
+        export interface IssuerSpecAcmeSolversHttp01GatewayHttprouteParentRefsArgs {
             /**
              * Group is the group of the referent. When unspecified, "gateway.networking.k8s.io" is inferred. To set the core API group (such as for a "Service" kind referent), Group must be explicitly set to "" (empty string). 
              *  Support: Core
@@ -4143,8 +4182,9 @@ export namespace certmanager {
             group?: pulumi.Input<string>;
             /**
              * Kind is kind of the referent. 
-             *  Support: Core (Gateway) 
-             *  Support: Implementation-specific (Other Resources)
+             *  There are two kinds of parent resources with "Core" support: 
+             *  * Gateway (Gateway conformance profile) * Service (Mesh conformance profile, experimental, ClusterIP Services only) 
+             *  Support for other resources is Implementation-Specific.
              */
             kind?: pulumi.Input<string>;
             /**
@@ -4155,12 +4195,15 @@ export namespace certmanager {
             /**
              * Namespace is the namespace of the referent. When unspecified, this refers to the local namespace of the Route. 
              *  Note that there are specific rules for ParentRefs which cross namespace boundaries. Cross-namespace references are only valid if they are explicitly allowed by something in the namespace they are referring to. For example: Gateway has the AllowedRoutes field, and ReferenceGrant provides a generic way to enable any other kind of cross-namespace reference. 
+             *  ParentRefs from a Route to a Service in the same namespace are "producer" routes, which apply default routing rules to inbound connections from any namespace to the Service. 
+             *  ParentRefs from a Route to a Service in a different namespace are "consumer" routes, and these routing rules are only applied to outbound connections originating from the same namespace as the Route, for which the intended destination of the connections are a Service targeted as a ParentRef of the Route. 
              *  Support: Core
              */
             namespace?: pulumi.Input<string>;
             /**
              * Port is the network port this Route targets. It can be interpreted differently based on the type of parent resource. 
              *  When the parent resource is a Gateway, this targets all listeners listening on the specified port that also support this kind of Route(and select this Route). It's not recommended to set `Port` unless the networking behaviors specified in a Route must apply to a specific port as opposed to a listener(s) whose port(s) may be changed. When both Port and SectionName are specified, the name and port of the selected listener must match both specified values. 
+             *  When the parent resource is a Service, this targets a specific port in the Service spec. When both Port (experimental) and SectionName are specified, the name and port of the selected port must match both specified values. 
              *  Implementations MAY choose to support other parent resources. Implementations supporting other types of parent resources MUST clearly document how/if Port is interpreted. 
              *  For the purpose of status, an attachment is considered successful as long as the parent resource accepts it partially. For example, Gateway listeners can restrict which Routes can attach to them by Route kind, namespace, or hostname. If 1 of 2 Gateway listeners accept attachment from the referencing Route, the Route MUST be considered successfully attached. If no Gateway listeners accept attachment from this Route, the Route MUST be considered detached from the Gateway. 
              *  Support: Extended 
@@ -4169,7 +4212,7 @@ export namespace certmanager {
             port?: pulumi.Input<number>;
             /**
              * SectionName is the name of a section within the target resource. In the following resources, SectionName is interpreted as the following: 
-             *  * Gateway: Listener Name. When both Port (experimental) and SectionName are specified, the name and port of the selected listener must match both specified values. 
+             *  * Gateway: Listener Name. When both Port (experimental) and SectionName are specified, the name and port of the selected listener must match both specified values. * Service: Port Name. When both Port (experimental) and SectionName are specified, the name and port of the selected listener must match both specified values. Note that attaching Routes to Services as Parents is part of experimental Mesh support and is not supported for any other purpose. 
              *  Implementations MAY choose to support attaching Routes to other resources. If that is the case, they MUST clearly document how SectionName is interpreted. 
              *  When unspecified (empty string), this will reference the entire resource. For the purpose of status, an attachment is considered successful if at least one section in the parent resource accepts it. For example, Gateway listeners can restrict which Routes can attach to them by Route kind, namespace, or hostname. If 1 of 2 Gateway listeners accept attachment from the referencing Route, the Route MUST be considered successfully attached. If no Gateway listeners accept attachment from this Route, the Route MUST be considered detached from the Gateway. 
              *  Support: Core
@@ -4177,9 +4220,9 @@ export namespace certmanager {
             sectionName?: pulumi.Input<string>;
         }
         /**
-         * issuerSpecAcmeSolversHttp01GatewayHTTPRouteParentRefsArgsProvideDefaults sets the appropriate defaults for IssuerSpecAcmeSolversHttp01GatewayHTTPRouteParentRefsArgs
+         * issuerSpecAcmeSolversHttp01GatewayHttprouteParentRefsArgsProvideDefaults sets the appropriate defaults for IssuerSpecAcmeSolversHttp01GatewayHttprouteParentRefsArgs
          */
-        export function issuerSpecAcmeSolversHttp01GatewayHTTPRouteParentRefsArgsProvideDefaults(val: IssuerSpecAcmeSolversHttp01GatewayHTTPRouteParentRefsArgs): IssuerSpecAcmeSolversHttp01GatewayHTTPRouteParentRefsArgs {
+        export function issuerSpecAcmeSolversHttp01GatewayHttprouteParentRefsArgsProvideDefaults(val: IssuerSpecAcmeSolversHttp01GatewayHttprouteParentRefsArgs): IssuerSpecAcmeSolversHttp01GatewayHttprouteParentRefsArgs {
             return {
                 ...val,
                 group: (val.group) ?? "gateway.networking.k8s.io",

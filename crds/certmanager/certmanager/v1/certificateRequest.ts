@@ -10,7 +10,7 @@ import {ObjectMeta} from "../../meta/v1";
 
 /**
  * A CertificateRequest is used to request a signed certificate from one of the configured issuers.
- *  All fields within the CertificateRequest's `spec` are immutable after creation. A CertificateRequest will either succeed or fail, as denoted by its `status.state` field.
+ *  All fields within the CertificateRequest's `spec` are immutable after creation. A CertificateRequest will either succeed or fail, as denoted by its `Ready` status condition and its `status.failureTime` field.
  *  A CertificateRequest is a one-shot resource, meaning it represents a single point in time request for a certificate and cannot be re-used.
  */
 export class CertificateRequest extends pulumi.CustomResource {
@@ -44,11 +44,11 @@ export class CertificateRequest extends pulumi.CustomResource {
     public readonly kind!: pulumi.Output<"CertificateRequest" | undefined>;
     public readonly metadata!: pulumi.Output<ObjectMeta | undefined>;
     /**
-     * Desired state of the CertificateRequest resource.
+     * Specification of the desired state of the CertificateRequest resource. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
      */
-    public readonly spec!: pulumi.Output<outputs.certmanager.v1.CertificateRequestSpec>;
+    public readonly spec!: pulumi.Output<outputs.certmanager.v1.CertificateRequestSpec | undefined>;
     /**
-     * Status of the CertificateRequest. This is set and managed automatically.
+     * Status of the CertificateRequest. This is set and managed automatically. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
      */
     public readonly status!: pulumi.Output<outputs.certmanager.v1.CertificateRequestStatus | undefined>;
 
@@ -88,11 +88,11 @@ export interface CertificateRequestArgs {
     kind?: pulumi.Input<"CertificateRequest">;
     metadata?: pulumi.Input<ObjectMeta>;
     /**
-     * Desired state of the CertificateRequest resource.
+     * Specification of the desired state of the CertificateRequest resource. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
      */
     spec?: pulumi.Input<inputs.certmanager.v1.CertificateRequestSpecArgs>;
     /**
-     * Status of the CertificateRequest. This is set and managed automatically.
+     * Status of the CertificateRequest. This is set and managed automatically. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
      */
     status?: pulumi.Input<inputs.certmanager.v1.CertificateRequestStatusArgs>;
 }

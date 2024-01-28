@@ -9,7 +9,7 @@ import * as utilities from "../../utilities";
 import {ObjectMeta} from "../../meta/v1";
 
 /**
- * A Certificate resource should be created to ensure an up to date and signed x509 certificate is stored in the Kubernetes Secret resource named in `spec.secretName`.
+ * A Certificate resource should be created to ensure an up to date and signed X.509 certificate is stored in the Kubernetes Secret resource named in `spec.secretName`.
  *  The stored certificate will be renewed before it expires (as configured by `spec.renewBefore`).
  */
 export class Certificate extends pulumi.CustomResource {
@@ -43,11 +43,11 @@ export class Certificate extends pulumi.CustomResource {
     public readonly kind!: pulumi.Output<"Certificate" | undefined>;
     public readonly metadata!: pulumi.Output<ObjectMeta | undefined>;
     /**
-     * Desired state of the Certificate resource.
+     * Specification of the desired state of the Certificate resource. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
      */
-    public readonly spec!: pulumi.Output<outputs.certmanager.v1.CertificateSpec>;
+    public readonly spec!: pulumi.Output<outputs.certmanager.v1.CertificateSpec | undefined>;
     /**
-     * Status of the Certificate. This is set and managed automatically.
+     * Status of the Certificate. This is set and managed automatically. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
      */
     public readonly status!: pulumi.Output<outputs.certmanager.v1.CertificateStatus | undefined>;
 
@@ -87,11 +87,11 @@ export interface CertificateArgs {
     kind?: pulumi.Input<"Certificate">;
     metadata?: pulumi.Input<ObjectMeta>;
     /**
-     * Desired state of the Certificate resource.
+     * Specification of the desired state of the Certificate resource. https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
      */
     spec?: pulumi.Input<inputs.certmanager.v1.CertificateSpecArgs>;
     /**
-     * Status of the Certificate. This is set and managed automatically.
+     * Status of the Certificate. This is set and managed automatically. Read-only. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#spec-and-status
      */
     status?: pulumi.Input<inputs.certmanager.v1.CertificateStatusArgs>;
 }
