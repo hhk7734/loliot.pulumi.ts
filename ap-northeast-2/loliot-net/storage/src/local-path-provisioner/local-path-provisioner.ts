@@ -3,7 +3,7 @@ import * as kubernetes from '@pulumi/kubernetes';
 import * as path from 'path';
 
 const localPathProvisionerName = 'local-path-provisioner';
-new kubernetes.helm.v3.Release(localPathProvisionerName, {
+export const localPathProvisioner = new kubernetes.helm.v3.Release(localPathProvisionerName, {
 	name: localPathProvisionerName,
 	chart: path.join(__dirname, '../../../../../charts/local-path-provisioner-0.0.25.tgz'),
 	namespace: namespace.metadata.name,
