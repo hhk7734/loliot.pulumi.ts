@@ -27,6 +27,7 @@ export const istiod = new kubernetes.helm.v3.Release(
 		values: {
 			revision: '1-20-2',
 			pilot: {
+				autoscaleEnabled: false,
 				env: {
 					ENABLE_CA_SERVER: 'false'
 				},
