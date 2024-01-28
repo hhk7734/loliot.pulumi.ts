@@ -38,6 +38,9 @@ export class WorkloadGroup extends pulumi.CustomResource {
     public readonly apiVersion!: pulumi.Output<"networking.istio.io/v1beta1" | undefined>;
     public readonly kind!: pulumi.Output<"WorkloadGroup" | undefined>;
     public readonly metadata!: pulumi.Output<ObjectMeta | undefined>;
+    /**
+     * `WorkloadGroup` enables specifying the properties of a single workload for bootstrap and provides a template for `WorkloadEntry`, similar to how `Deployment` specifies properties of workloads via `Pod` templates.
+     */
     public readonly spec!: pulumi.Output<outputs.networking.v1beta1.WorkloadGroupSpec | undefined>;
     public readonly status!: pulumi.Output<{[key: string]: any} | undefined>;
 
@@ -76,6 +79,9 @@ export interface WorkloadGroupArgs {
     apiVersion?: pulumi.Input<"networking.istio.io/v1beta1">;
     kind?: pulumi.Input<"WorkloadGroup">;
     metadata?: pulumi.Input<ObjectMeta>;
+    /**
+     * `WorkloadGroup` enables specifying the properties of a single workload for bootstrap and provides a template for `WorkloadEntry`, similar to how `Deployment` specifies properties of workloads via `Pod` templates.
+     */
     spec?: pulumi.Input<inputs.networking.v1beta1.WorkloadGroupSpecArgs>;
     status?: pulumi.Input<{[key: string]: any}>;
 }

@@ -39,7 +39,7 @@ export class RequestAuthentication extends pulumi.CustomResource {
     public readonly kind!: pulumi.Output<"RequestAuthentication" | undefined>;
     public readonly metadata!: pulumi.Output<ObjectMeta | undefined>;
     /**
-     * RequestAuthentication defines what request authentication methods are supported by a workload.
+     * Request authentication configuration for workloads. See more details at: https://istio.io/docs/reference/config/security/request_authentication.html
      */
     public readonly spec!: pulumi.Output<outputs.security.v1.RequestAuthenticationSpec | undefined>;
     public readonly status!: pulumi.Output<{[key: string]: any} | undefined>;
@@ -80,7 +80,7 @@ export interface RequestAuthenticationArgs {
     kind?: pulumi.Input<"RequestAuthentication">;
     metadata?: pulumi.Input<ObjectMeta>;
     /**
-     * RequestAuthentication defines what request authentication methods are supported by a workload.
+     * Request authentication configuration for workloads. See more details at: https://istio.io/docs/reference/config/security/request_authentication.html
      */
     spec?: pulumi.Input<inputs.security.v1.RequestAuthenticationSpecArgs>;
     status?: pulumi.Input<{[key: string]: any}>;

@@ -39,7 +39,7 @@ export class PeerAuthentication extends pulumi.CustomResource {
     public readonly kind!: pulumi.Output<"PeerAuthentication" | undefined>;
     public readonly metadata!: pulumi.Output<ObjectMeta | undefined>;
     /**
-     * PeerAuthentication defines how traffic will be tunneled (or not) to the sidecar.
+     * Peer authentication configuration for workloads. See more details at: https://istio.io/docs/reference/config/security/peer_authentication.html
      */
     public readonly spec!: pulumi.Output<outputs.security.v1beta1.PeerAuthenticationSpec | undefined>;
     public readonly status!: pulumi.Output<{[key: string]: any} | undefined>;
@@ -80,7 +80,7 @@ export interface PeerAuthenticationArgs {
     kind?: pulumi.Input<"PeerAuthentication">;
     metadata?: pulumi.Input<ObjectMeta>;
     /**
-     * PeerAuthentication defines how traffic will be tunneled (or not) to the sidecar.
+     * Peer authentication configuration for workloads. See more details at: https://istio.io/docs/reference/config/security/peer_authentication.html
      */
     spec?: pulumi.Input<inputs.security.v1beta1.PeerAuthenticationSpecArgs>;
     status?: pulumi.Input<{[key: string]: any}>;

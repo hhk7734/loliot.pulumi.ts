@@ -13,6 +13,13 @@ export namespace extensions {
          * Extend the functionality provided by the Istio proxy through WebAssembly filters. See more details at: https://istio.io/docs/reference/config/proxy_extensions/wasm-plugin.html
          */
         export interface WasmPluginSpecArgs {
+            /**
+             * Specifies the failure behavior for the plugin due to fatal errors.
+             */
+            failStrategy?: pulumi.Input<string>;
+            /**
+             * The pull behaviour to be applied when fetching Wasm module by either OCI image or http/https.
+             */
             imagePullPolicy?: pulumi.Input<string>;
             /**
              * Credentials to use for OCI image pulling.
@@ -30,20 +37,34 @@ export namespace extensions {
              * The configuration that will be passed on to the plugin.
              */
             pluginConfig?: pulumi.Input<{[key: string]: any}>;
+            /**
+             * The plugin name to be used in the Envoy configuration (used to be called `rootID`).
+             */
             pluginName?: pulumi.Input<string>;
             /**
              * Determines ordering of `WasmPlugins` in the same `phase`.
              */
             priority?: pulumi.Input<number>;
+            /**
+             * Criteria used to select the specific set of pods/VMs on which this plugin configuration should be applied.
+             */
             selector?: pulumi.Input<inputs.extensions.v1alpha1.WasmPluginSpecSelectorArgs>;
             /**
              * SHA256 checksum that will be used to verify Wasm module or OCI container.
              */
             sha256?: pulumi.Input<string>;
             /**
+             * Optional.
+             */
+            targetRef?: pulumi.Input<inputs.extensions.v1alpha1.WasmPluginSpecTargetRefArgs>;
+            /**
+             * Specifies the type of Wasm Extension to be used.
+             */
+            type?: pulumi.Input<string>;
+            /**
              * URL of a Wasm module or OCI container.
              */
-            url?: pulumi.Input<string>;
+            url: pulumi.Input<string>;
             verificationKey?: pulumi.Input<string>;
             /**
              * Configuration for a Wasm VM.
@@ -63,11 +84,39 @@ export namespace extensions {
         }
 
         export interface WasmPluginSpecMatchPortsArgs {
-            number?: pulumi.Input<number>;
+            number: pulumi.Input<number>;
         }
 
+        /**
+         * Criteria used to select the specific set of pods/VMs on which this plugin configuration should be applied.
+         */
         export interface WasmPluginSpecSelectorArgs {
+            /**
+             * One or more labels that indicate a specific set of pods/VMs on which a policy should be applied.
+             */
             matchLabels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+        }
+
+        /**
+         * Optional.
+         */
+        export interface WasmPluginSpecTargetRefArgs {
+            /**
+             * group is the group of the target resource.
+             */
+            group?: pulumi.Input<string>;
+            /**
+             * kind is kind of the target resource.
+             */
+            kind?: pulumi.Input<string>;
+            /**
+             * name is the name of the target resource.
+             */
+            name?: pulumi.Input<string>;
+            /**
+             * namespace is the namespace of the referent.
+             */
+            namespace?: pulumi.Input<string>;
         }
 
         /**
@@ -81,11 +130,17 @@ export namespace extensions {
         }
 
         export interface WasmPluginSpecVmConfigEnvArgs {
-            name?: pulumi.Input<string>;
+            /**
+             * Name of the environment variable.
+             */
+            name: pulumi.Input<string>;
             /**
              * Value for the environment variable.
              */
             value?: pulumi.Input<string>;
+            /**
+             * Source for the environment variable's value.
+             */
             valueFrom?: pulumi.Input<string>;
         }
     }
@@ -109,18 +164,30 @@ export namespace networking {
             /**
              * The name of a service from the service registry.
              */
-            host?: pulumi.Input<string>;
+            host: pulumi.Input<string>;
+            /**
+             * One or more named sets that represent individual versions of a service.
+             */
             subsets?: pulumi.Input<pulumi.Input<inputs.networking.v1alpha3.DestinationRuleSpecSubsetsArgs>[]>;
+            /**
+             * Traffic policies to apply (load balancing policy, connection pool sizes, outlier detection).
+             */
             trafficPolicy?: pulumi.Input<inputs.networking.v1alpha3.DestinationRuleSpecTrafficPolicyArgs>;
+            /**
+             * Criteria used to select the specific set of pods/VMs on which this `DestinationRule` configuration should be applied.
+             */
             workloadSelector?: pulumi.Input<inputs.networking.v1alpha3.DestinationRuleSpecWorkloadSelectorArgs>;
         }
 
         export interface DestinationRuleSpecSubsetsArgs {
+            /**
+             * Labels apply a filter over the endpoints of a service in the service registry.
+             */
             labels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
             /**
              * Name of the subset.
              */
-            name?: pulumi.Input<string>;
+            name: pulumi.Input<string>;
             /**
              * Traffic policies that apply to this subset.
              */
@@ -145,6 +212,9 @@ export namespace networking {
              * TLS related settings for connections to the upstream service.
              */
             tls?: pulumi.Input<inputs.networking.v1alpha3.DestinationRuleSpecSubsetsTrafficPolicyTlsArgs>;
+            /**
+             * Configuration of tunneling TCP over other transport or application layers for the host configured in the DestinationRule.
+             */
             tunnel?: pulumi.Input<inputs.networking.v1alpha3.DestinationRuleSpecSubsetsTrafficPolicyTunnelArgs>;
         }
 
@@ -167,6 +237,9 @@ export namespace networking {
              * Specify if http1.1 connection should be upgraded to http2 for the associated destination.
              */
             h2UpgradePolicy?: pulumi.Input<string>;
+            /**
+             * Maximum number of requests that will be queued while waiting for a ready connection pool connection.
+             */
             http1MaxPendingRequests?: pulumi.Input<number>;
             /**
              * Maximum number of active requests to a destination.
@@ -180,6 +253,9 @@ export namespace networking {
              * Maximum number of requests per connection to a backend.
              */
             maxRequestsPerConnection?: pulumi.Input<number>;
+            /**
+             * Maximum number of retries that can be outstanding to all hosts in a cluster at a given time.
+             */
             maxRetries?: pulumi.Input<number>;
             /**
              * If set to true, client protocol will be preserved while initiating connection to backend.
@@ -217,7 +293,13 @@ export namespace networking {
              * The time duration between keep-alive probes.
              */
             interval?: pulumi.Input<string>;
+            /**
+             * Maximum number of keepalive probes to send without response before deciding the connection is dead.
+             */
             probes?: pulumi.Input<number>;
+            /**
+             * The time duration a connection needs to be idle before keep-alive probes start being sent.
+             */
             time?: pulumi.Input<string>;
         }
 
@@ -235,12 +317,21 @@ export namespace networking {
              * Number of gateway errors before a host is ejected from the connection pool.
              */
             consecutiveGatewayErrors?: pulumi.Input<number>;
+            /**
+             * The number of consecutive locally originated failures before ejection occurs.
+             */
             consecutiveLocalOriginFailures?: pulumi.Input<number>;
             /**
              * Time interval between ejection sweep analysis.
              */
             interval?: pulumi.Input<string>;
+            /**
+             * Maximum % of hosts in the load balancing pool for the upstream service that can be ejected.
+             */
             maxEjectionPercent?: pulumi.Input<number>;
+            /**
+             * Outlier detection will be enabled as long as the associated load balancing pool has at least min_health_percent hosts in healthy mode.
+             */
             minHealthPercent?: pulumi.Input<number>;
             /**
              * Determines whether to distinguish local origin failures from external errors.
@@ -255,6 +346,9 @@ export namespace networking {
              */
             loadBalancer?: any;
             outlierDetection?: pulumi.Input<inputs.networking.v1alpha3.DestinationRuleSpecSubsetsTrafficPolicyPortLevelSettingsOutlierDetectionArgs>;
+            /**
+             * Specifies the number of a port on the destination service on which this policy is being applied.
+             */
             port?: pulumi.Input<inputs.networking.v1alpha3.DestinationRuleSpecSubsetsTrafficPolicyPortLevelSettingsPortArgs>;
             /**
              * TLS related settings for connections to the upstream service.
@@ -281,6 +375,9 @@ export namespace networking {
              * Specify if http1.1 connection should be upgraded to http2 for the associated destination.
              */
             h2UpgradePolicy?: pulumi.Input<string>;
+            /**
+             * Maximum number of requests that will be queued while waiting for a ready connection pool connection.
+             */
             http1MaxPendingRequests?: pulumi.Input<number>;
             /**
              * Maximum number of active requests to a destination.
@@ -294,6 +391,9 @@ export namespace networking {
              * Maximum number of requests per connection to a backend.
              */
             maxRequestsPerConnection?: pulumi.Input<number>;
+            /**
+             * Maximum number of retries that can be outstanding to all hosts in a cluster at a given time.
+             */
             maxRetries?: pulumi.Input<number>;
             /**
              * If set to true, client protocol will be preserved while initiating connection to backend.
@@ -331,7 +431,13 @@ export namespace networking {
              * The time duration between keep-alive probes.
              */
             interval?: pulumi.Input<string>;
+            /**
+             * Maximum number of keepalive probes to send without response before deciding the connection is dead.
+             */
             probes?: pulumi.Input<number>;
+            /**
+             * The time duration a connection needs to be idle before keep-alive probes start being sent.
+             */
             time?: pulumi.Input<string>;
         }
 
@@ -349,12 +455,21 @@ export namespace networking {
              * Number of gateway errors before a host is ejected from the connection pool.
              */
             consecutiveGatewayErrors?: pulumi.Input<number>;
+            /**
+             * The number of consecutive locally originated failures before ejection occurs.
+             */
             consecutiveLocalOriginFailures?: pulumi.Input<number>;
             /**
              * Time interval between ejection sweep analysis.
              */
             interval?: pulumi.Input<string>;
+            /**
+             * Maximum % of hosts in the load balancing pool for the upstream service that can be ejected.
+             */
             maxEjectionPercent?: pulumi.Input<number>;
+            /**
+             * Outlier detection will be enabled as long as the associated load balancing pool has at least min_health_percent hosts in healthy mode.
+             */
             minHealthPercent?: pulumi.Input<number>;
             /**
              * Determines whether to distinguish local origin failures from external errors.
@@ -362,6 +477,9 @@ export namespace networking {
             splitExternalLocalOriginErrors?: pulumi.Input<boolean>;
         }
 
+        /**
+         * Specifies the number of a port on the destination service on which this policy is being applied.
+         */
         export interface DestinationRuleSpecSubsetsTrafficPolicyPortLevelSettingsPortArgs {
             number?: pulumi.Input<number>;
         }
@@ -370,13 +488,25 @@ export namespace networking {
          * TLS related settings for connections to the upstream service.
          */
         export interface DestinationRuleSpecSubsetsTrafficPolicyPortLevelSettingsTlsArgs {
+            /**
+             * OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.
+             */
             caCertificates?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `MUTUAL`.
              */
             clientCertificate?: pulumi.Input<string>;
+            /**
+             * The name of the secret that holds the TLS certs for the client including the CA certificates.
+             */
             credentialName?: pulumi.Input<string>;
+            /**
+             * `insecureSkipVerify` specifies whether the proxy should skip verifying the CA signature and SAN for the server certificate corresponding to the host.
+             */
             insecureSkipVerify?: pulumi.Input<boolean>;
+            /**
+             * Indicates whether connections to this port should be secured using TLS.
+             */
             mode?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `MUTUAL`.
@@ -386,6 +516,9 @@ export namespace networking {
              * SNI string to present to the server during TLS handshake.
              */
             sni?: pulumi.Input<string>;
+            /**
+             * A list of alternate names to verify the subject identity in the certificate.
+             */
             subjectAltNames?: pulumi.Input<pulumi.Input<string>[]>;
         }
 
@@ -393,13 +526,25 @@ export namespace networking {
          * TLS related settings for connections to the upstream service.
          */
         export interface DestinationRuleSpecSubsetsTrafficPolicyTlsArgs {
+            /**
+             * OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.
+             */
             caCertificates?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `MUTUAL`.
              */
             clientCertificate?: pulumi.Input<string>;
+            /**
+             * The name of the secret that holds the TLS certs for the client including the CA certificates.
+             */
             credentialName?: pulumi.Input<string>;
+            /**
+             * `insecureSkipVerify` specifies whether the proxy should skip verifying the CA signature and SAN for the server certificate corresponding to the host.
+             */
             insecureSkipVerify?: pulumi.Input<boolean>;
+            /**
+             * Indicates whether connections to this port should be secured using TLS.
+             */
             mode?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `MUTUAL`.
@@ -409,9 +554,15 @@ export namespace networking {
              * SNI string to present to the server during TLS handshake.
              */
             sni?: pulumi.Input<string>;
+            /**
+             * A list of alternate names to verify the subject identity in the certificate.
+             */
             subjectAltNames?: pulumi.Input<pulumi.Input<string>[]>;
         }
 
+        /**
+         * Configuration of tunneling TCP over other transport or application layers for the host configured in the DestinationRule.
+         */
         export interface DestinationRuleSpecSubsetsTrafficPolicyTunnelArgs {
             /**
              * Specifies which protocol to use for tunneling the downstream connection.
@@ -420,13 +571,16 @@ export namespace networking {
             /**
              * Specifies a host to which the downstream connection is tunneled.
              */
-            targetHost?: pulumi.Input<string>;
+            targetHost: pulumi.Input<string>;
             /**
              * Specifies a port to which the downstream connection is tunneled.
              */
-            targetPort?: pulumi.Input<number>;
+            targetPort: pulumi.Input<number>;
         }
 
+        /**
+         * Traffic policies to apply (load balancing policy, connection pool sizes, outlier detection).
+         */
         export interface DestinationRuleSpecTrafficPolicyArgs {
             connectionPool?: pulumi.Input<inputs.networking.v1alpha3.DestinationRuleSpecTrafficPolicyConnectionPoolArgs>;
             /**
@@ -442,6 +596,9 @@ export namespace networking {
              * TLS related settings for connections to the upstream service.
              */
             tls?: pulumi.Input<inputs.networking.v1alpha3.DestinationRuleSpecTrafficPolicyTlsArgs>;
+            /**
+             * Configuration of tunneling TCP over other transport or application layers for the host configured in the DestinationRule.
+             */
             tunnel?: pulumi.Input<inputs.networking.v1alpha3.DestinationRuleSpecTrafficPolicyTunnelArgs>;
         }
 
@@ -464,6 +621,9 @@ export namespace networking {
              * Specify if http1.1 connection should be upgraded to http2 for the associated destination.
              */
             h2UpgradePolicy?: pulumi.Input<string>;
+            /**
+             * Maximum number of requests that will be queued while waiting for a ready connection pool connection.
+             */
             http1MaxPendingRequests?: pulumi.Input<number>;
             /**
              * Maximum number of active requests to a destination.
@@ -477,6 +637,9 @@ export namespace networking {
              * Maximum number of requests per connection to a backend.
              */
             maxRequestsPerConnection?: pulumi.Input<number>;
+            /**
+             * Maximum number of retries that can be outstanding to all hosts in a cluster at a given time.
+             */
             maxRetries?: pulumi.Input<number>;
             /**
              * If set to true, client protocol will be preserved while initiating connection to backend.
@@ -514,7 +677,13 @@ export namespace networking {
              * The time duration between keep-alive probes.
              */
             interval?: pulumi.Input<string>;
+            /**
+             * Maximum number of keepalive probes to send without response before deciding the connection is dead.
+             */
             probes?: pulumi.Input<number>;
+            /**
+             * The time duration a connection needs to be idle before keep-alive probes start being sent.
+             */
             time?: pulumi.Input<string>;
         }
 
@@ -532,12 +701,21 @@ export namespace networking {
              * Number of gateway errors before a host is ejected from the connection pool.
              */
             consecutiveGatewayErrors?: pulumi.Input<number>;
+            /**
+             * The number of consecutive locally originated failures before ejection occurs.
+             */
             consecutiveLocalOriginFailures?: pulumi.Input<number>;
             /**
              * Time interval between ejection sweep analysis.
              */
             interval?: pulumi.Input<string>;
+            /**
+             * Maximum % of hosts in the load balancing pool for the upstream service that can be ejected.
+             */
             maxEjectionPercent?: pulumi.Input<number>;
+            /**
+             * Outlier detection will be enabled as long as the associated load balancing pool has at least min_health_percent hosts in healthy mode.
+             */
             minHealthPercent?: pulumi.Input<number>;
             /**
              * Determines whether to distinguish local origin failures from external errors.
@@ -552,6 +730,9 @@ export namespace networking {
              */
             loadBalancer?: any;
             outlierDetection?: pulumi.Input<inputs.networking.v1alpha3.DestinationRuleSpecTrafficPolicyPortLevelSettingsOutlierDetectionArgs>;
+            /**
+             * Specifies the number of a port on the destination service on which this policy is being applied.
+             */
             port?: pulumi.Input<inputs.networking.v1alpha3.DestinationRuleSpecTrafficPolicyPortLevelSettingsPortArgs>;
             /**
              * TLS related settings for connections to the upstream service.
@@ -578,6 +759,9 @@ export namespace networking {
              * Specify if http1.1 connection should be upgraded to http2 for the associated destination.
              */
             h2UpgradePolicy?: pulumi.Input<string>;
+            /**
+             * Maximum number of requests that will be queued while waiting for a ready connection pool connection.
+             */
             http1MaxPendingRequests?: pulumi.Input<number>;
             /**
              * Maximum number of active requests to a destination.
@@ -591,6 +775,9 @@ export namespace networking {
              * Maximum number of requests per connection to a backend.
              */
             maxRequestsPerConnection?: pulumi.Input<number>;
+            /**
+             * Maximum number of retries that can be outstanding to all hosts in a cluster at a given time.
+             */
             maxRetries?: pulumi.Input<number>;
             /**
              * If set to true, client protocol will be preserved while initiating connection to backend.
@@ -628,7 +815,13 @@ export namespace networking {
              * The time duration between keep-alive probes.
              */
             interval?: pulumi.Input<string>;
+            /**
+             * Maximum number of keepalive probes to send without response before deciding the connection is dead.
+             */
             probes?: pulumi.Input<number>;
+            /**
+             * The time duration a connection needs to be idle before keep-alive probes start being sent.
+             */
             time?: pulumi.Input<string>;
         }
 
@@ -646,12 +839,21 @@ export namespace networking {
              * Number of gateway errors before a host is ejected from the connection pool.
              */
             consecutiveGatewayErrors?: pulumi.Input<number>;
+            /**
+             * The number of consecutive locally originated failures before ejection occurs.
+             */
             consecutiveLocalOriginFailures?: pulumi.Input<number>;
             /**
              * Time interval between ejection sweep analysis.
              */
             interval?: pulumi.Input<string>;
+            /**
+             * Maximum % of hosts in the load balancing pool for the upstream service that can be ejected.
+             */
             maxEjectionPercent?: pulumi.Input<number>;
+            /**
+             * Outlier detection will be enabled as long as the associated load balancing pool has at least min_health_percent hosts in healthy mode.
+             */
             minHealthPercent?: pulumi.Input<number>;
             /**
              * Determines whether to distinguish local origin failures from external errors.
@@ -659,6 +861,9 @@ export namespace networking {
             splitExternalLocalOriginErrors?: pulumi.Input<boolean>;
         }
 
+        /**
+         * Specifies the number of a port on the destination service on which this policy is being applied.
+         */
         export interface DestinationRuleSpecTrafficPolicyPortLevelSettingsPortArgs {
             number?: pulumi.Input<number>;
         }
@@ -667,13 +872,25 @@ export namespace networking {
          * TLS related settings for connections to the upstream service.
          */
         export interface DestinationRuleSpecTrafficPolicyPortLevelSettingsTlsArgs {
+            /**
+             * OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.
+             */
             caCertificates?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `MUTUAL`.
              */
             clientCertificate?: pulumi.Input<string>;
+            /**
+             * The name of the secret that holds the TLS certs for the client including the CA certificates.
+             */
             credentialName?: pulumi.Input<string>;
+            /**
+             * `insecureSkipVerify` specifies whether the proxy should skip verifying the CA signature and SAN for the server certificate corresponding to the host.
+             */
             insecureSkipVerify?: pulumi.Input<boolean>;
+            /**
+             * Indicates whether connections to this port should be secured using TLS.
+             */
             mode?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `MUTUAL`.
@@ -683,6 +900,9 @@ export namespace networking {
              * SNI string to present to the server during TLS handshake.
              */
             sni?: pulumi.Input<string>;
+            /**
+             * A list of alternate names to verify the subject identity in the certificate.
+             */
             subjectAltNames?: pulumi.Input<pulumi.Input<string>[]>;
         }
 
@@ -690,13 +910,25 @@ export namespace networking {
          * TLS related settings for connections to the upstream service.
          */
         export interface DestinationRuleSpecTrafficPolicyTlsArgs {
+            /**
+             * OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.
+             */
             caCertificates?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `MUTUAL`.
              */
             clientCertificate?: pulumi.Input<string>;
+            /**
+             * The name of the secret that holds the TLS certs for the client including the CA certificates.
+             */
             credentialName?: pulumi.Input<string>;
+            /**
+             * `insecureSkipVerify` specifies whether the proxy should skip verifying the CA signature and SAN for the server certificate corresponding to the host.
+             */
             insecureSkipVerify?: pulumi.Input<boolean>;
+            /**
+             * Indicates whether connections to this port should be secured using TLS.
+             */
             mode?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `MUTUAL`.
@@ -706,9 +938,15 @@ export namespace networking {
              * SNI string to present to the server during TLS handshake.
              */
             sni?: pulumi.Input<string>;
+            /**
+             * A list of alternate names to verify the subject identity in the certificate.
+             */
             subjectAltNames?: pulumi.Input<pulumi.Input<string>[]>;
         }
 
+        /**
+         * Configuration of tunneling TCP over other transport or application layers for the host configured in the DestinationRule.
+         */
         export interface DestinationRuleSpecTrafficPolicyTunnelArgs {
             /**
              * Specifies which protocol to use for tunneling the downstream connection.
@@ -717,14 +955,20 @@ export namespace networking {
             /**
              * Specifies a host to which the downstream connection is tunneled.
              */
-            targetHost?: pulumi.Input<string>;
+            targetHost: pulumi.Input<string>;
             /**
              * Specifies a port to which the downstream connection is tunneled.
              */
-            targetPort?: pulumi.Input<number>;
+            targetPort: pulumi.Input<number>;
         }
 
+        /**
+         * Criteria used to select the specific set of pods/VMs on which this `DestinationRule` configuration should be applied.
+         */
         export interface DestinationRuleSpecWorkloadSelectorArgs {
+            /**
+             * One or more labels that indicate a specific set of pods/VMs on which a policy should be applied.
+             */
             matchLabels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
         }
 
@@ -740,10 +984,16 @@ export namespace networking {
              * Priority defines the order in which patch sets are applied within a context.
              */
             priority?: pulumi.Input<number>;
+            /**
+             * Criteria used to select the specific set of pods/VMs on which this patch configuration should be applied.
+             */
             workloadSelector?: pulumi.Input<inputs.networking.v1alpha3.EnvoyFilterSpecWorkloadSelectorArgs>;
         }
 
         export interface EnvoyFilterSpecConfigPatchesArgs {
+            /**
+             * Specifies where in the Envoy configuration, the patch should be applied.
+             */
             applyTo?: pulumi.Input<string>;
             /**
              * Match on listener/route configuration/cluster.
@@ -773,7 +1023,13 @@ export namespace networking {
             value?: pulumi.Input<{[key: string]: any}>;
         }
 
+        /**
+         * Criteria used to select the specific set of pods/VMs on which this patch configuration should be applied.
+         */
         export interface EnvoyFilterSpecWorkloadSelectorArgs {
+            /**
+             * One or more labels that indicate a specific set of pods/VMs on which the configuration should be applied.
+             */
             labels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
         }
 
@@ -781,6 +1037,9 @@ export namespace networking {
          * Configuration affecting edge load balancer. See more details at: https://istio.io/docs/reference/config/networking/gateway.html
          */
         export interface GatewaySpecArgs {
+            /**
+             * One or more labels that indicate a specific set of pods/VMs on which this gateway configuration should be applied.
+             */
             selector?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
             /**
              * A list of server specifications.
@@ -789,36 +1048,45 @@ export namespace networking {
         }
 
         export interface GatewaySpecServersArgs {
+            /**
+             * The ip or the Unix domain socket to which the listener should be bound to.
+             */
             bind?: pulumi.Input<string>;
             defaultEndpoint?: pulumi.Input<string>;
             /**
              * One or more hosts exposed by this gateway.
              */
-            hosts?: pulumi.Input<pulumi.Input<string>[]>;
+            hosts: pulumi.Input<pulumi.Input<string>[]>;
             /**
              * An optional name of the server, when set must be unique across all servers.
              */
             name?: pulumi.Input<string>;
-            port?: pulumi.Input<inputs.networking.v1alpha3.GatewaySpecServersPortArgs>;
+            /**
+             * The Port on which the proxy should listen for incoming connections.
+             */
+            port: pulumi.Input<inputs.networking.v1alpha3.GatewaySpecServersPortArgs>;
             /**
              * Set of TLS related options that govern the server's behavior.
              */
             tls?: pulumi.Input<inputs.networking.v1alpha3.GatewaySpecServersTlsArgs>;
         }
 
+        /**
+         * The Port on which the proxy should listen for incoming connections.
+         */
         export interface GatewaySpecServersPortArgs {
             /**
              * Label assigned to the port.
              */
-            name?: pulumi.Input<string>;
+            name: pulumi.Input<string>;
             /**
              * A valid non-negative integer port number.
              */
-            number?: pulumi.Input<number>;
+            number: pulumi.Input<number>;
             /**
              * The protocol exposed on the port.
              */
-            protocol?: pulumi.Input<string>;
+            protocol: pulumi.Input<string>;
             targetPort?: pulumi.Input<number>;
         }
 
@@ -827,14 +1095,20 @@ export namespace networking {
          */
         export interface GatewaySpecServersTlsArgs {
             /**
-             * REQUIRED if mode is `MUTUAL`.
+             * REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
              */
             caCertificates?: pulumi.Input<string>;
             /**
              * Optional: If specified, only support the specified cipher list.
              */
             cipherSuites?: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * For gateways running on Kubernetes, the name of the secret that holds the TLS certs including the CA certificates.
+             */
             credentialName?: pulumi.Input<string>;
+            /**
+             * If set to true, the load balancer will send a 301 redirect for all http connections, asking the clients to use HTTPS.
+             */
             httpsRedirect?: pulumi.Input<boolean>;
             /**
              * Optional: Maximum TLS protocol version.
@@ -844,6 +1118,9 @@ export namespace networking {
              * Optional: Minimum TLS protocol version.
              */
             minProtocolVersion?: pulumi.Input<string>;
+            /**
+             * Optional: Indicates whether connections to this port should be secured using TLS.
+             */
             mode?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `SIMPLE` or `MUTUAL`.
@@ -853,8 +1130,17 @@ export namespace networking {
              * REQUIRED if mode is `SIMPLE` or `MUTUAL`.
              */
             serverCertificate?: pulumi.Input<string>;
+            /**
+             * A list of alternate names to verify the subject identity in the certificate presented by the client.
+             */
             subjectAltNames?: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * An optional list of hex-encoded SHA-256 hashes of the authorized client certificates.
+             */
             verifyCertificateHash?: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * An optional list of base64-encoded SHA-256 hashes of the SPKIs of authorized client certificates.
+             */
             verifyCertificateSpki?: pulumi.Input<pulumi.Input<string>[]>;
         }
 
@@ -877,7 +1163,10 @@ export namespace networking {
             /**
              * The hosts associated with the ServiceEntry.
              */
-            hosts?: pulumi.Input<pulumi.Input<string>[]>;
+            hosts: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * Specify whether the service should be considered external to the mesh or part of the mesh.
+             */
             location?: pulumi.Input<string>;
             /**
              * The ports associated with the external service.
@@ -887,6 +1176,9 @@ export namespace networking {
              * Service resolution mode for the hosts.
              */
             resolution?: pulumi.Input<string>;
+            /**
+             * If specified, the proxy will verify that the server certificate's subject alternate name matches one of the specified values.
+             */
             subjectAltNames?: pulumi.Input<pulumi.Input<string>[]>;
             /**
              * Applicable only for MESH_INTERNAL services.
@@ -895,6 +1187,9 @@ export namespace networking {
         }
 
         export interface ServiceEntrySpecEndpointsArgs {
+            /**
+             * Address associated with the network endpoint without the port.
+             */
             address?: pulumi.Input<string>;
             /**
              * One or more labels associated with the endpoint.
@@ -904,11 +1199,17 @@ export namespace networking {
              * The locality associated with the endpoint.
              */
             locality?: pulumi.Input<string>;
+            /**
+             * Network enables Istio to group endpoints resident in the same L3 domain/network.
+             */
             network?: pulumi.Input<string>;
             /**
              * Set of ports associated with the endpoint.
              */
             ports?: pulumi.Input<{[key: string]: pulumi.Input<number>}>;
+            /**
+             * The service account associated with the workload if a sidecar is present in the workload.
+             */
             serviceAccount?: pulumi.Input<string>;
             /**
              * The load balancing weight associated with the endpoint.
@@ -920,15 +1221,18 @@ export namespace networking {
             /**
              * Label assigned to the port.
              */
-            name?: pulumi.Input<string>;
+            name: pulumi.Input<string>;
             /**
              * A valid non-negative integer port number.
              */
-            number?: pulumi.Input<number>;
+            number: pulumi.Input<number>;
             /**
              * The protocol exposed on the port.
              */
             protocol?: pulumi.Input<string>;
+            /**
+             * The port number on the endpoint where the traffic will be received.
+             */
             targetPort?: pulumi.Input<number>;
         }
 
@@ -936,6 +1240,9 @@ export namespace networking {
          * Applicable only for MESH_INTERNAL services.
          */
         export interface ServiceEntrySpecWorkloadSelectorArgs {
+            /**
+             * One or more labels that indicate a specific set of pods/VMs on which the configuration should be applied.
+             */
             labels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
         }
 
@@ -943,19 +1250,41 @@ export namespace networking {
          * Configuration affecting network reachability of a sidecar. See more details at: https://istio.io/docs/reference/config/networking/sidecar.html
          */
         export interface SidecarSpecArgs {
+            /**
+             * Egress specifies the configuration of the sidecar for processing outbound traffic from the attached workload instance to other services in the mesh.
+             */
             egress?: pulumi.Input<pulumi.Input<inputs.networking.v1alpha3.SidecarSpecEgressArgs>[]>;
+            /**
+             * Settings controlling the volume of connections Envoy will accept from the network.
+             */
+            inboundConnectionPool?: pulumi.Input<inputs.networking.v1alpha3.SidecarSpecInboundConnectionPoolArgs>;
+            /**
+             * Ingress specifies the configuration of the sidecar for processing inbound traffic to the attached workload instance.
+             */
             ingress?: pulumi.Input<pulumi.Input<inputs.networking.v1alpha3.SidecarSpecIngressArgs>[]>;
             /**
              * Configuration for the outbound traffic policy.
              */
             outboundTrafficPolicy?: pulumi.Input<inputs.networking.v1alpha3.SidecarSpecOutboundTrafficPolicyArgs>;
+            /**
+             * Criteria used to select the specific set of pods/VMs on which this `Sidecar` configuration should be applied.
+             */
             workloadSelector?: pulumi.Input<inputs.networking.v1alpha3.SidecarSpecWorkloadSelectorArgs>;
         }
 
         export interface SidecarSpecEgressArgs {
+            /**
+             * The IP(IPv4 or IPv6) or the Unix domain socket to which the listener should be bound to.
+             */
             bind?: pulumi.Input<string>;
+            /**
+             * When the bind address is an IP, the captureMode option dictates how traffic to the listener is expected to be captured (or not).
+             */
             captureMode?: pulumi.Input<string>;
-            hosts?: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * One or more service hosts exposed by the listener in `namespace/dnsName` format.
+             */
+            hosts: pulumi.Input<pulumi.Input<string>[]>;
             /**
              * The port associated with the listener.
              */
@@ -981,18 +1310,207 @@ export namespace networking {
             targetPort?: pulumi.Input<number>;
         }
 
+        /**
+         * Settings controlling the volume of connections Envoy will accept from the network.
+         */
+        export interface SidecarSpecInboundConnectionPoolArgs {
+            /**
+             * HTTP connection pool settings.
+             */
+            http?: pulumi.Input<inputs.networking.v1alpha3.SidecarSpecInboundConnectionPoolHttpArgs>;
+            /**
+             * Settings common to both HTTP and TCP upstream connections.
+             */
+            tcp?: pulumi.Input<inputs.networking.v1alpha3.SidecarSpecInboundConnectionPoolTcpArgs>;
+        }
+
+        /**
+         * HTTP connection pool settings.
+         */
+        export interface SidecarSpecInboundConnectionPoolHttpArgs {
+            /**
+             * Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+             */
+            h2UpgradePolicy?: pulumi.Input<string>;
+            /**
+             * Maximum number of requests that will be queued while waiting for a ready connection pool connection.
+             */
+            http1MaxPendingRequests?: pulumi.Input<number>;
+            /**
+             * Maximum number of active requests to a destination.
+             */
+            http2MaxRequests?: pulumi.Input<number>;
+            /**
+             * The idle timeout for upstream connection pool connections.
+             */
+            idleTimeout?: pulumi.Input<string>;
+            /**
+             * Maximum number of requests per connection to a backend.
+             */
+            maxRequestsPerConnection?: pulumi.Input<number>;
+            /**
+             * Maximum number of retries that can be outstanding to all hosts in a cluster at a given time.
+             */
+            maxRetries?: pulumi.Input<number>;
+            /**
+             * If set to true, client protocol will be preserved while initiating connection to backend.
+             */
+            useClientProtocol?: pulumi.Input<boolean>;
+        }
+
+        /**
+         * Settings common to both HTTP and TCP upstream connections.
+         */
+        export interface SidecarSpecInboundConnectionPoolTcpArgs {
+            /**
+             * TCP connection timeout.
+             */
+            connectTimeout?: pulumi.Input<string>;
+            /**
+             * The maximum duration of a connection.
+             */
+            maxConnectionDuration?: pulumi.Input<string>;
+            /**
+             * Maximum number of HTTP1 /TCP connections to a destination host.
+             */
+            maxConnections?: pulumi.Input<number>;
+            /**
+             * If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+             */
+            tcpKeepalive?: pulumi.Input<inputs.networking.v1alpha3.SidecarSpecInboundConnectionPoolTcpTcpKeepaliveArgs>;
+        }
+
+        /**
+         * If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+         */
+        export interface SidecarSpecInboundConnectionPoolTcpTcpKeepaliveArgs {
+            /**
+             * The time duration between keep-alive probes.
+             */
+            interval?: pulumi.Input<string>;
+            /**
+             * Maximum number of keepalive probes to send without response before deciding the connection is dead.
+             */
+            probes?: pulumi.Input<number>;
+            /**
+             * The time duration a connection needs to be idle before keep-alive probes start being sent.
+             */
+            time?: pulumi.Input<string>;
+        }
+
         export interface SidecarSpecIngressArgs {
             /**
              * The IP(IPv4 or IPv6) to which the listener should be bound.
              */
             bind?: pulumi.Input<string>;
+            /**
+             * The captureMode option dictates how traffic to the listener is expected to be captured (or not).
+             */
             captureMode?: pulumi.Input<string>;
+            /**
+             * Settings controlling the volume of connections Envoy will accept from the network.
+             */
+            connectionPool?: pulumi.Input<inputs.networking.v1alpha3.SidecarSpecIngressConnectionPoolArgs>;
+            /**
+             * The IP endpoint or Unix domain socket to which traffic should be forwarded to.
+             */
             defaultEndpoint?: pulumi.Input<string>;
             /**
              * The port associated with the listener.
              */
-            port?: pulumi.Input<inputs.networking.v1alpha3.SidecarSpecIngressPortArgs>;
+            port: pulumi.Input<inputs.networking.v1alpha3.SidecarSpecIngressPortArgs>;
+            /**
+             * Set of TLS related options that will enable TLS termination on the sidecar for requests originating from outside the mesh.
+             */
             tls?: pulumi.Input<inputs.networking.v1alpha3.SidecarSpecIngressTlsArgs>;
+        }
+
+        /**
+         * Settings controlling the volume of connections Envoy will accept from the network.
+         */
+        export interface SidecarSpecIngressConnectionPoolArgs {
+            /**
+             * HTTP connection pool settings.
+             */
+            http?: pulumi.Input<inputs.networking.v1alpha3.SidecarSpecIngressConnectionPoolHttpArgs>;
+            /**
+             * Settings common to both HTTP and TCP upstream connections.
+             */
+            tcp?: pulumi.Input<inputs.networking.v1alpha3.SidecarSpecIngressConnectionPoolTcpArgs>;
+        }
+
+        /**
+         * HTTP connection pool settings.
+         */
+        export interface SidecarSpecIngressConnectionPoolHttpArgs {
+            /**
+             * Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+             */
+            h2UpgradePolicy?: pulumi.Input<string>;
+            /**
+             * Maximum number of requests that will be queued while waiting for a ready connection pool connection.
+             */
+            http1MaxPendingRequests?: pulumi.Input<number>;
+            /**
+             * Maximum number of active requests to a destination.
+             */
+            http2MaxRequests?: pulumi.Input<number>;
+            /**
+             * The idle timeout for upstream connection pool connections.
+             */
+            idleTimeout?: pulumi.Input<string>;
+            /**
+             * Maximum number of requests per connection to a backend.
+             */
+            maxRequestsPerConnection?: pulumi.Input<number>;
+            /**
+             * Maximum number of retries that can be outstanding to all hosts in a cluster at a given time.
+             */
+            maxRetries?: pulumi.Input<number>;
+            /**
+             * If set to true, client protocol will be preserved while initiating connection to backend.
+             */
+            useClientProtocol?: pulumi.Input<boolean>;
+        }
+
+        /**
+         * Settings common to both HTTP and TCP upstream connections.
+         */
+        export interface SidecarSpecIngressConnectionPoolTcpArgs {
+            /**
+             * TCP connection timeout.
+             */
+            connectTimeout?: pulumi.Input<string>;
+            /**
+             * The maximum duration of a connection.
+             */
+            maxConnectionDuration?: pulumi.Input<string>;
+            /**
+             * Maximum number of HTTP1 /TCP connections to a destination host.
+             */
+            maxConnections?: pulumi.Input<number>;
+            /**
+             * If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+             */
+            tcpKeepalive?: pulumi.Input<inputs.networking.v1alpha3.SidecarSpecIngressConnectionPoolTcpTcpKeepaliveArgs>;
+        }
+
+        /**
+         * If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+         */
+        export interface SidecarSpecIngressConnectionPoolTcpTcpKeepaliveArgs {
+            /**
+             * The time duration between keep-alive probes.
+             */
+            interval?: pulumi.Input<string>;
+            /**
+             * Maximum number of keepalive probes to send without response before deciding the connection is dead.
+             */
+            probes?: pulumi.Input<number>;
+            /**
+             * The time duration a connection needs to be idle before keep-alive probes start being sent.
+             */
+            time?: pulumi.Input<string>;
         }
 
         /**
@@ -1014,16 +1532,25 @@ export namespace networking {
             targetPort?: pulumi.Input<number>;
         }
 
+        /**
+         * Set of TLS related options that will enable TLS termination on the sidecar for requests originating from outside the mesh.
+         */
         export interface SidecarSpecIngressTlsArgs {
             /**
-             * REQUIRED if mode is `MUTUAL`.
+             * REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
              */
             caCertificates?: pulumi.Input<string>;
             /**
              * Optional: If specified, only support the specified cipher list.
              */
             cipherSuites?: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * For gateways running on Kubernetes, the name of the secret that holds the TLS certs including the CA certificates.
+             */
             credentialName?: pulumi.Input<string>;
+            /**
+             * If set to true, the load balancer will send a 301 redirect for all http connections, asking the clients to use HTTPS.
+             */
             httpsRedirect?: pulumi.Input<boolean>;
             /**
              * Optional: Maximum TLS protocol version.
@@ -1033,6 +1560,9 @@ export namespace networking {
              * Optional: Minimum TLS protocol version.
              */
             minProtocolVersion?: pulumi.Input<string>;
+            /**
+             * Optional: Indicates whether connections to this port should be secured using TLS.
+             */
             mode?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `SIMPLE` or `MUTUAL`.
@@ -1042,8 +1572,17 @@ export namespace networking {
              * REQUIRED if mode is `SIMPLE` or `MUTUAL`.
              */
             serverCertificate?: pulumi.Input<string>;
+            /**
+             * A list of alternate names to verify the subject identity in the certificate presented by the client.
+             */
             subjectAltNames?: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * An optional list of hex-encoded SHA-256 hashes of the authorized client certificates.
+             */
             verifyCertificateHash?: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * An optional list of base64-encoded SHA-256 hashes of the SPKIs of authorized client certificates.
+             */
             verifyCertificateSpki?: pulumi.Input<pulumi.Input<string>[]>;
         }
 
@@ -1059,7 +1598,7 @@ export namespace networking {
             /**
              * The name of a service from the service registry.
              */
-            host?: pulumi.Input<string>;
+            host: pulumi.Input<string>;
             /**
              * Specifies the port on the host that is being addressed.
              */
@@ -1077,7 +1616,13 @@ export namespace networking {
             number?: pulumi.Input<number>;
         }
 
+        /**
+         * Criteria used to select the specific set of pods/VMs on which this `Sidecar` configuration should be applied.
+         */
         export interface SidecarSpecWorkloadSelectorArgs {
+            /**
+             * One or more labels that indicate a specific set of pods/VMs on which the configuration should be applied.
+             */
             labels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
         }
 
@@ -1105,6 +1650,9 @@ export namespace networking {
              * An ordered list of route rules for opaque TCP traffic.
              */
             tcp?: pulumi.Input<pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecTcpArgs>[]>;
+            /**
+             * An ordered list of route rule for non-terminated TLS & HTTPS traffic.
+             */
             tls?: pulumi.Input<pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecTlsArgs>[]>;
         }
 
@@ -1113,6 +1661,9 @@ export namespace networking {
              * Cross-Origin Resource Sharing policy (CORS).
              */
             corsPolicy?: pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecHttpCorsPolicyArgs>;
+            /**
+             * Delegate is used to specify the particular VirtualService which can be used to define delegate HTTPRoute.
+             */
             delegate?: pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecHttpDelegateArgs>;
             /**
              * A HTTP rule can either return a direct_response, redirect or forward (default) traffic.
@@ -1123,20 +1674,24 @@ export namespace networking {
              */
             fault?: pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecHttpFaultArgs>;
             headers?: pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecHttpHeadersArgs>;
-            match?: pulumi.Input<pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecHttpMatchArgs>[]>;
-            mirror?: pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecHttpMirrorArgs>;
             /**
-             * Percentage of the traffic to be mirrored by the `mirror` field.
+             * Match conditions to be satisfied for the rule to be activated.
              */
+            match?: pulumi.Input<pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecHttpMatchArgs>[]>;
+            /**
+             * Mirror HTTP traffic to a another destination in addition to forwarding the requests to the intended destination.
+             */
+            mirror?: pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecHttpMirrorArgs>;
             mirrorPercent?: pulumi.Input<number>;
             /**
              * Percentage of the traffic to be mirrored by the `mirror` field.
              */
             mirrorPercentage?: pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecHttpMirrorPercentageArgs>;
-            /**
-             * Percentage of the traffic to be mirrored by the `mirror` field.
-             */
             mirror_percent?: pulumi.Input<number>;
+            /**
+             * Specifies the destinations to mirror HTTP traffic in addition to the original destination.
+             */
+            mirrors?: pulumi.Input<pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecHttpMirrorsArgs>[]>;
             /**
              * The name assigned to the route for debugging purposes.
              */
@@ -1167,24 +1722,36 @@ export namespace networking {
          * Cross-Origin Resource Sharing policy (CORS).
          */
         export interface VirtualServiceSpecHttpCorsPolicyArgs {
+            /**
+             * Indicates whether the caller is allowed to send the actual request (not the preflight) using credentials.
+             */
             allowCredentials?: pulumi.Input<boolean>;
+            /**
+             * List of HTTP headers that can be used when requesting the resource.
+             */
             allowHeaders?: pulumi.Input<pulumi.Input<string>[]>;
             /**
              * List of HTTP methods allowed to access the resource.
              */
             allowMethods?: pulumi.Input<pulumi.Input<string>[]>;
-            /**
-             * The list of origins that are allowed to perform CORS requests.
-             */
             allowOrigin?: pulumi.Input<pulumi.Input<string>[]>;
             /**
              * String patterns that match allowed origins.
              */
             allowOrigins?: pulumi.Input<any[]>;
+            /**
+             * A list of HTTP headers that the browsers are allowed to access.
+             */
             exposeHeaders?: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * Specifies how long the results of a preflight request can be cached.
+             */
             maxAge?: pulumi.Input<string>;
         }
 
+        /**
+         * Delegate is used to specify the particular VirtualService which can be used to define delegate HTTPRoute.
+         */
         export interface VirtualServiceSpecHttpDelegateArgs {
             /**
              * Name specifies the name of the delegate VirtualService.
@@ -1207,14 +1774,20 @@ export namespace networking {
             /**
              * Specifies the HTTP response status to be returned.
              */
-            status?: pulumi.Input<number>;
+            status: pulumi.Input<number>;
         }
 
         /**
          * Fault injection policy to apply on HTTP traffic at the client side.
          */
         export interface VirtualServiceSpecHttpFaultArgs {
+            /**
+             * Abort Http request attempts and return error codes back to downstream service, giving the impression that the upstream service is faulty.
+             */
             abort?: any;
+            /**
+             * Delay requests before forwarding, emulating various failures such as network issues, overloaded upstream service, etc.
+             */
             delay?: any;
         }
 
@@ -1236,16 +1809,25 @@ export namespace networking {
         }
 
         export interface VirtualServiceSpecHttpMatchArgs {
+            /**
+             * HTTP Authority values are case-sensitive and formatted as follows: - `exact: "value"` for exact string match - `prefix: "value"` for prefix-based match - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+             */
             authority?: any;
             /**
              * Names of gateways where the rule should be applied.
              */
             gateways?: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * The header keys must be lowercase and use hyphen as the separator, e.g.
+             */
             headers?: pulumi.Input<{[key: string]: any}>;
             /**
              * Flag to specify whether the URI matching should be case-insensitive.
              */
             ignoreUriCase?: pulumi.Input<boolean>;
+            /**
+             * HTTP Method values are case-sensitive and formatted as follows: - `exact: "value"` for exact string match - `prefix: "value"` for prefix-based match - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+             */
             method?: any;
             /**
              * The name assigned to a match.
@@ -1259,7 +1841,13 @@ export namespace networking {
              * Query parameters for matching.
              */
             queryParams?: pulumi.Input<{[key: string]: any}>;
+            /**
+             * URI Scheme values are case-sensitive and formatted as follows: - `exact: "value"` for exact string match - `prefix: "value"` for prefix-based match - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+             */
             scheme?: any;
+            /**
+             * One or more labels that constrain the applicability of a rule to source (client) workloads with the given labels.
+             */
             sourceLabels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
             /**
              * Source namespace constraining the applicability of a rule to workloads in that namespace.
@@ -1269,6 +1857,9 @@ export namespace networking {
              * The human readable prefix to use when emitting statistics for this route.
              */
             statPrefix?: pulumi.Input<string>;
+            /**
+             * URI to match values are case-sensitive and formatted as follows: - `exact: "value"` for exact string match - `prefix: "value"` for prefix-based match - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+             */
             uri?: any;
             /**
              * withoutHeader has the same syntax with the header, but has opposite meaning.
@@ -1276,11 +1867,14 @@ export namespace networking {
             withoutHeaders?: pulumi.Input<{[key: string]: any}>;
         }
 
+        /**
+         * Mirror HTTP traffic to a another destination in addition to forwarding the requests to the intended destination.
+         */
         export interface VirtualServiceSpecHttpMirrorArgs {
             /**
              * The name of a service from the service registry.
              */
-            host?: pulumi.Input<string>;
+            host: pulumi.Input<string>;
             /**
              * Specifies the port on the host that is being addressed.
              */
@@ -1303,6 +1897,49 @@ export namespace networking {
          */
         export interface VirtualServiceSpecHttpMirrorPortArgs {
             number?: pulumi.Input<number>;
+        }
+
+        export interface VirtualServiceSpecHttpMirrorsArgs {
+            /**
+             * Destination specifies the target of the mirror operation.
+             */
+            destination: pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecHttpMirrorsDestinationArgs>;
+            /**
+             * Percentage of the traffic to be mirrored by the `destination` field.
+             */
+            percentage?: pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecHttpMirrorsPercentageArgs>;
+        }
+
+        /**
+         * Destination specifies the target of the mirror operation.
+         */
+        export interface VirtualServiceSpecHttpMirrorsDestinationArgs {
+            /**
+             * The name of a service from the service registry.
+             */
+            host: pulumi.Input<string>;
+            /**
+             * Specifies the port on the host that is being addressed.
+             */
+            port?: pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecHttpMirrorsDestinationPortArgs>;
+            /**
+             * The name of a subset within the service.
+             */
+            subset?: pulumi.Input<string>;
+        }
+
+        /**
+         * Specifies the port on the host that is being addressed.
+         */
+        export interface VirtualServiceSpecHttpMirrorsDestinationPortArgs {
+            number?: pulumi.Input<number>;
+        }
+
+        /**
+         * Percentage of the traffic to be mirrored by the `destination` field.
+         */
+        export interface VirtualServiceSpecHttpMirrorsPercentageArgs {
+            value?: pulumi.Input<number>;
         }
 
         /**
@@ -1335,11 +1972,35 @@ export namespace networking {
              * rewrite the Authority/Host header with this value.
              */
             authority?: pulumi.Input<string>;
+            /**
+             * rewrite the path (or the prefix) portion of the URI with this value.
+             */
             uri?: pulumi.Input<string>;
+            /**
+             * rewrite the path portion of the URI with the specified regex.
+             */
+            uriRegexRewrite?: pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecHttpRewriteUriRegexRewriteArgs>;
+        }
+
+        /**
+         * rewrite the path portion of the URI with the specified regex.
+         */
+        export interface VirtualServiceSpecHttpRewriteUriRegexRewriteArgs {
+            /**
+             * RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+             */
+            match?: pulumi.Input<string>;
+            /**
+             * The string that should replace into matching portions of original URI.
+             */
+            rewrite?: pulumi.Input<string>;
         }
 
         export interface VirtualServiceSpecHttpRouteArgs {
-            destination?: pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecHttpRouteDestinationArgs>;
+            /**
+             * Destination uniquely identifies the instances of a service to which the request/connection should be forwarded to.
+             */
+            destination: pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecHttpRouteDestinationArgs>;
             headers?: pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecHttpRouteHeadersArgs>;
             /**
              * Weight specifies the relative proportion of traffic to be forwarded to the destination.
@@ -1347,11 +2008,14 @@ export namespace networking {
             weight?: pulumi.Input<number>;
         }
 
+        /**
+         * Destination uniquely identifies the instances of a service to which the request/connection should be forwarded to.
+         */
         export interface VirtualServiceSpecHttpRouteDestinationArgs {
             /**
              * The name of a service from the service registry.
              */
-            host?: pulumi.Input<string>;
+            host: pulumi.Input<string>;
             /**
              * Specifies the port on the host that is being addressed.
              */
@@ -1387,6 +2051,9 @@ export namespace networking {
         }
 
         export interface VirtualServiceSpecTcpArgs {
+            /**
+             * Match conditions to be satisfied for the rule to be activated.
+             */
             match?: pulumi.Input<pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecTcpMatchArgs>[]>;
             /**
              * The destination to which the connection should be forwarded to.
@@ -1407,30 +2074,36 @@ export namespace networking {
              * Specifies the port on the host that is being addressed.
              */
             port?: pulumi.Input<number>;
+            /**
+             * One or more labels that constrain the applicability of a rule to workloads with the given labels.
+             */
             sourceLabels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
             /**
              * Source namespace constraining the applicability of a rule to workloads in that namespace.
              */
             sourceNamespace?: pulumi.Input<string>;
-            /**
-             * IPv4 or IPv6 ip address of source with optional subnet.
-             */
             sourceSubnet?: pulumi.Input<string>;
         }
 
         export interface VirtualServiceSpecTcpRouteArgs {
-            destination?: pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecTcpRouteDestinationArgs>;
+            /**
+             * Destination uniquely identifies the instances of a service to which the request/connection should be forwarded to.
+             */
+            destination: pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecTcpRouteDestinationArgs>;
             /**
              * Weight specifies the relative proportion of traffic to be forwarded to the destination.
              */
             weight?: pulumi.Input<number>;
         }
 
+        /**
+         * Destination uniquely identifies the instances of a service to which the request/connection should be forwarded to.
+         */
         export interface VirtualServiceSpecTcpRouteDestinationArgs {
             /**
              * The name of a service from the service registry.
              */
-            host?: pulumi.Input<string>;
+            host: pulumi.Input<string>;
             /**
              * Specifies the port on the host that is being addressed.
              */
@@ -1449,7 +2122,10 @@ export namespace networking {
         }
 
         export interface VirtualServiceSpecTlsArgs {
-            match?: pulumi.Input<pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecTlsMatchArgs>[]>;
+            /**
+             * Match conditions to be satisfied for the rule to be activated.
+             */
+            match: pulumi.Input<pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecTlsMatchArgs>[]>;
             /**
              * The destination to which the connection should be forwarded to.
              */
@@ -1472,7 +2148,10 @@ export namespace networking {
             /**
              * SNI (server name indicator) to match on.
              */
-            sniHosts?: pulumi.Input<pulumi.Input<string>[]>;
+            sniHosts: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * One or more labels that constrain the applicability of a rule to workloads with the given labels.
+             */
             sourceLabels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
             /**
              * Source namespace constraining the applicability of a rule to workloads in that namespace.
@@ -1481,18 +2160,24 @@ export namespace networking {
         }
 
         export interface VirtualServiceSpecTlsRouteArgs {
-            destination?: pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecTlsRouteDestinationArgs>;
+            /**
+             * Destination uniquely identifies the instances of a service to which the request/connection should be forwarded to.
+             */
+            destination: pulumi.Input<inputs.networking.v1alpha3.VirtualServiceSpecTlsRouteDestinationArgs>;
             /**
              * Weight specifies the relative proportion of traffic to be forwarded to the destination.
              */
             weight?: pulumi.Input<number>;
         }
 
+        /**
+         * Destination uniquely identifies the instances of a service to which the request/connection should be forwarded to.
+         */
         export interface VirtualServiceSpecTlsRouteDestinationArgs {
             /**
              * The name of a service from the service registry.
              */
-            host?: pulumi.Input<string>;
+            host: pulumi.Input<string>;
             /**
              * Specifies the port on the host that is being addressed.
              */
@@ -1514,6 +2199,9 @@ export namespace networking {
          * Configuration affecting VMs onboarded into the mesh. See more details at: https://istio.io/docs/reference/config/networking/workload-entry.html
          */
         export interface WorkloadEntrySpecArgs {
+            /**
+             * Address associated with the network endpoint without the port.
+             */
             address?: pulumi.Input<string>;
             /**
              * One or more labels associated with the endpoint.
@@ -1523,11 +2211,17 @@ export namespace networking {
              * The locality associated with the endpoint.
              */
             locality?: pulumi.Input<string>;
+            /**
+             * Network enables Istio to group endpoints resident in the same L3 domain/network.
+             */
             network?: pulumi.Input<string>;
             /**
              * Set of ports associated with the endpoint.
              */
             ports?: pulumi.Input<{[key: string]: pulumi.Input<number>}>;
+            /**
+             * The service account associated with the workload if a sidecar is present in the workload.
+             */
             serviceAccount?: pulumi.Input<string>;
             /**
              * The load balancing weight associated with the endpoint.
@@ -1550,7 +2244,7 @@ export namespace networking {
             /**
              * Template to be used for the generation of `WorkloadEntry` resources that belong to this `WorkloadGroup`.
              */
-            template?: pulumi.Input<inputs.networking.v1alpha3.WorkloadGroupSpecTemplateArgs>;
+            template: pulumi.Input<inputs.networking.v1alpha3.WorkloadGroupSpecTemplateArgs>;
         }
 
         /**
@@ -1565,6 +2259,9 @@ export namespace networking {
          * Template to be used for the generation of `WorkloadEntry` resources that belong to this `WorkloadGroup`.
          */
         export interface WorkloadGroupSpecTemplateArgs {
+            /**
+             * Address associated with the network endpoint without the port.
+             */
             address?: pulumi.Input<string>;
             /**
              * One or more labels associated with the endpoint.
@@ -1574,11 +2271,17 @@ export namespace networking {
              * The locality associated with the endpoint.
              */
             locality?: pulumi.Input<string>;
+            /**
+             * Network enables Istio to group endpoints resident in the same L3 domain/network.
+             */
             network?: pulumi.Input<string>;
             /**
              * Set of ports associated with the endpoint.
              */
             ports?: pulumi.Input<{[key: string]: pulumi.Input<number>}>;
+            /**
+             * The service account associated with the workload if a sidecar is present in the workload.
+             */
             serviceAccount?: pulumi.Input<string>;
             /**
              * The load balancing weight associated with the endpoint.
@@ -1600,18 +2303,30 @@ export namespace networking {
             /**
              * The name of a service from the service registry.
              */
-            host?: pulumi.Input<string>;
+            host: pulumi.Input<string>;
+            /**
+             * One or more named sets that represent individual versions of a service.
+             */
             subsets?: pulumi.Input<pulumi.Input<inputs.networking.v1beta1.DestinationRuleSpecSubsetsArgs>[]>;
+            /**
+             * Traffic policies to apply (load balancing policy, connection pool sizes, outlier detection).
+             */
             trafficPolicy?: pulumi.Input<inputs.networking.v1beta1.DestinationRuleSpecTrafficPolicyArgs>;
+            /**
+             * Criteria used to select the specific set of pods/VMs on which this `DestinationRule` configuration should be applied.
+             */
             workloadSelector?: pulumi.Input<inputs.networking.v1beta1.DestinationRuleSpecWorkloadSelectorArgs>;
         }
 
         export interface DestinationRuleSpecSubsetsArgs {
+            /**
+             * Labels apply a filter over the endpoints of a service in the service registry.
+             */
             labels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
             /**
              * Name of the subset.
              */
-            name?: pulumi.Input<string>;
+            name: pulumi.Input<string>;
             /**
              * Traffic policies that apply to this subset.
              */
@@ -1636,6 +2351,9 @@ export namespace networking {
              * TLS related settings for connections to the upstream service.
              */
             tls?: pulumi.Input<inputs.networking.v1beta1.DestinationRuleSpecSubsetsTrafficPolicyTlsArgs>;
+            /**
+             * Configuration of tunneling TCP over other transport or application layers for the host configured in the DestinationRule.
+             */
             tunnel?: pulumi.Input<inputs.networking.v1beta1.DestinationRuleSpecSubsetsTrafficPolicyTunnelArgs>;
         }
 
@@ -1658,6 +2376,9 @@ export namespace networking {
              * Specify if http1.1 connection should be upgraded to http2 for the associated destination.
              */
             h2UpgradePolicy?: pulumi.Input<string>;
+            /**
+             * Maximum number of requests that will be queued while waiting for a ready connection pool connection.
+             */
             http1MaxPendingRequests?: pulumi.Input<number>;
             /**
              * Maximum number of active requests to a destination.
@@ -1671,6 +2392,9 @@ export namespace networking {
              * Maximum number of requests per connection to a backend.
              */
             maxRequestsPerConnection?: pulumi.Input<number>;
+            /**
+             * Maximum number of retries that can be outstanding to all hosts in a cluster at a given time.
+             */
             maxRetries?: pulumi.Input<number>;
             /**
              * If set to true, client protocol will be preserved while initiating connection to backend.
@@ -1708,7 +2432,13 @@ export namespace networking {
              * The time duration between keep-alive probes.
              */
             interval?: pulumi.Input<string>;
+            /**
+             * Maximum number of keepalive probes to send without response before deciding the connection is dead.
+             */
             probes?: pulumi.Input<number>;
+            /**
+             * The time duration a connection needs to be idle before keep-alive probes start being sent.
+             */
             time?: pulumi.Input<string>;
         }
 
@@ -1726,12 +2456,21 @@ export namespace networking {
              * Number of gateway errors before a host is ejected from the connection pool.
              */
             consecutiveGatewayErrors?: pulumi.Input<number>;
+            /**
+             * The number of consecutive locally originated failures before ejection occurs.
+             */
             consecutiveLocalOriginFailures?: pulumi.Input<number>;
             /**
              * Time interval between ejection sweep analysis.
              */
             interval?: pulumi.Input<string>;
+            /**
+             * Maximum % of hosts in the load balancing pool for the upstream service that can be ejected.
+             */
             maxEjectionPercent?: pulumi.Input<number>;
+            /**
+             * Outlier detection will be enabled as long as the associated load balancing pool has at least min_health_percent hosts in healthy mode.
+             */
             minHealthPercent?: pulumi.Input<number>;
             /**
              * Determines whether to distinguish local origin failures from external errors.
@@ -1746,6 +2485,9 @@ export namespace networking {
              */
             loadBalancer?: any;
             outlierDetection?: pulumi.Input<inputs.networking.v1beta1.DestinationRuleSpecSubsetsTrafficPolicyPortLevelSettingsOutlierDetectionArgs>;
+            /**
+             * Specifies the number of a port on the destination service on which this policy is being applied.
+             */
             port?: pulumi.Input<inputs.networking.v1beta1.DestinationRuleSpecSubsetsTrafficPolicyPortLevelSettingsPortArgs>;
             /**
              * TLS related settings for connections to the upstream service.
@@ -1772,6 +2514,9 @@ export namespace networking {
              * Specify if http1.1 connection should be upgraded to http2 for the associated destination.
              */
             h2UpgradePolicy?: pulumi.Input<string>;
+            /**
+             * Maximum number of requests that will be queued while waiting for a ready connection pool connection.
+             */
             http1MaxPendingRequests?: pulumi.Input<number>;
             /**
              * Maximum number of active requests to a destination.
@@ -1785,6 +2530,9 @@ export namespace networking {
              * Maximum number of requests per connection to a backend.
              */
             maxRequestsPerConnection?: pulumi.Input<number>;
+            /**
+             * Maximum number of retries that can be outstanding to all hosts in a cluster at a given time.
+             */
             maxRetries?: pulumi.Input<number>;
             /**
              * If set to true, client protocol will be preserved while initiating connection to backend.
@@ -1822,7 +2570,13 @@ export namespace networking {
              * The time duration between keep-alive probes.
              */
             interval?: pulumi.Input<string>;
+            /**
+             * Maximum number of keepalive probes to send without response before deciding the connection is dead.
+             */
             probes?: pulumi.Input<number>;
+            /**
+             * The time duration a connection needs to be idle before keep-alive probes start being sent.
+             */
             time?: pulumi.Input<string>;
         }
 
@@ -1840,12 +2594,21 @@ export namespace networking {
              * Number of gateway errors before a host is ejected from the connection pool.
              */
             consecutiveGatewayErrors?: pulumi.Input<number>;
+            /**
+             * The number of consecutive locally originated failures before ejection occurs.
+             */
             consecutiveLocalOriginFailures?: pulumi.Input<number>;
             /**
              * Time interval between ejection sweep analysis.
              */
             interval?: pulumi.Input<string>;
+            /**
+             * Maximum % of hosts in the load balancing pool for the upstream service that can be ejected.
+             */
             maxEjectionPercent?: pulumi.Input<number>;
+            /**
+             * Outlier detection will be enabled as long as the associated load balancing pool has at least min_health_percent hosts in healthy mode.
+             */
             minHealthPercent?: pulumi.Input<number>;
             /**
              * Determines whether to distinguish local origin failures from external errors.
@@ -1853,6 +2616,9 @@ export namespace networking {
             splitExternalLocalOriginErrors?: pulumi.Input<boolean>;
         }
 
+        /**
+         * Specifies the number of a port on the destination service on which this policy is being applied.
+         */
         export interface DestinationRuleSpecSubsetsTrafficPolicyPortLevelSettingsPortArgs {
             number?: pulumi.Input<number>;
         }
@@ -1861,13 +2627,25 @@ export namespace networking {
          * TLS related settings for connections to the upstream service.
          */
         export interface DestinationRuleSpecSubsetsTrafficPolicyPortLevelSettingsTlsArgs {
+            /**
+             * OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.
+             */
             caCertificates?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `MUTUAL`.
              */
             clientCertificate?: pulumi.Input<string>;
+            /**
+             * The name of the secret that holds the TLS certs for the client including the CA certificates.
+             */
             credentialName?: pulumi.Input<string>;
+            /**
+             * `insecureSkipVerify` specifies whether the proxy should skip verifying the CA signature and SAN for the server certificate corresponding to the host.
+             */
             insecureSkipVerify?: pulumi.Input<boolean>;
+            /**
+             * Indicates whether connections to this port should be secured using TLS.
+             */
             mode?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `MUTUAL`.
@@ -1877,6 +2655,9 @@ export namespace networking {
              * SNI string to present to the server during TLS handshake.
              */
             sni?: pulumi.Input<string>;
+            /**
+             * A list of alternate names to verify the subject identity in the certificate.
+             */
             subjectAltNames?: pulumi.Input<pulumi.Input<string>[]>;
         }
 
@@ -1884,13 +2665,25 @@ export namespace networking {
          * TLS related settings for connections to the upstream service.
          */
         export interface DestinationRuleSpecSubsetsTrafficPolicyTlsArgs {
+            /**
+             * OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.
+             */
             caCertificates?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `MUTUAL`.
              */
             clientCertificate?: pulumi.Input<string>;
+            /**
+             * The name of the secret that holds the TLS certs for the client including the CA certificates.
+             */
             credentialName?: pulumi.Input<string>;
+            /**
+             * `insecureSkipVerify` specifies whether the proxy should skip verifying the CA signature and SAN for the server certificate corresponding to the host.
+             */
             insecureSkipVerify?: pulumi.Input<boolean>;
+            /**
+             * Indicates whether connections to this port should be secured using TLS.
+             */
             mode?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `MUTUAL`.
@@ -1900,9 +2693,15 @@ export namespace networking {
              * SNI string to present to the server during TLS handshake.
              */
             sni?: pulumi.Input<string>;
+            /**
+             * A list of alternate names to verify the subject identity in the certificate.
+             */
             subjectAltNames?: pulumi.Input<pulumi.Input<string>[]>;
         }
 
+        /**
+         * Configuration of tunneling TCP over other transport or application layers for the host configured in the DestinationRule.
+         */
         export interface DestinationRuleSpecSubsetsTrafficPolicyTunnelArgs {
             /**
              * Specifies which protocol to use for tunneling the downstream connection.
@@ -1911,13 +2710,16 @@ export namespace networking {
             /**
              * Specifies a host to which the downstream connection is tunneled.
              */
-            targetHost?: pulumi.Input<string>;
+            targetHost: pulumi.Input<string>;
             /**
              * Specifies a port to which the downstream connection is tunneled.
              */
-            targetPort?: pulumi.Input<number>;
+            targetPort: pulumi.Input<number>;
         }
 
+        /**
+         * Traffic policies to apply (load balancing policy, connection pool sizes, outlier detection).
+         */
         export interface DestinationRuleSpecTrafficPolicyArgs {
             connectionPool?: pulumi.Input<inputs.networking.v1beta1.DestinationRuleSpecTrafficPolicyConnectionPoolArgs>;
             /**
@@ -1933,6 +2735,9 @@ export namespace networking {
              * TLS related settings for connections to the upstream service.
              */
             tls?: pulumi.Input<inputs.networking.v1beta1.DestinationRuleSpecTrafficPolicyTlsArgs>;
+            /**
+             * Configuration of tunneling TCP over other transport or application layers for the host configured in the DestinationRule.
+             */
             tunnel?: pulumi.Input<inputs.networking.v1beta1.DestinationRuleSpecTrafficPolicyTunnelArgs>;
         }
 
@@ -1955,6 +2760,9 @@ export namespace networking {
              * Specify if http1.1 connection should be upgraded to http2 for the associated destination.
              */
             h2UpgradePolicy?: pulumi.Input<string>;
+            /**
+             * Maximum number of requests that will be queued while waiting for a ready connection pool connection.
+             */
             http1MaxPendingRequests?: pulumi.Input<number>;
             /**
              * Maximum number of active requests to a destination.
@@ -1968,6 +2776,9 @@ export namespace networking {
              * Maximum number of requests per connection to a backend.
              */
             maxRequestsPerConnection?: pulumi.Input<number>;
+            /**
+             * Maximum number of retries that can be outstanding to all hosts in a cluster at a given time.
+             */
             maxRetries?: pulumi.Input<number>;
             /**
              * If set to true, client protocol will be preserved while initiating connection to backend.
@@ -2005,7 +2816,13 @@ export namespace networking {
              * The time duration between keep-alive probes.
              */
             interval?: pulumi.Input<string>;
+            /**
+             * Maximum number of keepalive probes to send without response before deciding the connection is dead.
+             */
             probes?: pulumi.Input<number>;
+            /**
+             * The time duration a connection needs to be idle before keep-alive probes start being sent.
+             */
             time?: pulumi.Input<string>;
         }
 
@@ -2023,12 +2840,21 @@ export namespace networking {
              * Number of gateway errors before a host is ejected from the connection pool.
              */
             consecutiveGatewayErrors?: pulumi.Input<number>;
+            /**
+             * The number of consecutive locally originated failures before ejection occurs.
+             */
             consecutiveLocalOriginFailures?: pulumi.Input<number>;
             /**
              * Time interval between ejection sweep analysis.
              */
             interval?: pulumi.Input<string>;
+            /**
+             * Maximum % of hosts in the load balancing pool for the upstream service that can be ejected.
+             */
             maxEjectionPercent?: pulumi.Input<number>;
+            /**
+             * Outlier detection will be enabled as long as the associated load balancing pool has at least min_health_percent hosts in healthy mode.
+             */
             minHealthPercent?: pulumi.Input<number>;
             /**
              * Determines whether to distinguish local origin failures from external errors.
@@ -2043,6 +2869,9 @@ export namespace networking {
              */
             loadBalancer?: any;
             outlierDetection?: pulumi.Input<inputs.networking.v1beta1.DestinationRuleSpecTrafficPolicyPortLevelSettingsOutlierDetectionArgs>;
+            /**
+             * Specifies the number of a port on the destination service on which this policy is being applied.
+             */
             port?: pulumi.Input<inputs.networking.v1beta1.DestinationRuleSpecTrafficPolicyPortLevelSettingsPortArgs>;
             /**
              * TLS related settings for connections to the upstream service.
@@ -2069,6 +2898,9 @@ export namespace networking {
              * Specify if http1.1 connection should be upgraded to http2 for the associated destination.
              */
             h2UpgradePolicy?: pulumi.Input<string>;
+            /**
+             * Maximum number of requests that will be queued while waiting for a ready connection pool connection.
+             */
             http1MaxPendingRequests?: pulumi.Input<number>;
             /**
              * Maximum number of active requests to a destination.
@@ -2082,6 +2914,9 @@ export namespace networking {
              * Maximum number of requests per connection to a backend.
              */
             maxRequestsPerConnection?: pulumi.Input<number>;
+            /**
+             * Maximum number of retries that can be outstanding to all hosts in a cluster at a given time.
+             */
             maxRetries?: pulumi.Input<number>;
             /**
              * If set to true, client protocol will be preserved while initiating connection to backend.
@@ -2119,7 +2954,13 @@ export namespace networking {
              * The time duration between keep-alive probes.
              */
             interval?: pulumi.Input<string>;
+            /**
+             * Maximum number of keepalive probes to send without response before deciding the connection is dead.
+             */
             probes?: pulumi.Input<number>;
+            /**
+             * The time duration a connection needs to be idle before keep-alive probes start being sent.
+             */
             time?: pulumi.Input<string>;
         }
 
@@ -2137,12 +2978,21 @@ export namespace networking {
              * Number of gateway errors before a host is ejected from the connection pool.
              */
             consecutiveGatewayErrors?: pulumi.Input<number>;
+            /**
+             * The number of consecutive locally originated failures before ejection occurs.
+             */
             consecutiveLocalOriginFailures?: pulumi.Input<number>;
             /**
              * Time interval between ejection sweep analysis.
              */
             interval?: pulumi.Input<string>;
+            /**
+             * Maximum % of hosts in the load balancing pool for the upstream service that can be ejected.
+             */
             maxEjectionPercent?: pulumi.Input<number>;
+            /**
+             * Outlier detection will be enabled as long as the associated load balancing pool has at least min_health_percent hosts in healthy mode.
+             */
             minHealthPercent?: pulumi.Input<number>;
             /**
              * Determines whether to distinguish local origin failures from external errors.
@@ -2150,6 +3000,9 @@ export namespace networking {
             splitExternalLocalOriginErrors?: pulumi.Input<boolean>;
         }
 
+        /**
+         * Specifies the number of a port on the destination service on which this policy is being applied.
+         */
         export interface DestinationRuleSpecTrafficPolicyPortLevelSettingsPortArgs {
             number?: pulumi.Input<number>;
         }
@@ -2158,13 +3011,25 @@ export namespace networking {
          * TLS related settings for connections to the upstream service.
          */
         export interface DestinationRuleSpecTrafficPolicyPortLevelSettingsTlsArgs {
+            /**
+             * OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.
+             */
             caCertificates?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `MUTUAL`.
              */
             clientCertificate?: pulumi.Input<string>;
+            /**
+             * The name of the secret that holds the TLS certs for the client including the CA certificates.
+             */
             credentialName?: pulumi.Input<string>;
+            /**
+             * `insecureSkipVerify` specifies whether the proxy should skip verifying the CA signature and SAN for the server certificate corresponding to the host.
+             */
             insecureSkipVerify?: pulumi.Input<boolean>;
+            /**
+             * Indicates whether connections to this port should be secured using TLS.
+             */
             mode?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `MUTUAL`.
@@ -2174,6 +3039,9 @@ export namespace networking {
              * SNI string to present to the server during TLS handshake.
              */
             sni?: pulumi.Input<string>;
+            /**
+             * A list of alternate names to verify the subject identity in the certificate.
+             */
             subjectAltNames?: pulumi.Input<pulumi.Input<string>[]>;
         }
 
@@ -2181,13 +3049,25 @@ export namespace networking {
          * TLS related settings for connections to the upstream service.
          */
         export interface DestinationRuleSpecTrafficPolicyTlsArgs {
+            /**
+             * OPTIONAL: The path to the file containing certificate authority certificates to use in verifying a presented server certificate.
+             */
             caCertificates?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `MUTUAL`.
              */
             clientCertificate?: pulumi.Input<string>;
+            /**
+             * The name of the secret that holds the TLS certs for the client including the CA certificates.
+             */
             credentialName?: pulumi.Input<string>;
+            /**
+             * `insecureSkipVerify` specifies whether the proxy should skip verifying the CA signature and SAN for the server certificate corresponding to the host.
+             */
             insecureSkipVerify?: pulumi.Input<boolean>;
+            /**
+             * Indicates whether connections to this port should be secured using TLS.
+             */
             mode?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `MUTUAL`.
@@ -2197,9 +3077,15 @@ export namespace networking {
              * SNI string to present to the server during TLS handshake.
              */
             sni?: pulumi.Input<string>;
+            /**
+             * A list of alternate names to verify the subject identity in the certificate.
+             */
             subjectAltNames?: pulumi.Input<pulumi.Input<string>[]>;
         }
 
+        /**
+         * Configuration of tunneling TCP over other transport or application layers for the host configured in the DestinationRule.
+         */
         export interface DestinationRuleSpecTrafficPolicyTunnelArgs {
             /**
              * Specifies which protocol to use for tunneling the downstream connection.
@@ -2208,14 +3094,20 @@ export namespace networking {
             /**
              * Specifies a host to which the downstream connection is tunneled.
              */
-            targetHost?: pulumi.Input<string>;
+            targetHost: pulumi.Input<string>;
             /**
              * Specifies a port to which the downstream connection is tunneled.
              */
-            targetPort?: pulumi.Input<number>;
+            targetPort: pulumi.Input<number>;
         }
 
+        /**
+         * Criteria used to select the specific set of pods/VMs on which this `DestinationRule` configuration should be applied.
+         */
         export interface DestinationRuleSpecWorkloadSelectorArgs {
+            /**
+             * One or more labels that indicate a specific set of pods/VMs on which a policy should be applied.
+             */
             matchLabels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
         }
 
@@ -2223,6 +3115,9 @@ export namespace networking {
          * Configuration affecting edge load balancer. See more details at: https://istio.io/docs/reference/config/networking/gateway.html
          */
         export interface GatewaySpecArgs {
+            /**
+             * One or more labels that indicate a specific set of pods/VMs on which this gateway configuration should be applied.
+             */
             selector?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
             /**
              * A list of server specifications.
@@ -2231,36 +3126,45 @@ export namespace networking {
         }
 
         export interface GatewaySpecServersArgs {
+            /**
+             * The ip or the Unix domain socket to which the listener should be bound to.
+             */
             bind?: pulumi.Input<string>;
             defaultEndpoint?: pulumi.Input<string>;
             /**
              * One or more hosts exposed by this gateway.
              */
-            hosts?: pulumi.Input<pulumi.Input<string>[]>;
+            hosts: pulumi.Input<pulumi.Input<string>[]>;
             /**
              * An optional name of the server, when set must be unique across all servers.
              */
             name?: pulumi.Input<string>;
-            port?: pulumi.Input<inputs.networking.v1beta1.GatewaySpecServersPortArgs>;
+            /**
+             * The Port on which the proxy should listen for incoming connections.
+             */
+            port: pulumi.Input<inputs.networking.v1beta1.GatewaySpecServersPortArgs>;
             /**
              * Set of TLS related options that govern the server's behavior.
              */
             tls?: pulumi.Input<inputs.networking.v1beta1.GatewaySpecServersTlsArgs>;
         }
 
+        /**
+         * The Port on which the proxy should listen for incoming connections.
+         */
         export interface GatewaySpecServersPortArgs {
             /**
              * Label assigned to the port.
              */
-            name?: pulumi.Input<string>;
+            name: pulumi.Input<string>;
             /**
              * A valid non-negative integer port number.
              */
-            number?: pulumi.Input<number>;
+            number: pulumi.Input<number>;
             /**
              * The protocol exposed on the port.
              */
-            protocol?: pulumi.Input<string>;
+            protocol: pulumi.Input<string>;
             targetPort?: pulumi.Input<number>;
         }
 
@@ -2269,14 +3173,20 @@ export namespace networking {
          */
         export interface GatewaySpecServersTlsArgs {
             /**
-             * REQUIRED if mode is `MUTUAL`.
+             * REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
              */
             caCertificates?: pulumi.Input<string>;
             /**
              * Optional: If specified, only support the specified cipher list.
              */
             cipherSuites?: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * For gateways running on Kubernetes, the name of the secret that holds the TLS certs including the CA certificates.
+             */
             credentialName?: pulumi.Input<string>;
+            /**
+             * If set to true, the load balancer will send a 301 redirect for all http connections, asking the clients to use HTTPS.
+             */
             httpsRedirect?: pulumi.Input<boolean>;
             /**
              * Optional: Maximum TLS protocol version.
@@ -2286,6 +3196,9 @@ export namespace networking {
              * Optional: Minimum TLS protocol version.
              */
             minProtocolVersion?: pulumi.Input<string>;
+            /**
+             * Optional: Indicates whether connections to this port should be secured using TLS.
+             */
             mode?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `SIMPLE` or `MUTUAL`.
@@ -2295,8 +3208,17 @@ export namespace networking {
              * REQUIRED if mode is `SIMPLE` or `MUTUAL`.
              */
             serverCertificate?: pulumi.Input<string>;
+            /**
+             * A list of alternate names to verify the subject identity in the certificate presented by the client.
+             */
             subjectAltNames?: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * An optional list of hex-encoded SHA-256 hashes of the authorized client certificates.
+             */
             verifyCertificateHash?: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * An optional list of base64-encoded SHA-256 hashes of the SPKIs of authorized client certificates.
+             */
             verifyCertificateSpki?: pulumi.Input<pulumi.Input<string>[]>;
         }
 
@@ -2336,6 +3258,9 @@ export namespace networking {
          * Optional.
          */
         export interface ProxyConfigSpecSelectorArgs {
+            /**
+             * One or more labels that indicate a specific set of pods/VMs on which a policy should be applied.
+             */
             matchLabels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
         }
 
@@ -2358,7 +3283,10 @@ export namespace networking {
             /**
              * The hosts associated with the ServiceEntry.
              */
-            hosts?: pulumi.Input<pulumi.Input<string>[]>;
+            hosts: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * Specify whether the service should be considered external to the mesh or part of the mesh.
+             */
             location?: pulumi.Input<string>;
             /**
              * The ports associated with the external service.
@@ -2368,6 +3296,9 @@ export namespace networking {
              * Service resolution mode for the hosts.
              */
             resolution?: pulumi.Input<string>;
+            /**
+             * If specified, the proxy will verify that the server certificate's subject alternate name matches one of the specified values.
+             */
             subjectAltNames?: pulumi.Input<pulumi.Input<string>[]>;
             /**
              * Applicable only for MESH_INTERNAL services.
@@ -2376,6 +3307,9 @@ export namespace networking {
         }
 
         export interface ServiceEntrySpecEndpointsArgs {
+            /**
+             * Address associated with the network endpoint without the port.
+             */
             address?: pulumi.Input<string>;
             /**
              * One or more labels associated with the endpoint.
@@ -2385,11 +3319,17 @@ export namespace networking {
              * The locality associated with the endpoint.
              */
             locality?: pulumi.Input<string>;
+            /**
+             * Network enables Istio to group endpoints resident in the same L3 domain/network.
+             */
             network?: pulumi.Input<string>;
             /**
              * Set of ports associated with the endpoint.
              */
             ports?: pulumi.Input<{[key: string]: pulumi.Input<number>}>;
+            /**
+             * The service account associated with the workload if a sidecar is present in the workload.
+             */
             serviceAccount?: pulumi.Input<string>;
             /**
              * The load balancing weight associated with the endpoint.
@@ -2401,15 +3341,18 @@ export namespace networking {
             /**
              * Label assigned to the port.
              */
-            name?: pulumi.Input<string>;
+            name: pulumi.Input<string>;
             /**
              * A valid non-negative integer port number.
              */
-            number?: pulumi.Input<number>;
+            number: pulumi.Input<number>;
             /**
              * The protocol exposed on the port.
              */
             protocol?: pulumi.Input<string>;
+            /**
+             * The port number on the endpoint where the traffic will be received.
+             */
             targetPort?: pulumi.Input<number>;
         }
 
@@ -2417,6 +3360,9 @@ export namespace networking {
          * Applicable only for MESH_INTERNAL services.
          */
         export interface ServiceEntrySpecWorkloadSelectorArgs {
+            /**
+             * One or more labels that indicate a specific set of pods/VMs on which the configuration should be applied.
+             */
             labels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
         }
 
@@ -2424,19 +3370,41 @@ export namespace networking {
          * Configuration affecting network reachability of a sidecar. See more details at: https://istio.io/docs/reference/config/networking/sidecar.html
          */
         export interface SidecarSpecArgs {
+            /**
+             * Egress specifies the configuration of the sidecar for processing outbound traffic from the attached workload instance to other services in the mesh.
+             */
             egress?: pulumi.Input<pulumi.Input<inputs.networking.v1beta1.SidecarSpecEgressArgs>[]>;
+            /**
+             * Settings controlling the volume of connections Envoy will accept from the network.
+             */
+            inboundConnectionPool?: pulumi.Input<inputs.networking.v1beta1.SidecarSpecInboundConnectionPoolArgs>;
+            /**
+             * Ingress specifies the configuration of the sidecar for processing inbound traffic to the attached workload instance.
+             */
             ingress?: pulumi.Input<pulumi.Input<inputs.networking.v1beta1.SidecarSpecIngressArgs>[]>;
             /**
              * Configuration for the outbound traffic policy.
              */
             outboundTrafficPolicy?: pulumi.Input<inputs.networking.v1beta1.SidecarSpecOutboundTrafficPolicyArgs>;
+            /**
+             * Criteria used to select the specific set of pods/VMs on which this `Sidecar` configuration should be applied.
+             */
             workloadSelector?: pulumi.Input<inputs.networking.v1beta1.SidecarSpecWorkloadSelectorArgs>;
         }
 
         export interface SidecarSpecEgressArgs {
+            /**
+             * The IP(IPv4 or IPv6) or the Unix domain socket to which the listener should be bound to.
+             */
             bind?: pulumi.Input<string>;
+            /**
+             * When the bind address is an IP, the captureMode option dictates how traffic to the listener is expected to be captured (or not).
+             */
             captureMode?: pulumi.Input<string>;
-            hosts?: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * One or more service hosts exposed by the listener in `namespace/dnsName` format.
+             */
+            hosts: pulumi.Input<pulumi.Input<string>[]>;
             /**
              * The port associated with the listener.
              */
@@ -2462,18 +3430,207 @@ export namespace networking {
             targetPort?: pulumi.Input<number>;
         }
 
+        /**
+         * Settings controlling the volume of connections Envoy will accept from the network.
+         */
+        export interface SidecarSpecInboundConnectionPoolArgs {
+            /**
+             * HTTP connection pool settings.
+             */
+            http?: pulumi.Input<inputs.networking.v1beta1.SidecarSpecInboundConnectionPoolHttpArgs>;
+            /**
+             * Settings common to both HTTP and TCP upstream connections.
+             */
+            tcp?: pulumi.Input<inputs.networking.v1beta1.SidecarSpecInboundConnectionPoolTcpArgs>;
+        }
+
+        /**
+         * HTTP connection pool settings.
+         */
+        export interface SidecarSpecInboundConnectionPoolHttpArgs {
+            /**
+             * Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+             */
+            h2UpgradePolicy?: pulumi.Input<string>;
+            /**
+             * Maximum number of requests that will be queued while waiting for a ready connection pool connection.
+             */
+            http1MaxPendingRequests?: pulumi.Input<number>;
+            /**
+             * Maximum number of active requests to a destination.
+             */
+            http2MaxRequests?: pulumi.Input<number>;
+            /**
+             * The idle timeout for upstream connection pool connections.
+             */
+            idleTimeout?: pulumi.Input<string>;
+            /**
+             * Maximum number of requests per connection to a backend.
+             */
+            maxRequestsPerConnection?: pulumi.Input<number>;
+            /**
+             * Maximum number of retries that can be outstanding to all hosts in a cluster at a given time.
+             */
+            maxRetries?: pulumi.Input<number>;
+            /**
+             * If set to true, client protocol will be preserved while initiating connection to backend.
+             */
+            useClientProtocol?: pulumi.Input<boolean>;
+        }
+
+        /**
+         * Settings common to both HTTP and TCP upstream connections.
+         */
+        export interface SidecarSpecInboundConnectionPoolTcpArgs {
+            /**
+             * TCP connection timeout.
+             */
+            connectTimeout?: pulumi.Input<string>;
+            /**
+             * The maximum duration of a connection.
+             */
+            maxConnectionDuration?: pulumi.Input<string>;
+            /**
+             * Maximum number of HTTP1 /TCP connections to a destination host.
+             */
+            maxConnections?: pulumi.Input<number>;
+            /**
+             * If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+             */
+            tcpKeepalive?: pulumi.Input<inputs.networking.v1beta1.SidecarSpecInboundConnectionPoolTcpTcpKeepaliveArgs>;
+        }
+
+        /**
+         * If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+         */
+        export interface SidecarSpecInboundConnectionPoolTcpTcpKeepaliveArgs {
+            /**
+             * The time duration between keep-alive probes.
+             */
+            interval?: pulumi.Input<string>;
+            /**
+             * Maximum number of keepalive probes to send without response before deciding the connection is dead.
+             */
+            probes?: pulumi.Input<number>;
+            /**
+             * The time duration a connection needs to be idle before keep-alive probes start being sent.
+             */
+            time?: pulumi.Input<string>;
+        }
+
         export interface SidecarSpecIngressArgs {
             /**
              * The IP(IPv4 or IPv6) to which the listener should be bound.
              */
             bind?: pulumi.Input<string>;
+            /**
+             * The captureMode option dictates how traffic to the listener is expected to be captured (or not).
+             */
             captureMode?: pulumi.Input<string>;
+            /**
+             * Settings controlling the volume of connections Envoy will accept from the network.
+             */
+            connectionPool?: pulumi.Input<inputs.networking.v1beta1.SidecarSpecIngressConnectionPoolArgs>;
+            /**
+             * The IP endpoint or Unix domain socket to which traffic should be forwarded to.
+             */
             defaultEndpoint?: pulumi.Input<string>;
             /**
              * The port associated with the listener.
              */
-            port?: pulumi.Input<inputs.networking.v1beta1.SidecarSpecIngressPortArgs>;
+            port: pulumi.Input<inputs.networking.v1beta1.SidecarSpecIngressPortArgs>;
+            /**
+             * Set of TLS related options that will enable TLS termination on the sidecar for requests originating from outside the mesh.
+             */
             tls?: pulumi.Input<inputs.networking.v1beta1.SidecarSpecIngressTlsArgs>;
+        }
+
+        /**
+         * Settings controlling the volume of connections Envoy will accept from the network.
+         */
+        export interface SidecarSpecIngressConnectionPoolArgs {
+            /**
+             * HTTP connection pool settings.
+             */
+            http?: pulumi.Input<inputs.networking.v1beta1.SidecarSpecIngressConnectionPoolHttpArgs>;
+            /**
+             * Settings common to both HTTP and TCP upstream connections.
+             */
+            tcp?: pulumi.Input<inputs.networking.v1beta1.SidecarSpecIngressConnectionPoolTcpArgs>;
+        }
+
+        /**
+         * HTTP connection pool settings.
+         */
+        export interface SidecarSpecIngressConnectionPoolHttpArgs {
+            /**
+             * Specify if http1.1 connection should be upgraded to http2 for the associated destination.
+             */
+            h2UpgradePolicy?: pulumi.Input<string>;
+            /**
+             * Maximum number of requests that will be queued while waiting for a ready connection pool connection.
+             */
+            http1MaxPendingRequests?: pulumi.Input<number>;
+            /**
+             * Maximum number of active requests to a destination.
+             */
+            http2MaxRequests?: pulumi.Input<number>;
+            /**
+             * The idle timeout for upstream connection pool connections.
+             */
+            idleTimeout?: pulumi.Input<string>;
+            /**
+             * Maximum number of requests per connection to a backend.
+             */
+            maxRequestsPerConnection?: pulumi.Input<number>;
+            /**
+             * Maximum number of retries that can be outstanding to all hosts in a cluster at a given time.
+             */
+            maxRetries?: pulumi.Input<number>;
+            /**
+             * If set to true, client protocol will be preserved while initiating connection to backend.
+             */
+            useClientProtocol?: pulumi.Input<boolean>;
+        }
+
+        /**
+         * Settings common to both HTTP and TCP upstream connections.
+         */
+        export interface SidecarSpecIngressConnectionPoolTcpArgs {
+            /**
+             * TCP connection timeout.
+             */
+            connectTimeout?: pulumi.Input<string>;
+            /**
+             * The maximum duration of a connection.
+             */
+            maxConnectionDuration?: pulumi.Input<string>;
+            /**
+             * Maximum number of HTTP1 /TCP connections to a destination host.
+             */
+            maxConnections?: pulumi.Input<number>;
+            /**
+             * If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+             */
+            tcpKeepalive?: pulumi.Input<inputs.networking.v1beta1.SidecarSpecIngressConnectionPoolTcpTcpKeepaliveArgs>;
+        }
+
+        /**
+         * If set then set SO_KEEPALIVE on the socket to enable TCP Keepalives.
+         */
+        export interface SidecarSpecIngressConnectionPoolTcpTcpKeepaliveArgs {
+            /**
+             * The time duration between keep-alive probes.
+             */
+            interval?: pulumi.Input<string>;
+            /**
+             * Maximum number of keepalive probes to send without response before deciding the connection is dead.
+             */
+            probes?: pulumi.Input<number>;
+            /**
+             * The time duration a connection needs to be idle before keep-alive probes start being sent.
+             */
+            time?: pulumi.Input<string>;
         }
 
         /**
@@ -2495,16 +3652,25 @@ export namespace networking {
             targetPort?: pulumi.Input<number>;
         }
 
+        /**
+         * Set of TLS related options that will enable TLS termination on the sidecar for requests originating from outside the mesh.
+         */
         export interface SidecarSpecIngressTlsArgs {
             /**
-             * REQUIRED if mode is `MUTUAL`.
+             * REQUIRED if mode is `MUTUAL` or `OPTIONAL_MUTUAL`.
              */
             caCertificates?: pulumi.Input<string>;
             /**
              * Optional: If specified, only support the specified cipher list.
              */
             cipherSuites?: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * For gateways running on Kubernetes, the name of the secret that holds the TLS certs including the CA certificates.
+             */
             credentialName?: pulumi.Input<string>;
+            /**
+             * If set to true, the load balancer will send a 301 redirect for all http connections, asking the clients to use HTTPS.
+             */
             httpsRedirect?: pulumi.Input<boolean>;
             /**
              * Optional: Maximum TLS protocol version.
@@ -2514,6 +3680,9 @@ export namespace networking {
              * Optional: Minimum TLS protocol version.
              */
             minProtocolVersion?: pulumi.Input<string>;
+            /**
+             * Optional: Indicates whether connections to this port should be secured using TLS.
+             */
             mode?: pulumi.Input<string>;
             /**
              * REQUIRED if mode is `SIMPLE` or `MUTUAL`.
@@ -2523,8 +3692,17 @@ export namespace networking {
              * REQUIRED if mode is `SIMPLE` or `MUTUAL`.
              */
             serverCertificate?: pulumi.Input<string>;
+            /**
+             * A list of alternate names to verify the subject identity in the certificate presented by the client.
+             */
             subjectAltNames?: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * An optional list of hex-encoded SHA-256 hashes of the authorized client certificates.
+             */
             verifyCertificateHash?: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * An optional list of base64-encoded SHA-256 hashes of the SPKIs of authorized client certificates.
+             */
             verifyCertificateSpki?: pulumi.Input<pulumi.Input<string>[]>;
         }
 
@@ -2540,7 +3718,7 @@ export namespace networking {
             /**
              * The name of a service from the service registry.
              */
-            host?: pulumi.Input<string>;
+            host: pulumi.Input<string>;
             /**
              * Specifies the port on the host that is being addressed.
              */
@@ -2558,7 +3736,13 @@ export namespace networking {
             number?: pulumi.Input<number>;
         }
 
+        /**
+         * Criteria used to select the specific set of pods/VMs on which this `Sidecar` configuration should be applied.
+         */
         export interface SidecarSpecWorkloadSelectorArgs {
+            /**
+             * One or more labels that indicate a specific set of pods/VMs on which the configuration should be applied.
+             */
             labels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
         }
 
@@ -2586,6 +3770,9 @@ export namespace networking {
              * An ordered list of route rules for opaque TCP traffic.
              */
             tcp?: pulumi.Input<pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecTcpArgs>[]>;
+            /**
+             * An ordered list of route rule for non-terminated TLS & HTTPS traffic.
+             */
             tls?: pulumi.Input<pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecTlsArgs>[]>;
         }
 
@@ -2594,6 +3781,9 @@ export namespace networking {
              * Cross-Origin Resource Sharing policy (CORS).
              */
             corsPolicy?: pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecHttpCorsPolicyArgs>;
+            /**
+             * Delegate is used to specify the particular VirtualService which can be used to define delegate HTTPRoute.
+             */
             delegate?: pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecHttpDelegateArgs>;
             /**
              * A HTTP rule can either return a direct_response, redirect or forward (default) traffic.
@@ -2604,20 +3794,24 @@ export namespace networking {
              */
             fault?: pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecHttpFaultArgs>;
             headers?: pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecHttpHeadersArgs>;
-            match?: pulumi.Input<pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecHttpMatchArgs>[]>;
-            mirror?: pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecHttpMirrorArgs>;
             /**
-             * Percentage of the traffic to be mirrored by the `mirror` field.
+             * Match conditions to be satisfied for the rule to be activated.
              */
+            match?: pulumi.Input<pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecHttpMatchArgs>[]>;
+            /**
+             * Mirror HTTP traffic to a another destination in addition to forwarding the requests to the intended destination.
+             */
+            mirror?: pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecHttpMirrorArgs>;
             mirrorPercent?: pulumi.Input<number>;
             /**
              * Percentage of the traffic to be mirrored by the `mirror` field.
              */
             mirrorPercentage?: pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecHttpMirrorPercentageArgs>;
-            /**
-             * Percentage of the traffic to be mirrored by the `mirror` field.
-             */
             mirror_percent?: pulumi.Input<number>;
+            /**
+             * Specifies the destinations to mirror HTTP traffic in addition to the original destination.
+             */
+            mirrors?: pulumi.Input<pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecHttpMirrorsArgs>[]>;
             /**
              * The name assigned to the route for debugging purposes.
              */
@@ -2648,24 +3842,36 @@ export namespace networking {
          * Cross-Origin Resource Sharing policy (CORS).
          */
         export interface VirtualServiceSpecHttpCorsPolicyArgs {
+            /**
+             * Indicates whether the caller is allowed to send the actual request (not the preflight) using credentials.
+             */
             allowCredentials?: pulumi.Input<boolean>;
+            /**
+             * List of HTTP headers that can be used when requesting the resource.
+             */
             allowHeaders?: pulumi.Input<pulumi.Input<string>[]>;
             /**
              * List of HTTP methods allowed to access the resource.
              */
             allowMethods?: pulumi.Input<pulumi.Input<string>[]>;
-            /**
-             * The list of origins that are allowed to perform CORS requests.
-             */
             allowOrigin?: pulumi.Input<pulumi.Input<string>[]>;
             /**
              * String patterns that match allowed origins.
              */
             allowOrigins?: pulumi.Input<any[]>;
+            /**
+             * A list of HTTP headers that the browsers are allowed to access.
+             */
             exposeHeaders?: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * Specifies how long the results of a preflight request can be cached.
+             */
             maxAge?: pulumi.Input<string>;
         }
 
+        /**
+         * Delegate is used to specify the particular VirtualService which can be used to define delegate HTTPRoute.
+         */
         export interface VirtualServiceSpecHttpDelegateArgs {
             /**
              * Name specifies the name of the delegate VirtualService.
@@ -2688,14 +3894,20 @@ export namespace networking {
             /**
              * Specifies the HTTP response status to be returned.
              */
-            status?: pulumi.Input<number>;
+            status: pulumi.Input<number>;
         }
 
         /**
          * Fault injection policy to apply on HTTP traffic at the client side.
          */
         export interface VirtualServiceSpecHttpFaultArgs {
+            /**
+             * Abort Http request attempts and return error codes back to downstream service, giving the impression that the upstream service is faulty.
+             */
             abort?: any;
+            /**
+             * Delay requests before forwarding, emulating various failures such as network issues, overloaded upstream service, etc.
+             */
             delay?: any;
         }
 
@@ -2717,16 +3929,25 @@ export namespace networking {
         }
 
         export interface VirtualServiceSpecHttpMatchArgs {
+            /**
+             * HTTP Authority values are case-sensitive and formatted as follows: - `exact: "value"` for exact string match - `prefix: "value"` for prefix-based match - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+             */
             authority?: any;
             /**
              * Names of gateways where the rule should be applied.
              */
             gateways?: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * The header keys must be lowercase and use hyphen as the separator, e.g.
+             */
             headers?: pulumi.Input<{[key: string]: any}>;
             /**
              * Flag to specify whether the URI matching should be case-insensitive.
              */
             ignoreUriCase?: pulumi.Input<boolean>;
+            /**
+             * HTTP Method values are case-sensitive and formatted as follows: - `exact: "value"` for exact string match - `prefix: "value"` for prefix-based match - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+             */
             method?: any;
             /**
              * The name assigned to a match.
@@ -2740,7 +3961,13 @@ export namespace networking {
              * Query parameters for matching.
              */
             queryParams?: pulumi.Input<{[key: string]: any}>;
+            /**
+             * URI Scheme values are case-sensitive and formatted as follows: - `exact: "value"` for exact string match - `prefix: "value"` for prefix-based match - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+             */
             scheme?: any;
+            /**
+             * One or more labels that constrain the applicability of a rule to source (client) workloads with the given labels.
+             */
             sourceLabels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
             /**
              * Source namespace constraining the applicability of a rule to workloads in that namespace.
@@ -2750,6 +3977,9 @@ export namespace networking {
              * The human readable prefix to use when emitting statistics for this route.
              */
             statPrefix?: pulumi.Input<string>;
+            /**
+             * URI to match values are case-sensitive and formatted as follows: - `exact: "value"` for exact string match - `prefix: "value"` for prefix-based match - `regex: "value"` for RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+             */
             uri?: any;
             /**
              * withoutHeader has the same syntax with the header, but has opposite meaning.
@@ -2757,11 +3987,14 @@ export namespace networking {
             withoutHeaders?: pulumi.Input<{[key: string]: any}>;
         }
 
+        /**
+         * Mirror HTTP traffic to a another destination in addition to forwarding the requests to the intended destination.
+         */
         export interface VirtualServiceSpecHttpMirrorArgs {
             /**
              * The name of a service from the service registry.
              */
-            host?: pulumi.Input<string>;
+            host: pulumi.Input<string>;
             /**
              * Specifies the port on the host that is being addressed.
              */
@@ -2784,6 +4017,49 @@ export namespace networking {
          */
         export interface VirtualServiceSpecHttpMirrorPortArgs {
             number?: pulumi.Input<number>;
+        }
+
+        export interface VirtualServiceSpecHttpMirrorsArgs {
+            /**
+             * Destination specifies the target of the mirror operation.
+             */
+            destination: pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecHttpMirrorsDestinationArgs>;
+            /**
+             * Percentage of the traffic to be mirrored by the `destination` field.
+             */
+            percentage?: pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecHttpMirrorsPercentageArgs>;
+        }
+
+        /**
+         * Destination specifies the target of the mirror operation.
+         */
+        export interface VirtualServiceSpecHttpMirrorsDestinationArgs {
+            /**
+             * The name of a service from the service registry.
+             */
+            host: pulumi.Input<string>;
+            /**
+             * Specifies the port on the host that is being addressed.
+             */
+            port?: pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecHttpMirrorsDestinationPortArgs>;
+            /**
+             * The name of a subset within the service.
+             */
+            subset?: pulumi.Input<string>;
+        }
+
+        /**
+         * Specifies the port on the host that is being addressed.
+         */
+        export interface VirtualServiceSpecHttpMirrorsDestinationPortArgs {
+            number?: pulumi.Input<number>;
+        }
+
+        /**
+         * Percentage of the traffic to be mirrored by the `destination` field.
+         */
+        export interface VirtualServiceSpecHttpMirrorsPercentageArgs {
+            value?: pulumi.Input<number>;
         }
 
         /**
@@ -2816,11 +4092,35 @@ export namespace networking {
              * rewrite the Authority/Host header with this value.
              */
             authority?: pulumi.Input<string>;
+            /**
+             * rewrite the path (or the prefix) portion of the URI with this value.
+             */
             uri?: pulumi.Input<string>;
+            /**
+             * rewrite the path portion of the URI with the specified regex.
+             */
+            uriRegexRewrite?: pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecHttpRewriteUriRegexRewriteArgs>;
+        }
+
+        /**
+         * rewrite the path portion of the URI with the specified regex.
+         */
+        export interface VirtualServiceSpecHttpRewriteUriRegexRewriteArgs {
+            /**
+             * RE2 style regex-based match (https://github.com/google/re2/wiki/Syntax).
+             */
+            match?: pulumi.Input<string>;
+            /**
+             * The string that should replace into matching portions of original URI.
+             */
+            rewrite?: pulumi.Input<string>;
         }
 
         export interface VirtualServiceSpecHttpRouteArgs {
-            destination?: pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecHttpRouteDestinationArgs>;
+            /**
+             * Destination uniquely identifies the instances of a service to which the request/connection should be forwarded to.
+             */
+            destination: pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecHttpRouteDestinationArgs>;
             headers?: pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecHttpRouteHeadersArgs>;
             /**
              * Weight specifies the relative proportion of traffic to be forwarded to the destination.
@@ -2828,11 +4128,14 @@ export namespace networking {
             weight?: pulumi.Input<number>;
         }
 
+        /**
+         * Destination uniquely identifies the instances of a service to which the request/connection should be forwarded to.
+         */
         export interface VirtualServiceSpecHttpRouteDestinationArgs {
             /**
              * The name of a service from the service registry.
              */
-            host?: pulumi.Input<string>;
+            host: pulumi.Input<string>;
             /**
              * Specifies the port on the host that is being addressed.
              */
@@ -2868,6 +4171,9 @@ export namespace networking {
         }
 
         export interface VirtualServiceSpecTcpArgs {
+            /**
+             * Match conditions to be satisfied for the rule to be activated.
+             */
             match?: pulumi.Input<pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecTcpMatchArgs>[]>;
             /**
              * The destination to which the connection should be forwarded to.
@@ -2888,30 +4194,36 @@ export namespace networking {
              * Specifies the port on the host that is being addressed.
              */
             port?: pulumi.Input<number>;
+            /**
+             * One or more labels that constrain the applicability of a rule to workloads with the given labels.
+             */
             sourceLabels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
             /**
              * Source namespace constraining the applicability of a rule to workloads in that namespace.
              */
             sourceNamespace?: pulumi.Input<string>;
-            /**
-             * IPv4 or IPv6 ip address of source with optional subnet.
-             */
             sourceSubnet?: pulumi.Input<string>;
         }
 
         export interface VirtualServiceSpecTcpRouteArgs {
-            destination?: pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecTcpRouteDestinationArgs>;
+            /**
+             * Destination uniquely identifies the instances of a service to which the request/connection should be forwarded to.
+             */
+            destination: pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecTcpRouteDestinationArgs>;
             /**
              * Weight specifies the relative proportion of traffic to be forwarded to the destination.
              */
             weight?: pulumi.Input<number>;
         }
 
+        /**
+         * Destination uniquely identifies the instances of a service to which the request/connection should be forwarded to.
+         */
         export interface VirtualServiceSpecTcpRouteDestinationArgs {
             /**
              * The name of a service from the service registry.
              */
-            host?: pulumi.Input<string>;
+            host: pulumi.Input<string>;
             /**
              * Specifies the port on the host that is being addressed.
              */
@@ -2930,7 +4242,10 @@ export namespace networking {
         }
 
         export interface VirtualServiceSpecTlsArgs {
-            match?: pulumi.Input<pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecTlsMatchArgs>[]>;
+            /**
+             * Match conditions to be satisfied for the rule to be activated.
+             */
+            match: pulumi.Input<pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecTlsMatchArgs>[]>;
             /**
              * The destination to which the connection should be forwarded to.
              */
@@ -2953,7 +4268,10 @@ export namespace networking {
             /**
              * SNI (server name indicator) to match on.
              */
-            sniHosts?: pulumi.Input<pulumi.Input<string>[]>;
+            sniHosts: pulumi.Input<pulumi.Input<string>[]>;
+            /**
+             * One or more labels that constrain the applicability of a rule to workloads with the given labels.
+             */
             sourceLabels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
             /**
              * Source namespace constraining the applicability of a rule to workloads in that namespace.
@@ -2962,18 +4280,24 @@ export namespace networking {
         }
 
         export interface VirtualServiceSpecTlsRouteArgs {
-            destination?: pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecTlsRouteDestinationArgs>;
+            /**
+             * Destination uniquely identifies the instances of a service to which the request/connection should be forwarded to.
+             */
+            destination: pulumi.Input<inputs.networking.v1beta1.VirtualServiceSpecTlsRouteDestinationArgs>;
             /**
              * Weight specifies the relative proportion of traffic to be forwarded to the destination.
              */
             weight?: pulumi.Input<number>;
         }
 
+        /**
+         * Destination uniquely identifies the instances of a service to which the request/connection should be forwarded to.
+         */
         export interface VirtualServiceSpecTlsRouteDestinationArgs {
             /**
              * The name of a service from the service registry.
              */
-            host?: pulumi.Input<string>;
+            host: pulumi.Input<string>;
             /**
              * Specifies the port on the host that is being addressed.
              */
@@ -2995,6 +4319,9 @@ export namespace networking {
          * Configuration affecting VMs onboarded into the mesh. See more details at: https://istio.io/docs/reference/config/networking/workload-entry.html
          */
         export interface WorkloadEntrySpecArgs {
+            /**
+             * Address associated with the network endpoint without the port.
+             */
             address?: pulumi.Input<string>;
             /**
              * One or more labels associated with the endpoint.
@@ -3004,11 +4331,17 @@ export namespace networking {
              * The locality associated with the endpoint.
              */
             locality?: pulumi.Input<string>;
+            /**
+             * Network enables Istio to group endpoints resident in the same L3 domain/network.
+             */
             network?: pulumi.Input<string>;
             /**
              * Set of ports associated with the endpoint.
              */
             ports?: pulumi.Input<{[key: string]: pulumi.Input<number>}>;
+            /**
+             * The service account associated with the workload if a sidecar is present in the workload.
+             */
             serviceAccount?: pulumi.Input<string>;
             /**
              * The load balancing weight associated with the endpoint.
@@ -3016,6 +4349,9 @@ export namespace networking {
             weight?: pulumi.Input<number>;
         }
 
+        /**
+         * `WorkloadGroup` enables specifying the properties of a single workload for bootstrap and provides a template for `WorkloadEntry`, similar to how `Deployment` specifies properties of workloads via `Pod` templates.
+         */
         export interface WorkloadGroupSpecArgs {
             /**
              * Metadata that will be used for all corresponding `WorkloadEntries`.
@@ -3028,7 +4364,7 @@ export namespace networking {
             /**
              * Template to be used for the generation of `WorkloadEntry` resources that belong to this `WorkloadGroup`.
              */
-            template?: pulumi.Input<inputs.networking.v1beta1.WorkloadGroupSpecTemplateArgs>;
+            template: pulumi.Input<inputs.networking.v1beta1.WorkloadGroupSpecTemplateArgs>;
         }
 
         /**
@@ -3043,6 +4379,9 @@ export namespace networking {
          * Template to be used for the generation of `WorkloadEntry` resources that belong to this `WorkloadGroup`.
          */
         export interface WorkloadGroupSpecTemplateArgs {
+            /**
+             * Address associated with the network endpoint without the port.
+             */
             address?: pulumi.Input<string>;
             /**
              * One or more labels associated with the endpoint.
@@ -3052,11 +4391,17 @@ export namespace networking {
              * The locality associated with the endpoint.
              */
             locality?: pulumi.Input<string>;
+            /**
+             * Network enables Istio to group endpoints resident in the same L3 domain/network.
+             */
             network?: pulumi.Input<string>;
             /**
              * Set of ports associated with the endpoint.
              */
             ports?: pulumi.Input<{[key: string]: pulumi.Input<number>}>;
+            /**
+             * The service account associated with the workload if a sidecar is present in the workload.
+             */
             serviceAccount?: pulumi.Input<string>;
             /**
              * The load balancing weight associated with the endpoint.
@@ -3070,7 +4415,7 @@ export namespace networking {
 export namespace security {
     export namespace v1 {
         /**
-         * RequestAuthentication defines what request authentication methods are supported by a workload.
+         * Request authentication configuration for workloads. See more details at: https://istio.io/docs/reference/config/security/request_authentication.html
          */
         export interface RequestAuthenticationSpecArgs {
             /**
@@ -3081,9 +4426,16 @@ export namespace security {
              * Optional.
              */
             selector?: pulumi.Input<inputs.security.v1.RequestAuthenticationSpecSelectorArgs>;
+            /**
+             * Optional.
+             */
+            targetRef?: pulumi.Input<inputs.security.v1.RequestAuthenticationSpecTargetRefArgs>;
         }
 
         export interface RequestAuthenticationSpecJwtRulesArgs {
+            /**
+             * The list of JWT [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3) that are allowed to access.
+             */
             audiences?: pulumi.Input<pulumi.Input<string>[]>;
             /**
              * If set to true, the original token will be kept for the upstream request.
@@ -3100,17 +4452,26 @@ export namespace security {
             /**
              * Identifies the issuer that issued the JWT.
              */
-            issuer?: pulumi.Input<string>;
+            issuer: pulumi.Input<string>;
             /**
              * JSON Web Key Set of public keys to validate signature of the JWT.
              */
             jwks?: pulumi.Input<string>;
+            /**
+             * URL of the provider's public key set to validate signature of the JWT.
+             */
             jwksUri?: pulumi.Input<string>;
+            /**
+             * URL of the provider's public key set to validate signature of the JWT.
+             */
             jwks_uri?: pulumi.Input<string>;
             /**
              * This field specifies a list of operations to copy the claim to HTTP headers on a successfully verified token.
              */
             outputClaimToHeaders?: pulumi.Input<pulumi.Input<inputs.security.v1.RequestAuthenticationSpecJwtRulesOutputClaimToHeadersArgs>[]>;
+            /**
+             * This field specifies the header name to output a successfully verified JWT payload to the backend.
+             */
             outputPayloadToHeader?: pulumi.Input<string>;
         }
 
@@ -3118,7 +4479,7 @@ export namespace security {
             /**
              * The HTTP header name.
              */
-            name?: pulumi.Input<string>;
+            name: pulumi.Input<string>;
             /**
              * The prefix that should be stripped before decoding the token.
              */
@@ -3140,14 +4501,38 @@ export namespace security {
          * Optional.
          */
         export interface RequestAuthenticationSpecSelectorArgs {
+            /**
+             * One or more labels that indicate a specific set of pods/VMs on which a policy should be applied.
+             */
             matchLabels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
         }
 
+        /**
+         * Optional.
+         */
+        export interface RequestAuthenticationSpecTargetRefArgs {
+            /**
+             * group is the group of the target resource.
+             */
+            group?: pulumi.Input<string>;
+            /**
+             * kind is kind of the target resource.
+             */
+            kind?: pulumi.Input<string>;
+            /**
+             * name is the name of the target resource.
+             */
+            name?: pulumi.Input<string>;
+            /**
+             * namespace is the namespace of the referent.
+             */
+            namespace?: pulumi.Input<string>;
+        }
     }
 
     export namespace v1beta1 {
         /**
-         * PeerAuthentication defines how traffic will be tunneled (or not) to the sidecar.
+         * Peer authentication configuration for workloads. See more details at: https://istio.io/docs/reference/config/security/peer_authentication.html
          */
         export interface PeerAuthenticationSpecArgs {
             /**
@@ -3185,11 +4570,14 @@ export namespace security {
          * The selector determines the workloads to apply the ChannelAuthentication on.
          */
         export interface PeerAuthenticationSpecSelectorArgs {
+            /**
+             * One or more labels that indicate a specific set of pods/VMs on which a policy should be applied.
+             */
             matchLabels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
         }
 
         /**
-         * RequestAuthentication defines what request authentication methods are supported by a workload.
+         * Request authentication configuration for workloads. See more details at: https://istio.io/docs/reference/config/security/request_authentication.html
          */
         export interface RequestAuthenticationSpecArgs {
             /**
@@ -3200,9 +4588,16 @@ export namespace security {
              * Optional.
              */
             selector?: pulumi.Input<inputs.security.v1beta1.RequestAuthenticationSpecSelectorArgs>;
+            /**
+             * Optional.
+             */
+            targetRef?: pulumi.Input<inputs.security.v1beta1.RequestAuthenticationSpecTargetRefArgs>;
         }
 
         export interface RequestAuthenticationSpecJwtRulesArgs {
+            /**
+             * The list of JWT [audiences](https://tools.ietf.org/html/rfc7519#section-4.1.3) that are allowed to access.
+             */
             audiences?: pulumi.Input<pulumi.Input<string>[]>;
             /**
              * If set to true, the original token will be kept for the upstream request.
@@ -3219,17 +4614,26 @@ export namespace security {
             /**
              * Identifies the issuer that issued the JWT.
              */
-            issuer?: pulumi.Input<string>;
+            issuer: pulumi.Input<string>;
             /**
              * JSON Web Key Set of public keys to validate signature of the JWT.
              */
             jwks?: pulumi.Input<string>;
+            /**
+             * URL of the provider's public key set to validate signature of the JWT.
+             */
             jwksUri?: pulumi.Input<string>;
+            /**
+             * URL of the provider's public key set to validate signature of the JWT.
+             */
             jwks_uri?: pulumi.Input<string>;
             /**
              * This field specifies a list of operations to copy the claim to HTTP headers on a successfully verified token.
              */
             outputClaimToHeaders?: pulumi.Input<pulumi.Input<inputs.security.v1beta1.RequestAuthenticationSpecJwtRulesOutputClaimToHeadersArgs>[]>;
+            /**
+             * This field specifies the header name to output a successfully verified JWT payload to the backend.
+             */
             outputPayloadToHeader?: pulumi.Input<string>;
         }
 
@@ -3237,7 +4641,7 @@ export namespace security {
             /**
              * The HTTP header name.
              */
-            name?: pulumi.Input<string>;
+            name: pulumi.Input<string>;
             /**
              * The prefix that should be stripped before decoding the token.
              */
@@ -3259,9 +4663,33 @@ export namespace security {
          * Optional.
          */
         export interface RequestAuthenticationSpecSelectorArgs {
+            /**
+             * One or more labels that indicate a specific set of pods/VMs on which a policy should be applied.
+             */
             matchLabels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
         }
 
+        /**
+         * Optional.
+         */
+        export interface RequestAuthenticationSpecTargetRefArgs {
+            /**
+             * group is the group of the target resource.
+             */
+            group?: pulumi.Input<string>;
+            /**
+             * kind is kind of the target resource.
+             */
+            kind?: pulumi.Input<string>;
+            /**
+             * name is the name of the target resource.
+             */
+            name?: pulumi.Input<string>;
+            /**
+             * namespace is the namespace of the referent.
+             */
+            namespace?: pulumi.Input<string>;
+        }
     }
 }
 
@@ -3283,6 +4711,10 @@ export namespace telemetry {
              * Optional.
              */
             selector?: pulumi.Input<inputs.telemetry.v1alpha1.TelemetrySpecSelectorArgs>;
+            /**
+             * Optional.
+             */
+            targetRef?: pulumi.Input<inputs.telemetry.v1alpha1.TelemetrySpecTargetRefArgs>;
             /**
              * Optional.
              */
@@ -3322,6 +4754,9 @@ export namespace telemetry {
          * Allows tailoring of logging behavior to specific conditions.
          */
         export interface TelemetrySpecAccessLoggingMatchArgs {
+            /**
+             * This determines whether or not to apply the access logging configuration based on the direction of traffic relative to the proxied workload.
+             */
             mode?: pulumi.Input<string>;
         }
 
@@ -3329,7 +4764,7 @@ export namespace telemetry {
             /**
              * Required.
              */
-            name?: pulumi.Input<string>;
+            name: pulumi.Input<string>;
         }
 
         export interface TelemetrySpecMetricsArgs {
@@ -3377,14 +4812,39 @@ export namespace telemetry {
             /**
              * Required.
              */
-            name?: pulumi.Input<string>;
+            name: pulumi.Input<string>;
         }
 
         /**
          * Optional.
          */
         export interface TelemetrySpecSelectorArgs {
+            /**
+             * One or more labels that indicate a specific set of pods/VMs on which a policy should be applied.
+             */
             matchLabels?: pulumi.Input<{[key: string]: pulumi.Input<string>}>;
+        }
+
+        /**
+         * Optional.
+         */
+        export interface TelemetrySpecTargetRefArgs {
+            /**
+             * group is the group of the target resource.
+             */
+            group?: pulumi.Input<string>;
+            /**
+             * kind is kind of the target resource.
+             */
+            kind?: pulumi.Input<string>;
+            /**
+             * name is the name of the target resource.
+             */
+            name?: pulumi.Input<string>;
+            /**
+             * namespace is the namespace of the referent.
+             */
+            namespace?: pulumi.Input<string>;
         }
 
         export interface TelemetrySpecTracingArgs {
@@ -3404,6 +4864,9 @@ export namespace telemetry {
              * Optional.
              */
             providers?: pulumi.Input<pulumi.Input<inputs.telemetry.v1alpha1.TelemetrySpecTracingProvidersArgs>[]>;
+            /**
+             * Controls the rate at which traffic will be selected for tracing if no prior sampling decision has been made.
+             */
             randomSamplingPercentage?: pulumi.Input<number>;
             useRequestIdForTraceSampling?: pulumi.Input<boolean>;
         }
@@ -3412,6 +4875,9 @@ export namespace telemetry {
          * Allows tailoring of behavior to specific conditions.
          */
         export interface TelemetrySpecTracingMatchArgs {
+            /**
+             * This determines whether or not to apply the tracing configuration based on the direction of traffic relative to the proxied workload.
+             */
             mode?: pulumi.Input<string>;
         }
 
@@ -3419,7 +4885,7 @@ export namespace telemetry {
             /**
              * Required.
              */
-            name?: pulumi.Input<string>;
+            name: pulumi.Input<string>;
         }
     }
 }

@@ -41,7 +41,7 @@ export class WasmPlugin extends pulumi.CustomResource {
     /**
      * Extend the functionality provided by the Istio proxy through WebAssembly filters. See more details at: https://istio.io/docs/reference/config/proxy_extensions/wasm-plugin.html
      */
-    public readonly spec!: pulumi.Output<outputs.extensions.v1alpha1.WasmPluginSpec | undefined>;
+    public readonly spec!: pulumi.Output<outputs.extensions.v1alpha1.WasmPluginSpec>;
     public readonly status!: pulumi.Output<{[key: string]: any} | undefined>;
 
     /**
