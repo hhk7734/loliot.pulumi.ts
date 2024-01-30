@@ -3,6 +3,7 @@ import * as kubernetes from '@pulumi/kubernetes';
 import * as path from 'path';
 import * as variable from '@src/variable';
 import * as pulumi from '@pulumi/pulumi';
+import * as networking from '@crds/istio/networking';
 
 const casdoorName = 'casdoor';
 new kubernetes.helm.v3.Release(casdoorName, {
@@ -56,5 +57,40 @@ enableGzip = true`
 				}
 			}
 		}
+	}
+});
+
+const casdoorVirtualServiceName = 'casdoor';
+new networking.v1beta1.VirtualService(casdoorVirtualServiceName, {
+	metadata: {
+		name: casdoorVirtualServiceName,
+		namespace: namespace.metadata.name
+	},
+	spec: {
+		hosts: ['auth.loliot.net'],
+		gateways: ['loliot/gateway'],
+		http: [
+			{
+				match: [
+					{
+						uri: {
+							prefix: '/'
+						}
+					}
+				],
+				route: [
+					{
+						destination: {
+							host: namespace.metadata.name.apply(
+								(namespaceName) => `${casdoorName}.${namespaceName}.svc.cluster.local`
+							),
+							port: {
+								number: 8000
+							}
+						}
+					}
+				]
+			}
+		]
 	}
 });
