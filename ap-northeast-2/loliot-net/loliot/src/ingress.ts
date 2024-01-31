@@ -86,9 +86,6 @@ const ingress = new kubernetes.helm.v3.Release(ingressName, {
 	}
 });
 
-const issuerName = variable.auth.certManager
-	.apply((certManager) => certManager.clusterIssuer.cloudflareLetsencrypt.metadata)
-	.apply((metadata) => `${metadata?.name}`);
 const loliotNetIngressCertName = 'loliot-net-ingress-cert';
 const loliotNetIngressCert = new certmanager.v1.Certificate(loliotNetIngressCertName, {
 	metadata: {
@@ -105,7 +102,9 @@ const loliotNetIngressCert = new certmanager.v1.Certificate(loliotNetIngressCert
 		dnsNames: ['*.loliot.net', 'loliot.net'],
 		issuerRef: {
 			kind: 'ClusterIssuer',
-			name: issuerName
+			name: variable.auth.certManager.apply(
+				(certManager) => certManager.clusterIssuer.cloudflareLetsencrypt.metadata.name
+			)
 		}
 	}
 });
