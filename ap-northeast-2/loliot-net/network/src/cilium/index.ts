@@ -1,1 +1,5 @@
-export * as cilium from './cilium';
+import * as cilium_ from './cilium';
+
+cilium_;
+
+export const cilium = {};

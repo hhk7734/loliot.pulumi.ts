@@ -1,4 +1,11 @@
-export * as istioBase from './istio-base';
-export * as istiod from './istiod';
-export * as namespace from './namespace';
-export * as istioCsr from './cert-manager-istio-csr';
+import * as namespace from './namespace';
+import * as istioBase from './istio-base';
+import * as istiod from './istiod';
+import * as istioCsr from './cert-manager-istio-csr';
+
+namespace;
+istioBase;
+istiod;
+istioCsr;
+
+export const istio = {};

@@ -4,16 +4,8 @@ import { namespace } from './namespace';
 import { istioBase } from '@src/istio/istio-base';
 import { certManagerIstioCSR } from '@src/istio/cert-manager-istio-csr';
 
-const tolerations = [
-	{
-		key: 'node-role.kubernetes.io/master',
-		operator: 'Exists',
-		effect: 'NoSchedule'
-	}
-];
-
 const istiodName = 'istiod-1-20-2';
-export const istiod = new kubernetes.helm.v3.Release(
+new kubernetes.helm.v3.Release(
 	istiodName,
 	{
 		name: istiodName,
@@ -37,7 +29,13 @@ export const istiod = new kubernetes.helm.v3.Release(
 						memory: '64Mi'
 					}
 				},
-				tolerations: tolerations,
+				tolerations: [
+					{
+						key: 'node-role.kubernetes.io/master',
+						operator: 'Exists',
+						effect: 'NoSchedule'
+					}
+				],
 				affinity: {
 					nodeAffinity: {
 						requiredDuringSchedulingIgnoredDuringExecution: {

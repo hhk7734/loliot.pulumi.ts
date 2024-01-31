@@ -10,5 +10,7 @@ register({
 	paths: tsConfig.paths
 });
 
-export * as cilium from './cilium';
-export * as istio from './istio';
+import { cilium } from './cilium';
+import { istio } from './istio';
+
+export { cilium, istio };
