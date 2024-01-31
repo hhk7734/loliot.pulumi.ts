@@ -10,6 +10,10 @@ register({
 	paths: tsConfig.paths
 });
 
-export * as certManager from './cert-manager';
-export * as namespace from './namespace';
-export * as casdoor from './casdoor';
+import * as namespace from './namespace';
+import { certManager } from './cert-manager';
+import { casdoor } from './casdoor';
+
+namespace;
+
+export { certManager, casdoor };
