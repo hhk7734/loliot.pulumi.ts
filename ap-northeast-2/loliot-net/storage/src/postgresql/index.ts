@@ -1,1 +1,5 @@
-export * as postgresql from './postgresql';
+import * as postgresql_ from './postgresql';
+
+postgresql_;
+
+export const postgresql = {};

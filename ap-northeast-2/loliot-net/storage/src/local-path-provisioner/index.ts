@@ -1,1 +1,5 @@
-export * as localPathProvisioner from './local-path-provisioner';
+import * as localPathProvisioner_ from './local-path-provisioner';
+
+localPathProvisioner_;
+
+export const localPathProvisioner = {};

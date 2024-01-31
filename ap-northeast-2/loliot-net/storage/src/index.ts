@@ -10,6 +10,10 @@ register({
 	paths: tsConfig.paths
 });
 
-export * as namespace from './namespace';
-export * as localPathProvisioner from './local-path-provisioner';
-export * as postgresql from './postgresql';
+import * as namespace from './namespace';
+import * as localPathProvisioner from './local-path-provisioner';
+import * as postgresql from './postgresql';
+
+namespace;
+
+export { localPathProvisioner, postgresql };
